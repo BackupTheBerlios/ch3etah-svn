@@ -100,7 +100,7 @@
                     Name = "log4net"
                     Project = "{F6A02431-167E-4347-BC43-65532C31CDB7}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                    Private = "False"
+                    Private = "True"
                 />
             </References>
         </Build>

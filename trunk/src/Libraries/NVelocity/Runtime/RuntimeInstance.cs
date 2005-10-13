@@ -378,7 +378,9 @@ namespace NVelocity.Runtime {
 	///
 	/// </param>
 	public virtual void init(ExtendedProperties p) {
-	    overridingProperties = ExtendedProperties.ConvertProperties(p);
+		// REMOVED by Igor @ Oct 13, 2005
+		// overridingProperties = ExtendedProperties.ConvertProperties(p);
+		overridingProperties = p;
 	    init();
 	}
 
