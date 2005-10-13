@@ -24,6 +24,7 @@ using System.Collections;
 using System.IO;
 
 using Ch3Etah.Core.CodeGen.PackageLib;
+using Ch3Etah.Core.ProjectLib;
 
 namespace Ch3Etah.Core.CodeGen
 {
@@ -34,8 +35,12 @@ namespace Ch3Etah.Core.CodeGen
 	{
 		private MacroLibraryCollection _libraries = new MacroLibraryCollection();
 		private HelperCollection _helpers = new HelperCollection();
-		private InputParameterCollection _parameters = new InputParameterCollection();
-		
+		private Ch3Etah.Core.CodeGen.PackageLib
+			.InputParameterCollection _parameters = 
+			new Ch3Etah.Core.CodeGen.PackageLib.InputParameterCollection();
+		private MetadataFile _currentMetadataFile;
+		private MetadataFileCollection _selectedMetadataFiles = new MetadataFileCollection();
+
 		public CodeGenerationContext()
 		{
 		}
@@ -51,10 +56,23 @@ namespace Ch3Etah.Core.CodeGen
 			set { _helpers = value;}
 		}
 		
-		public InputParameterCollection Parameters {
+		public Ch3Etah.Core.CodeGen.PackageLib
+			.InputParameterCollection Parameters {
 			get { return _parameters;}
 			set { _parameters = value;}
 		}
 		
+		public MetadataFile CurrentMetadataFile
+		{
+			get { return _currentMetadataFile; }
+			set { _currentMetadataFile = value; }
+		}
+
+		public MetadataFileCollection SelectedMetadataFiles
+		{
+			get { return _selectedMetadataFiles; }
+			set { _selectedMetadataFiles = value; }
+		}
+
 	}
 }

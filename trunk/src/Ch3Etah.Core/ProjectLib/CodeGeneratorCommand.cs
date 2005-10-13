@@ -336,6 +336,8 @@ namespace Ch3Etah.Core.ProjectLib {
 				try {
 					XmlDocument document = PrepareMetadata(inputFile);
 					CodeGenerator generator = GetGenerator(document);
+					generator.Context.CurrentMetadataFile = inputFile;
+					generator.Context.SelectedMetadataFiles = this.IndividualMetadataFiles;
 					string outputPath = generator.Context.Parameters["CodeGenOutputPath"].Value;
 					outputPath = Path.GetFullPath(outputPath);
 					FileSystemHelper.CreateDirectory(new FileInfo(outputPath));
@@ -378,6 +380,8 @@ namespace Ch3Etah.Core.ProjectLib {
 			try {
 				XmlDocument document = PrepareMetadata(inputFile);
 				CodeGenerator generator = GetGenerator(document);
+				generator.Context.CurrentMetadataFile = inputFile;
+				generator.Context.SelectedMetadataFiles = this.IndividualMetadataFiles;
 				generator.Generate(document, outputWriter);
 				ResetGroupedMetadataCache();
 			}

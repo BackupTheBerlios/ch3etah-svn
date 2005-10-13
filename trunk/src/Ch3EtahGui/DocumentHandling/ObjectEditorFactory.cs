@@ -20,7 +20,7 @@
  */
 
 using System;
-
+using System.IO;
 using Ch3Etah.Core.CodeGen.PackageLib;
 using Ch3Etah.Core.ProjectLib;
 
@@ -68,9 +68,16 @@ namespace Ch3Etah.Gui.DocumentHandling
  			}
 			if (contextObject is Template)
 			{
-				return new TextFileEditor((contextObject as Template).GetFullPath());
+				string path = ((Template)contextObject).GetFullPath();
+				return new TextFileEditor(path);
 			}
- 			if (editor != null) {
+			if (contextObject is MacroLibrary)
+			{
+				string path = ((MacroLibrary)contextObject).GetFullPath();
+				return new TextFileEditor(path);
+			}
+			if (editor != null) 
+			{
  				editor.SelectedObject = contextObject;
  			}
 			return editor;

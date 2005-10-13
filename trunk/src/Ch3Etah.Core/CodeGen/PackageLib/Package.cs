@@ -20,7 +20,9 @@
  */
 
 using System;
+using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Xml.Serialization;
 using Ch3Etah.Core.Config;
@@ -30,21 +32,26 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 	/// <summary>
 	/// Description of Package.	
 	/// </summary>
+	[ReadOnly(true)]
 	public class Package
 	{
-		private string _name;
-		private string _baseFolder;
-		private TemplateCollection _templates;
-		private MacroLibraryCollection _libraries;
-		private HelperCollection _helpers;
-		private InputParameterCollection _inputParameters;
-		
+
 		public Package()
 		{
 		}
 		
+		#region Fields
+		private string _name;
+		private string _baseFolder;
+		private string _packageFileName;
+		private TemplateCollection _templates;
+		private MacroLibraryCollection _libraries;
+		private HelperCollection _helpers;
+		private InputParameterCollection _inputParameters;
+		#endregion Fields
+
 		#region Properties
-		[XmlAttribute, ReadOnly(true)]
+		[XmlAttribute]
 		public string Name {
 			get { return _name; }
 			set { _name = value; }
@@ -56,6 +63,11 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 			set { _baseFolder = value; }
 		}
 		
+		public string PackageFileName
+		{
+			get { return _packageFileName; }
+		}
+
 		[XmlArrayItem("Template")]
 		public TemplateCollection Templates {
 			get {
@@ -70,10 +82,19 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 			}
 		}
 		
-		[XmlArrayItem("Library")]
-		public MacroLibraryCollection Libraries {
-			get { return _libraries; }
-			set { _libraries = value; }
+		[XmlArray("Libraries"), XmlArrayItem("Library")]
+		public MacroLibraryCollection MacroLibraries {
+			get {
+				if (_libraries != null) 
+				{
+					_libraries.Package = this;
+				}
+				return _libraries;
+			}
+			set {
+				_libraries = value;
+				_libraries.Package = this;
+			}
 		}
 		
 		[XmlArrayItem("Helper")]
@@ -99,21 +120,125 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 		}
 		#endregion Properties
 		
-		public static Package Load(string address) {
-			if (address.IndexOf(".chp") < 0 && address.IndexOf(".xml") < 0) {
-				return LoadFile(address + "\\manifest.xml");
+		public static string[] PackageFileExtensions
+		{
+			get { return new string[] {".CHP", ".CH3PKG", ".XML"}; }
+		}
+		
+		#region Load Package
+		public static Package Load(string uri) 
+		{
+			// REFACTOR: THIS IS REDUNDANT NOW
+			if (File.Exists(uri)) {
+				return LoadFile(uri);
+			}
+			else if (Directory.Exists(uri)) {
+				return LoadFile(uri + @"\manifest.xml");
 			}
 			else {
-				return LoadFile(address);
+				if (Path.GetExtension(uri) == "") {
+					throw new DirectoryNotFoundException(
+						string.Format("Directory '' could not be found.", uri));
+				}
+				else {
+					throw new FileNotFoundException(
+						string.Format("File '' could not be found.", uri));
+				}
 			}
 		}
 		
-		public static Package LoadFile(string fileName) {
+		private static Package LoadFile(string fileName) {
 			Package package = (Package)XmlSerializationHelper.LoadObject(fileName, typeof(Package));
+			package._packageFileName = Path.GetFullPath(fileName);
 			package.BaseFolder = Path.GetDirectoryName(Path.GetFullPath(fileName));
 			package.Name = Path.GetFileName(fileName);
 			return package;
 		}
+		#endregion Load
 		
+		#region List / Get
+		private static Hashtable _packagesDictionary = new Hashtable();
+		public static Package[] ListPackages(string baseDirectory)
+		{
+			string fulldir = Path.GetFullPath(baseDirectory);
+			ArrayList packages = GetPackagesEntry(fulldir);
+			if (packages == null)
+			{
+				packages = new ArrayList();
+				foreach (string ext in PackageFileExtensions)
+				{
+					DirectoryInfo dirInfo = new DirectoryInfo(fulldir);
+					foreach (FileInfo file in dirInfo.GetFiles("*" + ext))
+					{
+						try
+						{
+							packages.Add(Load(file.FullName));
+						}
+						catch (Exception ex)
+						{
+							Trace.WriteLine(string.Format(
+								"Package.ListPackages(): ERROR LOADING PACKAGE '{0}'\r\n{1}",
+								file.FullName,
+								ex.ToString()));
+						}
+					}
+				}
+				SetPackagesEntry(baseDirectory, packages);
+			}
+
+			return packages.ToArray(typeof(Package)) as Package[];
+		}
+		
+		private static ArrayList GetPackagesEntry(string baseDirectory)
+		{
+			string fulldir = Path.GetFullPath(baseDirectory);
+			return _packagesDictionary[fulldir] as ArrayList;
+		}
+
+		private static void SetPackagesEntry(string baseDirectory, ArrayList packages)
+		{
+			if (_packagesDictionary.Contains(baseDirectory))
+			{
+				_packagesDictionary[baseDirectory] = packages;
+			}
+			else
+			{
+				_packagesDictionary.Add(baseDirectory, packages);
+			}
+		}
+
+		public static Package GetPackage(string baseDirectory, string packageName)
+		{
+			string currentDir = Directory.GetCurrentDirectory();
+			try
+			{
+				//Directory.SetCurrentDirectory(this.GetFullTemplatePath());
+				Directory.SetCurrentDirectory(baseDirectory);
+				Package package = SearchLoadedPackages(baseDirectory, packageName);
+				if (package == null)
+				{
+					package = Load(packageName);
+					package.Name = packageName;
+					ArrayList packages = GetPackagesEntry(baseDirectory);
+					packages.Add(package);
+				}
+				return package;
+			}
+			finally 
+			{
+				Directory.SetCurrentDirectory(currentDir);
+			}
+		}
+		
+		private static Package SearchLoadedPackages(string baseDirectory, string packageName)
+		{
+			foreach (Package p in ListPackages(baseDirectory))
+			{
+				if (p.Name == packageName) return p;
+			}
+			return null;
+		}
+		#endregion List / Get
+
 	}
 }

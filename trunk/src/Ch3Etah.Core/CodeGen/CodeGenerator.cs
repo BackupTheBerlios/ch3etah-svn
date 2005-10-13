@@ -45,7 +45,7 @@ namespace Ch3Etah.Core.CodeGen
 			_package = package;
 			_baseFolder = package.BaseFolder;
 			this.Context.Helpers = new HelperCollection(package.Helpers);
-			this.Context.Libraries = new MacroLibraryCollection(package.Libraries);
+			this.Context.Libraries = new MacroLibraryCollection(package.MacroLibraries);
 		}
 		
 		public CodeGenerator(string baseFolder) {

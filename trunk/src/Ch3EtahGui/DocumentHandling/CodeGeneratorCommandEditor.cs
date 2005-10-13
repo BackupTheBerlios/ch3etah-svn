@@ -633,7 +633,8 @@ namespace Ch3Etah.Gui.DocumentHandling {
 
 		private void cboPackage_DropDown(object sender, EventArgs e) {
 			
-			Package[] packages = _generatorCommand.Project.ListPackages();
+			Package[] packages = Package.ListPackages(
+				_generatorCommand.Project.GetFullTemplatePath());
 
 			if (packages != null && packages.Length > 0) {
 				foreach (Package p in packages) {
@@ -647,7 +648,9 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			if (cboPackage.Text.Trim() == "")
 				return;
 
-			Package package = _generatorCommand.Project.GetPackage(cboPackage.Text);
+			Package package = Package.GetPackage(
+				_generatorCommand.Project.GetFullTemplatePath(),
+				cboPackage.Text);;
 			if (package == null)
 				return;
 			

@@ -44,6 +44,14 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 		{
 		}
 		
+		private Package _package;
+		
+		internal Package Package 
+		{
+			get { return _package; }
+			set { _package = value; }
+		}
+		
 		public bool Contains(string address) {
 			if (this[address] != null) {
 				return true;
@@ -57,6 +65,10 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 			get {
 				foreach (MacroLibrary library in this) {
 					if (library.Address == address) {
+						if (_package != null) 
+						{
+							library.SetPackage(_package);
+						}
 						return library;
 					}
 				}
@@ -64,5 +76,111 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 			}
 		}
 		
+		#region Overrides
+		new public int Add(MacroLibrary val)
+		{
+			if (_package != null) 
+			{
+				val.SetPackage(_package);
+			}
+			if ( !this.Contains(val) ) 
+			{
+				return base.Add(val);
+			}
+			return -1;
+		}
+		
+		new public void Insert(int index, MacroLibrary val)
+		{
+			if (_package != null) 
+			{
+				val.SetPackage(_package);
+			}
+			if ( this.Contains(val) ) 
+			{
+				this.Remove(val);
+			}
+			this.Insert(index, val);
+		}
+		
+		new public MacroLibraryCollectionEnumerator GetEnumerator()
+		{
+			MacroLibraryCollectionEnumerator e = new MacroLibraryCollectionEnumerator(this);
+			if (_package != null) 
+			{
+				e.Package = _package;
+			}
+			return e;
+		}
+		
+		new public MacroLibrary this[int index] 
+		{
+			get 
+			{
+				if (_package != null) 
+				{
+					((MacroLibrary)(List[index])).SetPackage(_package);
+				}
+				return ((MacroLibrary)(List[index]));
+			}
+			set 
+			{
+				List[index] = (MacroLibrary)value;
+				if (_package != null) 
+				{
+					((MacroLibrary)(List[index])).SetPackage(_package);
+				}
+			}
+		}
+		#endregion Overrides
+		
+		#region MacroLibraryCollectionEnumerator
+		new public class MacroLibraryCollectionEnumerator : Ch3Etah.Core.CodeGen.PackageLib.Generated.MacroLibraryCollection.MacroLibraryCollectionEnumerator, IEnumerator
+		{
+			Package _package;
+			
+			public MacroLibraryCollectionEnumerator(MacroLibraryCollection mappings) : base(mappings)
+			{
+			}
+			
+			[XmlIgnore()]
+			internal Package Package 
+			{
+				get 
+				{
+					return _package;
+				}
+				set 
+				{
+					_package = value;
+				}
+			}
+
+			new public MacroLibrary Current 
+			{
+				get 
+				{
+					if (_package != null) 
+					{
+						base.Current.SetPackage(_package);
+					}
+					return base.Current;
+				}
+			}
+			
+			object IEnumerator.Current 
+			{
+				get 
+				{
+					if (_package != null) 
+					{
+						base.Current.SetPackage(_package);
+					}
+					return base.Current;
+				}
+			}
+		}
+		#endregion MacroLibraryCollectionEnumerator
+
 	}
 }

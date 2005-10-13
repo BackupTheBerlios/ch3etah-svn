@@ -20,6 +20,9 @@
  */
 
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Xml.Serialization;
 
 namespace Ch3Etah.Core.CodeGen.PackageLib
@@ -27,12 +30,29 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 	/// <summary>
 	/// Description of Library.
 	/// </summary>
+	[ReadOnly(true)]
 	public class MacroLibrary
 	{
+		private Package _package;
 		private string _address;
 		
 		public MacroLibrary()
 		{
+		}
+		
+		[XmlIgnore()]
+		[Browsable(false)]
+		public Package Package 
+		{
+			get 
+			{
+				return _package;
+			}
+		}
+		internal void SetPackage(Package package) 
+		{
+			Debug.Assert(package != null, "Package should not be null.");
+			_package = package;
 		}
 		
 		[XmlAttribute]
@@ -45,5 +65,40 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 			}
 		}
 		
+		#region GetFullPath
+		public string GetFullPath() 
+		{
+			return GetFullPath(this.Address);
+		}
+		
+		private string GetFullPath(string fileName) 
+		{
+			string oldBaseFolder = Directory.GetCurrentDirectory();
+			string fullPath = fileName;
+			try 
+			{
+				if (Package != null) 
+				{
+					//Debug.WriteLine("Template.GetFullPath(): baseDirectory='" + this.Package.BaseFolder);
+					Directory.SetCurrentDirectory(this.Package.BaseFolder);
+				}
+				//Debug.WriteLine("Template.GetFullPath(): baseDirectory='" + Directory.GetCurrentDirectory() + "' fileName='" + fileName + "'");
+				if (fileName == "") 
+				{
+					fullPath = "";
+				}
+				else 
+				{
+					fullPath = Path.GetFullPath(fileName);
+				}
+			}
+			finally 
+			{
+				Directory.SetCurrentDirectory(oldBaseFolder);
+			}
+			return fullPath;
+		}
+		#endregion GetFullPath
+
 	}
 }

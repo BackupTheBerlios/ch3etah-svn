@@ -106,8 +106,45 @@
   <data name="tvwProject.Locked" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </data>
-  <data name="$this.Name">
-    <value>ProjectExplorer</value>
+  <data name="panel1.Locked" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </data>
+  <data name="panel1.SnapToGrid" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="panel1.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="panel1.GridSize" type="System.Drawing.Size, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>8, 8</value>
+  </data>
+  <data name="panel1.DrawGrid" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </data>
+  <data name="panel1.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="btnRefresh.Locked" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </data>
+  <data name="btnRefresh.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="btnRefresh.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Private</value>
+  </data>
+  <data name="btnRefresh.Image" type="System.Drawing.Bitmap, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA0AAAAQCAIAAABCwWJuAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAZZJREFUKFONkGsr
+        g2EYx28fAHvrnU/AV5gP4J23IiS0nObQchhRIjlTqGFrDhvzNJI2MmNaXgyzZlbbYg7bk/XY4TE7cLme
+        3aWlxL9fd1fdv/7381w5M0eRKMuSX/LidJaW5AmXUwccZJJOp5PJZDwe53k+HI6woddLd1Aq128d+00m
+        E5ncZz8zoTYGp7ckRBNgv+PRK1sLaY0eMr7z+JHJD4nlweaNoUchozofvkilJkszmSfIsmsbz6sAmK3A
+        MNDaw5CR9dtUKpUtUZV6iO0JWrp0ZGjFnkgkUM1fEmFNIAa0jHrWBzjzQ6Nskwwunkd4wUODkt1n8YP5
+        DiQd66R/9oSLvlO+1VM/h2DZoReMHmiQqknv2EGAiyPfNTigYfByehcwN7B7C3VNStI9vPcQ4hHq5SpE
+        KucFegXKQuohtRIFkQ0wnmAMye7DuUgjRm/DIVBTv0A65Vr3cxSha8MVFmvE5ca+VQenc4LKLlBVO0fa
+        u1av7yMIbsHo4/AH8dsNHsAy9NQZr6J6+t9eW6fqT8orJ74A1IWmMxfa9/oAAAAASUVORK5CYII=
+</value>
   </data>
   <data name="$this.TrayHeight" type="System.Int32, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>80</value>
@@ -132,6 +169,9 @@
   </data>
   <data name="$this.GridSize" type="System.Drawing.Size, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>8, 8</value>
+  </data>
+  <data name="$this.Name">
+    <value>ProjectExplorer</value>
   </data>
   <data name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>(Default)</value>

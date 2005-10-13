@@ -648,7 +648,8 @@ namespace Ch3Etah.Gui {
 				node.ImageIndex = Images.Indexes.Icons;
 				node.SelectedImageIndex = Images.Indexes.Icons;
 				node.Tag = p;
-				SetupPackageNode(node, p);
+				SetupTemplatesNode(node, p);
+				SetupMacrosNode(node, p);
 			}
 			foreach (TreeNode node in packagesNode.Nodes) 
 			{
@@ -670,14 +671,25 @@ namespace Ch3Etah.Gui {
 			return packagesNode;
 		}
 
-		private void SetupPackageNode(TreeNode packageNode, Package package) 
+		private void SetupTemplatesNode(TreeNode packageNode, Package package) 
 		{
+
+			TreeNode templatesNode = GetContextNode(package.Templates, packageNode.Nodes);
+			if (templatesNode == null) 
+			{
+				templatesNode = packageNode.Nodes.Add("Templates");
+			}
+
+			templatesNode.ImageIndex = Images.Indexes.FolderOpen;
+			templatesNode.SelectedImageIndex = Images.Indexes.FolderOpen;
+			templatesNode.Tag = package.Templates;
+			
 			foreach (Template t in package.Templates) 
 			{
-				TreeNode node = GetContextNode(t, packageNode.Nodes);
+				TreeNode node = GetContextNode(t, templatesNode.Nodes);
 				if (node == null) 
 				{
-					node = packageNode.Nodes.Add(t.Name);
+					node = templatesNode.Nodes.Add(t.Name);
 				}
 				node.Text = Path.GetFileName(t.GetFullPath());
 				//TreeNode node = generatorCommandsNode.Nodes.Add(command.Name);
@@ -685,7 +697,7 @@ namespace Ch3Etah.Gui {
 				node.SelectedImageIndex = Images.Indexes.DocumentText;
 				node.Tag = t;
 			}
-			foreach (TreeNode node in packageNode.Nodes) 
+			foreach (TreeNode node in templatesNode.Nodes) 
 			{
 				if (node.Tag != null && !package.Templates.Contains((Template)node.Tag)) 
 				{
@@ -693,8 +705,43 @@ namespace Ch3Etah.Gui {
 				}
 			}
 		}
+		private void SetupMacrosNode(TreeNode packageNode, Package package) 
+		{
+
+			TreeNode macrosNode = GetContextNode(package.MacroLibraries, packageNode.Nodes);
+			if (macrosNode == null) 
+			{
+				macrosNode = packageNode.Nodes.Add("Macro Libraries");
+			}
+
+			macrosNode.ImageIndex = Images.Indexes.FolderOpen;
+			macrosNode.SelectedImageIndex = Images.Indexes.FolderOpen;
+			macrosNode.Tag = package.MacroLibraries;
+			
+			foreach (MacroLibrary m in package.MacroLibraries) 
+			{
+				TreeNode node = GetContextNode(m, macrosNode.Nodes);
+				if (node == null) 
+				{
+					node = macrosNode.Nodes.Add(m.Address);
+				}
+				node.Text = Path.GetFileName(m.Address);
+				//TreeNode node = generatorCommandsNode.Nodes.Add(command.Name);
+				node.ImageIndex = Images.Indexes.DocumentText;
+				node.SelectedImageIndex = Images.Indexes.DocumentText;
+				node.Tag = m;
+			}
+			foreach (TreeNode node in macrosNode.Nodes) 
+			{
+				if (node.Tag != null && !package.MacroLibraries.Contains((MacroLibrary)node.Tag)) 
+				{
+					node.Remove();
+				}
+			}
+		}
 		
-		private void SetupTreeviewContextMenu() {
+		private void SetupTreeviewContextMenu() 
+		{
 			treeviewContextMenu.Items.Clear();
 
 			// get selected node
@@ -1319,8 +1366,12 @@ namespace Ch3Etah.Gui {
 		private void propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e) {
 			RefreshTreeview();
 		}
-
-		private void Form_Closing(object sender, CancelEventArgs e) {
+		private void propertyGrid_Validated(object sender, EventArgs e)
+		{
+			RefreshTreeview();
+		}
+		private void Form_Closing(object sender, CancelEventArgs e) 
+		{
 			CloseDocuments();
 			e.Cancel = (_running || MdiChildren.Length > 0 || !DoSaveConfirmation());
 		}
@@ -1488,6 +1539,7 @@ namespace Ch3Etah.Gui {
 					propertiesWindow = (PropertiesWindow) content;
 					propertyGrid = propertiesWindow.propertyGrid;
 					propertyGrid.PropertyValueChanged += new PropertyValueChangedEventHandler(propertyGrid_PropertyValueChanged);
+					propertyGrid.Validated += new EventHandler(propertyGrid_Validated);
 				}
 				else if (content is OutputWindow) {
 					outputWindow = (OutputWindow) content;
@@ -1505,6 +1557,7 @@ namespace Ch3Etah.Gui {
 		}
 
 		#endregion
+
 	}
 
 }

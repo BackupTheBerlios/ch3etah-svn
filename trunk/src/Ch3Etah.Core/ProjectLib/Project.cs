@@ -431,80 +431,10 @@ namespace Ch3Etah.Core.ProjectLib {
 			return null;
 		}
 
-		
-		private Package[] _packages;
 		public Package[] ListPackages()
 		{
-			if (_packages == null)
-			{
-				ArrayList list = new ArrayList();
-			
-				DirectoryInfo templatesDir = new DirectoryInfo(this.GetFullTemplatePath());
-				FileInfo[] files = templatesDir.GetFiles("*.xml");
-				foreach (FileInfo file in files) 
-				{
-					try
-					{
-						Package package = Package.LoadFile(file.FullName);
-						list.Add(package);
-					}
-					catch
-					{
-					}
-				}
-				_packages = list.ToArray(typeof(Package)) as Package[];
-			}
-
-			return _packages;
-		}
-
-		public Package GetPackage(string name)
-		{
-			string currentDir = Directory.GetCurrentDirectory();
-			try
-			{
-				Directory.SetCurrentDirectory(this.GetFullTemplatePath());
-				Package package = FindPackage(name);
-				if (package == null)
-				{
-					package = Package.Load(name);
-					package.Name = name;
-					ArrayList list = new ArrayList(_packages);
-					list.Add(package);
-					_packages = list.ToArray(typeof(Package)) as Package[];
-				}
-				return package;
-			}
-			finally 
-			{
-				Directory.SetCurrentDirectory(currentDir);
-			}
+			return Package.ListPackages(this.GetFullTemplatePath());
 		}
 		
-		private Package FindPackage(string name)
-		{
-			foreach (Package p in this.ListPackages())
-			{
-				if (p.Name == name) return p;
-			}
-			return null;
-		}
-		
-		//		public ICollection ListTemplates(string packageName)
-		//		{
-		//			ArrayList list = new ArrayList();
-		//			XmlDocument doc = new XmlDocument();
-		//			Project project = Project.CurrentProject;
-		//
-		//			doc.Load(project.GetFullTemplatePath() + "\\" + packageName);
-		//			
-		//			foreach (XmlAttribute attr in doc.SelectNodes("/Package/Templates/Template/@Name")) 
-		//			{
-		//				list.Add(attr.Value);
-		//			}
-		//			
-		//			return list;
-		//		}
-		//
 	}
 }

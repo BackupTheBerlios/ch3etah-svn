@@ -32,6 +32,7 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 	/// <summary>
 	/// Description of CodeTemplate.
 	/// </summary>
+	[ReadOnly(true)]
 	public class Template
 	{
 		private Package _package;
