@@ -28,7 +28,7 @@ using System.Xml;
 using Ch3Etah.Core.CodeGen.PackageLib;
 using Ch3Etah.Core.Exceptions;
 
-//using Commons.Collections;
+using Commons.Collections;
 
 using NVelocity;
 using NVelocity.App;
