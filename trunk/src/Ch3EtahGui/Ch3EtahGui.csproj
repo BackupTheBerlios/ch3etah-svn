@@ -90,12 +90,6 @@
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Core"
-                    Project = "{2A171F7D-E0A0-4FFF-B63E-22F1D6E4DDA5}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                    Private = "True"
-                />
-                <Reference
                     Name = "System.Design"
                     AssemblyName = "System.Design"
                     HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Design.dll"
@@ -156,6 +150,12 @@
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
                     HintPath = "..\Libraries\Bin\NVelocity.dll"
+                />
+                <Reference
+                    Name = "Ch3Etah.Core"
+                    Project = "{2A171F7D-E0A0-4FFF-B63E-22F1D6E4DDA5}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Private = "False"
                 />
             </References>
         </Build>
