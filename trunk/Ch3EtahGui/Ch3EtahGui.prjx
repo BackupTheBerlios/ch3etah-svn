@@ -1,0 +1,78 @@
+<Project name="Ch3EtahGui" standardNamespace="Ch3Etah.Gui" description="" newfilesearch="OnLoad" enableviewstate="True" version="1.1" projecttype="C#">
+  <Contents>
+    <File name=".\AssemblyInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\EventTraceListener.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\app.config" subtype="Code" buildaction="Exclude" dependson="" data="" />
+    <File name=".\App.ico" subtype="Code" buildaction="Nothing" dependson="" data="" />
+    <File name=".\NorcaGui.csproj" subtype="Code" buildaction="Exclude" dependson="" data="" />
+    <File name=".\NorcaGui.csproj.user" subtype="Code" buildaction="Exclude" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.ProjectPropertiesForm.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\Ch3EtahGui.csproj" subtype="Code" buildaction="Exclude" dependson="" data="" />
+    <File name=".\Ch3EtahGui.csproj.user" subtype="Code" buildaction="Exclude" dependson="" data="" />
+    <File name=".\bin\Debug\NorcaGui.exe.config" subtype="Code" buildaction="Exclude" dependson="" data="" />
+    <File name=".\obj\Debug\Ch3EtahGui.projdata" subtype="Code" buildaction="Exclude" dependson="" data="" />
+    <File name=".\obj\Debug\NorcaGui.projdata" subtype="Code" buildaction="Exclude" dependson="" data="" />
+    <File name=".\DocumentHandling\CodeGeneratorCommandEditor.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.NCodeGenGeneratorCommandsEditor.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\MainForm.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.MainForm.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\DocumentHandling\ObjectEditorPanelBase.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.MainPanelBase.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\MainClass.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.ObjectEditorBase.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.Form1.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\Images.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.ObjectEditorPanelBase.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\DocumentHandling\MdiStrategy\ObjectEditorForm.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.ObjectEditorForm.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\DocumentHandling\MetadataFileEditor.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.MetadataFileEditor.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\Widgets\MetadataFileSelector.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\DocumentHandling\TextFileEditor.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\DocumentHandling" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.SourceCodeFileEditor.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\DocumentHandling\CodeGenerationTemplateEditor.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.NCodeGenTemplateEditor.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.TextFileEditor.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\Widgets" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\Forum.cs" subtype="Code" buildaction="Exclude" dependson="" data="" />
+    <File name=".\ImageList16.png" subtype="Code" buildaction="Exclude" dependson="" data="" />
+    <File name=".\DocumentHandling\InputParameterCollectionEditor.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.InputParametersEditor.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.NCodeGenGeneratorCommandEditor.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.CodeGenerationTemplateEditor.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\Ch3Etah.Gui.CodeGeneratorCommandEditor.resources" subtype="Code" buildaction="EmbedAsResource" dependson="" data="" />
+    <File name=".\Widgets\Class1.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\MetadataFilePlaceholder.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\DocumentHandling\ObjectEditorManager.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\DocumentHandling\ObjectEditorFactory.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\DocumentHandling\IObjectEditor.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\DocumentHandling\MdiStrategy" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\DocumentHandling\IDocumentHandlingStrategy.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\DocumentHandling\SourceCodeFileEditor.cs" subtype="Code" buildaction="Exclude" dependson="" data="" />
+    <File name=".\DocumentHandling\MdiStrategy\MdiDocumentHandlingStrategy.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <Reference type="Project" refto="Core" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\lib\CommandBar.dll" localcopy="True" />
+    <Reference type="Assembly" refto="..\..\lib\ICSharpCode.TextEditor.dll" localcopy="True" />
+  </References>
+  <DeploymentInformation target="" script="" strategy="File" />
+  <Configuration runwithwarnings="True" name="Debug">
+    <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="Standard" warninglevel="4" nowarn="" includedebuginformation="True" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="WinExe" definesymbols="DEBUG; TRACE" generatexmldocumentation="False" win32Icon=".\App.ico" noconfig="False" nostdlib="False" />
+    <Execution commandlineparameters="" consolepause="False" />
+    <Output directory="..\bin\Debug" assembly="Ch3EtahGui" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+  </Configuration>
+  <Configurations active="Debug">
+    <Configuration runwithwarnings="True" name="Debug">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="Standard" warninglevel="4" nowarn="" includedebuginformation="True" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="WinExe" definesymbols="DEBUG; TRACE" generatexmldocumentation="False" win32Icon=".\App.ico" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="..\bin\Debug" assembly="Ch3EtahGui" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+    <Configuration runwithwarnings="True" name="Release">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="" warninglevel="4" nowarn="" includedebuginformation="False" optimize="True" unsafecodeallowed="False" generateoverflowchecks="False" mainclass="" target="WinExe" definesymbols="TRACE" generatexmldocumentation="False" win32Icon=".\App.ico" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="..\bin\Release" assembly="Ch3EtahGui" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+  </Configurations>
+</Project>
