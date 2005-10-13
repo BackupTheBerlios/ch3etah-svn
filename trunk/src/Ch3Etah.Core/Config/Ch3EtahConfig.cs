@@ -54,6 +54,7 @@ namespace Ch3Etah.Core.Config
 	public class Ch3EtahConfig
 	{
 		private const string CONFIG_FILE_NAME = @".\Ch3Etah.config";
+		private const string CONFIG_RESOURCE_NAME = "Ch3Etah.Core.Ch3Etah.config";
 
 		private static Ch3EtahSettingsHelper _settings;
 
@@ -84,7 +85,14 @@ namespace Ch3Etah.Core.Config
 		}
 
 		public static void LoadSettings(string fileName) {
-			_settings = (Ch3EtahSettingsHelper)XmlSerializationHelper.LoadObject(GetFullPath(fileName), typeof(Ch3EtahSettingsHelper));
+			try
+			{
+				_settings = (Ch3EtahSettingsHelper)XmlSerializationHelper.LoadObject(GetFullPath(fileName), typeof(Ch3EtahSettingsHelper));
+			}
+			catch
+			{
+				_settings = (Ch3EtahSettingsHelper)XmlSerializationHelper.LoadObject(typeof(Ch3EtahConfig).Assembly.GetManifestResourceStream(CONFIG_RESOURCE_NAME), typeof(Ch3EtahSettingsHelper));
+			}
 		}
 
 		public static void SaveSettings() {

@@ -142,25 +142,27 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 		}
 		
 		private string GetFullPath(string fileName) {
-			string oldBaseFolder = Directory.GetCurrentDirectory();
-			string fullPath = fileName;
-			try {
-				if (Package != null) {
-					//Debug.WriteLine("Template.GetFullPath(): baseDirectory='" + this.Package.BaseFolder);
-					Directory.SetCurrentDirectory(this.Package.BaseFolder);
-				}
-				//Debug.WriteLine("Template.GetFullPath(): baseDirectory='" + Directory.GetCurrentDirectory() + "' fileName='" + fileName + "'");
-				if (fileName == "") {
-					fullPath = "";
-				}
-				else {
-					fullPath = Path.GetFullPath(fileName);
-				}
-			}
-			finally {
-				Directory.SetCurrentDirectory(oldBaseFolder);
-			}
-			return fullPath;
+			return Path.GetFullPath(Path.Combine(Package.GetFullBaseFolderPath(), fileName));
+// REMOVED by Igor @ Oct 13, 2005
+//			string oldBaseFolder = Directory.GetCurrentDirectory();
+//			string fullPath = fileName;
+//			try {
+//				if (Package != null) {
+//					//Debug.WriteLine("Template.GetFullPath(): baseDirectory='" + this.Package.BaseFolder);
+//					Directory.SetCurrentDirectory(this.Package.BaseFolder);
+//				}
+//				//Debug.WriteLine("Template.GetFullPath(): baseDirectory='" + Directory.GetCurrentDirectory() + "' fileName='" + fileName + "'");
+//				if (fileName == "") {
+//					fullPath = "";
+//				}
+//				else {
+//					fullPath = Path.GetFullPath(fileName);
+//				}
+//			}
+//			finally {
+//				Directory.SetCurrentDirectory(oldBaseFolder);
+//			}
+//			return fullPath;
 		}
 		
 		public string GetRelativePath(string fileName) {

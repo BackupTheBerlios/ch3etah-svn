@@ -278,8 +278,7 @@ namespace Ch3Etah.Core.ProjectLib {
 				_isLoading = true;
 				try {
 					using (FileStream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-						Project project = Load(stream);
-						project._fileName = fileName;
+						Project project = Load(stream, fileName);
 						stream.Close();
 						Debug.WriteLine("Successfully loaded project file '" + fileName + "'");
 						return project;
@@ -295,13 +294,15 @@ namespace Ch3Etah.Core.ProjectLib {
 		/// Loads a Ch3Etah project from a stream using XML Serialization.
 		/// </summary>
 		/// <param name="stream"></param>
-		public static Project Load(Stream stream) {
+		public static Project Load(Stream stream, string originalFileName) {
 			Project project = null;
 			TextReader reader = null;
 
 			reader = new StreamReader(stream);
 			XmlSerializer ser = new XmlSerializer(typeof (Project));
 			project = (Project) ser.Deserialize(reader);
+			
+			project._fileName = originalFileName;
 			
 			project.SetLoadedState();
 			project.LoadMetadataFiles();
@@ -378,21 +379,23 @@ namespace Ch3Etah.Core.ProjectLib {
 		}
 
 		private string GetFullPath(string path) {
-			string oldDirectory = Directory.GetCurrentDirectory();
-			string fullPath = Directory.GetCurrentDirectory();
-			try {
-				if (FileName != "") {
-					Directory.SetCurrentDirectory(Path.GetDirectoryName(FileName));
-				}
-				if (path != "") {
-					fullPath = Path.GetFullPath(path);
-				}
-				//Debug.WriteLine("Project.GetFullPath(): path=" + path + " this.FileName=" + this.FileName + " CurrentDirectory=" + Directory.GetCurrentDirectory() + " fullPath=" + fullPath);
-			}
-			finally {
-				Directory.SetCurrentDirectory(oldDirectory);
-			}
-			return fullPath;
+			return Path.GetFullPath(Path.Combine(Path.GetDirectoryName(FileName), path));
+// REMOVED by Igor @ Oct 13, 2005
+//			string oldDirectory = Directory.GetCurrentDirectory();
+//			string fullPath = Directory.GetCurrentDirectory();
+//			try {
+//				if (FileName != "") {
+//					Directory.SetCurrentDirectory(Path.GetDirectoryName(FileName));
+//				}
+//				if (path != "") {
+//					fullPath = Path.GetFullPath(path);
+//				}
+//				//Debug.WriteLine("Project.GetFullPath(): path=" + path + " this.FileName=" + this.FileName + " CurrentDirectory=" + Directory.GetCurrentDirectory() + " fullPath=" + fullPath);
+//			}
+//			finally {
+//				Directory.SetCurrentDirectory(oldDirectory);
+//			}
+//			return fullPath;
 		}
 
 		#endregion GetFullPaths

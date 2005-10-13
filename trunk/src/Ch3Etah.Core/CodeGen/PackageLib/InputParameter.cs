@@ -20,7 +20,10 @@
  */
 
 using System;
+using System.ComponentModel;
+using System.Globalization;
 using System.Xml.Serialization;
+using Ch3Etah.Core.ProjectLib;
 
 namespace Ch3Etah.Core.CodeGen.PackageLib
 {
@@ -37,7 +40,13 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 		public InputParameter()
 		{
 		}
-		
+
+		public InputParameter(string name, string value)
+		{
+			_name = name;
+			_value = value;
+		}
+
 		#region Properties
 		[XmlAttribute]
 		public string Name {
@@ -66,6 +75,56 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 		
 		public override string ToString() {
 			return "Parameter '" + this.Name + "' = '" + this.Value + "'";
+		}
+	}
+
+	public class InputParameterTypeConverter: StringConverter 
+	{
+		
+		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) 
+		{
+			if (sourceType == typeof(string)) 
+			{
+				return true;
+			}
+			else 
+			{
+				return base.CanConvertFrom(context, sourceType);
+			}
+		}
+
+		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) 
+		{
+			object instance = context.PropertyDescriptor.GetValue(context.Instance);
+			if (value is string && instance is InputParameter && !value.Equals("")) 
+			{
+				return new InputParameter(((InputParameter) instance).Name, value as string);
+			}
+			return base.ConvertFrom(context, culture, value);
+		}
+
+		public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) 
+		{
+			if (destinationType == typeof (string)) 
+			{
+				return true;
+			}
+			else 
+			{
+				return base.CanConvertTo(context, destinationType);
+			}
+		}
+
+		public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) 
+		{
+			if (destinationType == typeof(string) && value is InputParameter) 
+			{
+				return ((InputParameter) value).Value;
+			}
+			else 
+			{
+				return base.ConvertTo(context, culture, value, destinationType);
+			}
 		}
 	}
 }

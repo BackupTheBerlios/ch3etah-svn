@@ -111,15 +111,9 @@
                     HintPath = "..\Libraries\bin\WinFormsUI.dll"
                 />
                 <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\Libraries\bin\log4net.dll"
-                    Private = "False"
-                />
-                <Reference
-                    Name = "Commons"
-                    AssemblyName = "Commons"
-                    HintPath = "..\Libraries\bin\Commons.dll"
+                    Name = "Adapdev.Data"
+                    AssemblyName = "Adapdev.Data"
+                    HintPath = "..\..\Bin\Adapdev.Data.dll"
                 />
                 <Reference
                     Name = "NVelocity"
@@ -127,9 +121,14 @@
                     HintPath = "..\Libraries\bin\NVelocity.dll"
                 />
                 <Reference
-                    Name = "Adapdev.Data"
-                    AssemblyName = "Adapdev.Data"
-                    HintPath = "..\..\Bin\Adapdev.Data.dll"
+                    Name = "Commons"
+                    AssemblyName = "Commons"
+                    HintPath = "..\Libraries\bin\Commons.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\Libraries\bin\log4net.dll"
                 />
             </References>
         </Build>
@@ -139,6 +138,10 @@
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ch3Etah.config"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "FileSystemHelper.cs"

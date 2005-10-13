@@ -19,20 +19,12 @@
  *   Date: 19/11/2004
  */
 
-using System;
-using System.Collections;
-using System.Diagnostics;
 using System.IO;
 using System.Xml;
-
 using Ch3Etah.Core.CodeGen.PackageLib;
-using Ch3Etah.Core.Exceptions;
-
 using Commons.Collections;
-
 using NVelocity;
 using NVelocity.App;
-using NVelocity.Runtime;
 
 namespace Ch3Etah.Core.CodeGen.NVelocityEngine
 {
@@ -44,17 +36,20 @@ namespace Ch3Etah.Core.CodeGen.NVelocityEngine
 	{
 		private VelocityContext _velocityContext;
 		private XmlNode _inputNode;
-		
-		public NVelocityTransformationEngine()
+
+		public NVelocityTransformationEngine(): base()
 		{
 		}
-		
-		public override void Transform(XmlNode input, TextWriter output) {
+
+		public override void Transform(XmlNode input, TextWriter output)
+		{
 			_inputNode = input;
+			// HACK: To resolve the ResourceNotFoundException thrown by NVelocity
+			Directory.SetCurrentDirectory(Path.GetDirectoryName(Template.GetFullPath()));
 			PrepareVelocityEngine();
-			Velocity.Evaluate(_velocityContext, output, this.Template.Name, this.Template.Content);
+			Velocity.Evaluate(_velocityContext, output, Template.Name, Template.Content);
 		}
-		
+
 		private void PrepareVelocityEngine()
 		{
 			ExtendedProperties properties = LoadExtendedProperties();
@@ -63,11 +58,14 @@ namespace Ch3Etah.Core.CodeGen.NVelocityEngine
 			SetLoaderPath(properties);
 			Velocity.Init(properties);
 		}
-		
-		private ExtendedProperties LoadExtendedProperties() {
+
+		private ExtendedProperties LoadExtendedProperties()
+		{
 			ExtendedProperties properties = new ExtendedProperties();
-			if (File.Exists(BaseFolder + "\\nvelocity.properties")) {
-				using (FileStream fs = new FileStream(BaseFolder + "\\nvelocity.properties", FileMode.Open, FileAccess.Read)) {
+			if (File.Exists(BaseFolder + "\\nvelocity.properties"))
+			{
+				using (FileStream fs = new FileStream(BaseFolder + "\\nvelocity.properties", FileMode.Open, FileAccess.Read))
+				{
 					properties.Load(fs);
 					fs.Flush();
 					fs.Close();
@@ -75,80 +73,102 @@ namespace Ch3Etah.Core.CodeGen.NVelocityEngine
 			}
 			return properties;
 		}
-		
-		private void SetLoaderPath(ExtendedProperties properties) {
+
+		private void SetLoaderPath(ExtendedProperties properties)
+		{
 			string loaderPath = "";
 			// TODO: Solve multiple loader path problem in NVelocity
-			if (this.Template.FileName == "") {
+			if (Template.FileName == "")
+			{
 				loaderPath = BaseFolder;
 			}
-			else {
-				loaderPath = Path.GetDirectoryName(this.Template.GetFullPath());
-				if (loaderPath.IndexOf(BaseFolder) < 0 && loaderPath != BaseFolder) {
+			else
+			{
+				loaderPath = Path.GetDirectoryName(Template.GetFullPath());
+				if (loaderPath.IndexOf(BaseFolder) < 0 && loaderPath != BaseFolder)
+				{
 					loaderPath = BaseFolder + "," + loaderPath;
 				}
-				else if(loaderPath != BaseFolder) {
+				else if (loaderPath != BaseFolder)
+				{
 					loaderPath += "," + BaseFolder;
 				}
 			}
 			// HACK: Setting loader path to base folder until loader problem is solved
 			//loaderPath = BaseFolder;
 			//System.Diagnostics.Debug.WriteLine("NVeleocity:loaderPath=" + loaderPath);
-			if (properties.Contains("file.resource.loader.path")) {
+			if (properties.Contains("file.resource.loader.path"))
+			{
 				properties["file.resource.loader.path"] = loaderPath;
-			} else {
+			}
+			else
+			{
 				properties.AddProperty("file.resource.loader.path", loaderPath);
 			}
 		}
-		
-		private void SetMacroLibraries(ExtendedProperties properties) {
+
+		private void SetMacroLibraries(ExtendedProperties properties)
+		{
 			string libraries = "";
-			foreach (MacroLibrary library in Context.Libraries) {
-				if (libraries != "") {
+			foreach (MacroLibrary library in Context.Libraries)
+			{
+				if (libraries != "")
+				{
 					libraries += ",";
 				}
 				libraries += library.Address;
 			}
-			if (libraries == "") {
+			if (libraries == "")
+			{
 				return;
-			} else {
+			}
+			else
+			{
 				//System.Diagnostics.Debug.WriteLine("NVeleocity:libraries=" + libraries);
 			}
-			if (libraries.Length > 1) {
-				if (properties.Contains("velocimacro.library")) {
+			if (libraries.Length > 1)
+			{
+				if (properties.Contains("velocimacro.library"))
+				{
 					string library = properties["velocimacro.library"].ToString();
 					properties["velocimacro.library"] = library + "," + libraries;
-				} else {
+				}
+				else
+				{
 					properties.AddProperty("velocimacro.library", libraries);
 				}
 			}
 		}
-		
+
 		private void PrepareVelocityContext()
 		{
 			_velocityContext = new VelocityContext();
 			SetXmlContext();
 			SetContextHelpers();
 			SetContextParameters();
- 		}
-		
-		private void SetXmlContext() {
-			if (_inputNode != null) {
+		}
+
+		private void SetXmlContext()
+		{
+			if (_inputNode != null)
+			{
 				XmlContext xmlContext = new XmlContext(_inputNode);
 				_velocityContext.Put(_inputNode.Name, xmlContext);
 			}
 		}
-		
+
 		private void SetContextHelpers()
 		{
-			foreach (Helper helper in this.Context.Helpers)
+			foreach (Helper helper in Context.Helpers)
 			{
 				_velocityContext.Put(helper.Name, helper.CreateInstance());
 			}
 		}
-		
-		private void SetContextParameters() {
-			foreach (InputParameter parameter in this.Context.Parameters) {
+
+		private void SetContextParameters()
+		{
+			foreach (InputParameter parameter in Context.Parameters)
+			{
 				_velocityContext.Put(parameter.Name, parameter.Value);
 			}
 		}

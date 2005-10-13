@@ -276,28 +276,31 @@ namespace Ch3Etah.Core.ProjectLib
 		}
 		
 		private string GetFullPath(string fileName) {
-			string oldBaseFolder = Directory.GetCurrentDirectory();
-			string fullPath = fileName;
-			try {
-				if (Project != null) {
-					string metadataPath = Project.GetFullMetadataPath();
-					if (!Directory.Exists(metadataPath)) {
-						FileSystemHelper.CreateDirectory(new DirectoryInfo(metadataPath));
-					}
-					Directory.SetCurrentDirectory(metadataPath);
-				}
-				Debug.WriteLine("MetadataFile.GetFullPath(): baseDirectory='" + Directory.GetCurrentDirectory() + "' fileName='" + fileName + "'");
-				if (fileName == "") {
-					fullPath = "";
-				}
-				else {
-					fullPath = Path.GetFullPath(fileName);
-				}
-			}
-			finally {
-				Directory.SetCurrentDirectory(oldBaseFolder);
-			}
-			return fullPath;
+			return Path.GetFullPath(Path.Combine(Project.GetFullMetadataPath(), FileName));
+			
+// REMOVED by Igor @ Oct 13, 2005
+//			string oldBaseFolder = Directory.GetCurrentDirectory();
+//			string fullPath = fileName;
+//			try {
+//				if (Project != null) {
+//					string metadataPath = Project.GetFullMetadataPath();
+//					if (!Directory.Exists(metadataPath)) {
+//						FileSystemHelper.CreateDirectory(new DirectoryInfo(metadataPath));
+//					}
+//					Directory.SetCurrentDirectory(metadataPath);
+//				}
+//				Debug.WriteLine("MetadataFile.GetFullPath(): baseDirectory='" + Directory.GetCurrentDirectory() + "' fileName='" + fileName + "'");
+//				if (fileName == "") {
+//					fullPath = "";
+//				}
+//				else {
+//					fullPath = Path.GetFullPath(fileName);
+//				}
+//			}
+//			finally {
+//				Directory.SetCurrentDirectory(oldBaseFolder);
+//			}
+//			return fullPath;
 		}
 
 		public string GetRelativePath(string fileName) {

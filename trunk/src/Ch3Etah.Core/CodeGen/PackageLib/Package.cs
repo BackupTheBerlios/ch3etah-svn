@@ -125,6 +125,11 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 			get { return new string[] {".CHP", ".CH3PKG", ".XML"}; }
 		}
 		
+		public string GetFullBaseFolderPath()
+		{
+			return Path.GetFullPath(Path.Combine(Path.GetDirectoryName(_packageFileName), _baseFolder));
+		}
+		
 		#region Load Package
 		public static Package Load(string uri) 
 		{
