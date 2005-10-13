@@ -150,6 +150,7 @@
                     Name = "log4net"
                     AssemblyName = "log4net"
                     HintPath = "..\Libraries\Bin\log4net.dll"
+                    Private = "True"
                 />
                 <Reference
                     Name = "NVelocity"
@@ -426,7 +427,7 @@
                 />
                 <File
                     RelPath = "DocumentHandling\MdiStrategy\ObjectEditorForm.cs"
-                    SubType = "Form"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -550,7 +551,7 @@
                 />
                 <File
                     RelPath = "Widgets\OutputWindow.cs"
-                    SubType = "Form"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -560,7 +561,7 @@
                 />
                 <File
                     RelPath = "Widgets\ProjectExplorer.cs"
-                    SubType = "Form"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -570,7 +571,7 @@
                 />
                 <File
                     RelPath = "Widgets\PropertiesWindow.cs"
-                    SubType = "Form"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
