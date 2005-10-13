@@ -114,6 +114,7 @@
                     Name = "log4net"
                     AssemblyName = "log4net"
                     HintPath = "..\Libraries\bin\log4net.dll"
+                    Private = "False"
                 />
                 <Reference
                     Name = "Commons"
@@ -124,6 +125,11 @@
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
                     HintPath = "..\Libraries\bin\NVelocity.dll"
+                />
+                <Reference
+                    Name = "Adapdev.Data"
+                    AssemblyName = "Adapdev.Data"
+                    HintPath = "..\..\Bin\Adapdev.Data.dll"
                 />
             </References>
         </Build>
@@ -164,6 +170,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <Folder RelPath = "CodeGen\CodeSmith\" />
                 <File
                     RelPath = "CodeGen\NVelocity\NVelocityTransformationEngine.cs"
                     SubType = "Code"
