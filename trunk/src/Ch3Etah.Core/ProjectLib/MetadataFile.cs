@@ -276,7 +276,17 @@ namespace Ch3Etah.Core.ProjectLib
 		}
 		
 		private string GetFullPath(string fileName) {
-			return Path.GetFullPath(Path.Combine(Project.GetFullMetadataPath(), FileName));
+			if (Path.IsPathRooted(fileName))
+			{
+				return fileName;
+			}
+			else
+			{
+				string fullMetadataPath = Project.GetFullMetadataPath();
+				string path = Path.Combine(fullMetadataPath, FileName);
+				string fullPath = Path.GetFullPath(path);
+				return fullPath;
+			}
 			
 // REMOVED by Igor @ Oct 13, 2005
 //			string oldBaseFolder = Directory.GetCurrentDirectory();

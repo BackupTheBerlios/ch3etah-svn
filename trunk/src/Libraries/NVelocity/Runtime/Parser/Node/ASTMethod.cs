@@ -244,7 +244,7 @@ namespace NVelocity.Runtime.Parser.Node {
 		*  also, let non-Exception Throwables go...
 		*/
 
-		if (ec != null && ite.GetBaseException() is System.Exception) {
+		if (ec != null) {
 		    try {
 			return ec.methodException(o.GetType(), methodName, (System.Exception) ite.GetBaseException());
 		    } catch (System.Exception e) {

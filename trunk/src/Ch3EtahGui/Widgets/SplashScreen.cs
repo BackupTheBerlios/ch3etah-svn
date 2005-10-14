@@ -1,5 +1,7 @@
+using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 using System.Resources;
 using System.Threading;
 using System.Windows.Forms;
@@ -52,23 +54,55 @@ namespace Ch3Etah.Gui.Widgets
 		/// </summary>
 		private void InitializeComponent()
 		{
-			ResourceManager resources = new ResourceManager(typeof (SplashScreen));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(SplashScreen));
+			this.lblVersion = new System.Windows.Forms.Label();
+			this.lblRevision = new System.Windows.Forms.Label();
+			this.SuspendLayout();
 			// 
-			// AboutWindow
+			// lblVersion
 			// 
-			AutoScaleBaseSize = new Size(5, 13);
-			BackgroundImage = ((Image) (resources.GetObject("$this.BackgroundImage")));
-			ClientSize = new Size(500, 300);
-			ControlBox = false;
-			FormBorderStyle = FormBorderStyle.None;
-			HelpButton = true;
-			Name = "AboutWindow";
-			StartPosition = FormStartPosition.CenterScreen;
-			TopMost = true;
+			this.lblVersion.AutoSize = true;
+			this.lblVersion.BackColor = System.Drawing.Color.Transparent;
+			this.lblVersion.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.lblVersion.Location = new System.Drawing.Point(8, 192);
+			this.lblVersion.Name = "lblVersion";
+			this.lblVersion.Size = new System.Drawing.Size(117, 23);
+			this.lblVersion.TabIndex = 0;
+			this.lblVersion.Text = "Version {0}";
+			// 
+			// lblRevision
+			// 
+			this.lblRevision.AutoSize = true;
+			this.lblRevision.BackColor = System.Drawing.Color.Transparent;
+			this.lblRevision.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.lblRevision.Location = new System.Drawing.Point(8, 224);
+			this.lblRevision.Name = "lblRevision";
+			this.lblRevision.Size = new System.Drawing.Size(125, 23);
+			this.lblRevision.TabIndex = 0;
+			this.lblRevision.Text = "Revision {0}";
+			// 
+			// SplashScreen
+			// 
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+			this.ClientSize = new System.Drawing.Size(500, 300);
+			this.ControlBox = false;
+			this.Controls.Add(this.lblVersion);
+			this.Controls.Add(this.lblRevision);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+			this.HelpButton = true;
+			this.Name = "SplashScreen";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.TopMost = true;
+			this.Load += new System.EventHandler(this.SplashScreen_Load);
+			this.ResumeLayout(false);
 
 		}
 
 		#endregion
+
+		private System.Windows.Forms.Label lblVersion;
+		private System.Windows.Forms.Label lblRevision;
 
 		private static SplashScreen defaultInstance = new SplashScreen();
 		
@@ -99,6 +133,26 @@ namespace Ch3Etah.Gui.Widgets
 			catch
 			{
 			}
+		}
+
+		private void SplashScreen_Load(object sender, System.EventArgs e)
+		{
+			lblVersion.Text = string.Format(lblVersion.Text, GetVersion());
+			lblRevision.Text = string.Format(lblRevision.Text, GetRevision());
+		}
+
+		private string GetVersion()
+		{
+			Assembly assembly = GetType().Assembly;
+			AssemblyName name = assembly.GetName();
+			return string.Format("{0}.{1}", name.Version.Major, name.Version.Minor);
+		}
+		
+		private string GetRevision()
+		{
+			Assembly assembly = GetType().Assembly;
+			AssemblyName name = assembly.GetName();
+			return string.Format("{0}{1}", name.Version.Build, name.Version.Revision);
 		}
 	}
 }

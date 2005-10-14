@@ -114,361 +114,359 @@ namespace Ch3Etah.Gui.DocumentHandling {
 		/// not be able to load this method if it was changed manually.
 		/// </summary>
 		private void InitializeComponent() {
-			components = new Container();
-			panelBottomLeft = new Panel();
-			lblInputParameters = new Label();
-			splitterTop = new Splitter();
-			cboEngine = new ComboBox();
-			chkOverwrite = new CheckBox();
-			lblPackage = new Label();
-			panelTopLeft = new Panel();
-			cboTemplate = new ComboBox();
-			cboPackage = new ComboBox();
-			btnEditTemplate = new Button();
-			lblTemplate = new Label();
-			lblOutputPath = new Label();
-			toolTipProvider = new ToolTip(components);
-			splitterBottom = new Splitter();
-			panelTop = new Panel();
-			panelTopRight = new Panel();
-			btnSelectOutputPath = new Button();
-			lblEngine = new Label();
-			txtOutputPath = new TextBox();
-			panelBottomRight = new Panel();
-			grpMultiOutput = new GroupBox();
-			panel1 = new Panel();
-			cmdSelectAll = new Button();
-			cmdSelectNone = new Button();
-			cmdInvertSelection = new Button();
-			grpOutputGeneration = new GroupBox();
-			optMultiOutput = new RadioButton();
-			optSingleOutput = new RadioButton();
-			panelBottom = new Panel();
-			panelBottomLeft.SuspendLayout();
-			panelTopLeft.SuspendLayout();
-			panelTop.SuspendLayout();
-			panelTopRight.SuspendLayout();
-			panelBottomRight.SuspendLayout();
-			grpMultiOutput.SuspendLayout();
-			panel1.SuspendLayout();
-			grpOutputGeneration.SuspendLayout();
-			panelBottom.SuspendLayout();
-			SuspendLayout();
+			this.components = new System.ComponentModel.Container();
+			this.panelBottomLeft = new System.Windows.Forms.Panel();
+			this.lblInputParameters = new System.Windows.Forms.Label();
+			this.splitterTop = new System.Windows.Forms.Splitter();
+			this.cboEngine = new System.Windows.Forms.ComboBox();
+			this.chkOverwrite = new System.Windows.Forms.CheckBox();
+			this.lblPackage = new System.Windows.Forms.Label();
+			this.panelTopLeft = new System.Windows.Forms.Panel();
+			this.cboTemplate = new System.Windows.Forms.ComboBox();
+			this.cboPackage = new System.Windows.Forms.ComboBox();
+			this.btnEditTemplate = new System.Windows.Forms.Button();
+			this.lblTemplate = new System.Windows.Forms.Label();
+			this.lblOutputPath = new System.Windows.Forms.Label();
+			this.toolTipProvider = new System.Windows.Forms.ToolTip(this.components);
+			this.splitterBottom = new System.Windows.Forms.Splitter();
+			this.panelTop = new System.Windows.Forms.Panel();
+			this.panelTopRight = new System.Windows.Forms.Panel();
+			this.btnSelectOutputPath = new System.Windows.Forms.Button();
+			this.lblEngine = new System.Windows.Forms.Label();
+			this.txtOutputPath = new System.Windows.Forms.TextBox();
+			this.panelBottomRight = new System.Windows.Forms.Panel();
+			this.grpMultiOutput = new System.Windows.Forms.GroupBox();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.cmdSelectAll = new System.Windows.Forms.Button();
+			this.cmdSelectNone = new System.Windows.Forms.Button();
+			this.cmdInvertSelection = new System.Windows.Forms.Button();
+			this.grpOutputGeneration = new System.Windows.Forms.GroupBox();
+			this.optMultiOutput = new System.Windows.Forms.RadioButton();
+			this.optSingleOutput = new System.Windows.Forms.RadioButton();
+			this.panelBottom = new System.Windows.Forms.Panel();
+			this.panelBottomLeft.SuspendLayout();
+			this.panelTopLeft.SuspendLayout();
+			this.panelTop.SuspendLayout();
+			this.panelTopRight.SuspendLayout();
+			this.panelBottomRight.SuspendLayout();
+			this.grpMultiOutput.SuspendLayout();
+			this.panel1.SuspendLayout();
+			this.grpOutputGeneration.SuspendLayout();
+			this.panelBottom.SuspendLayout();
+			this.SuspendLayout();
 			// 
 			// panelBottomLeft
 			// 
-			panelBottomLeft.Controls.Add(lblInputParameters);
-			panelBottomLeft.Dock = DockStyle.Left;
-			panelBottomLeft.Location = new Point(0, 0);
-			panelBottomLeft.Name = "panelBottomLeft";
-			panelBottomLeft.Size = new Size(296, 344);
-			panelBottomLeft.TabIndex = 12;
+			this.panelBottomLeft.Controls.Add(this.lblInputParameters);
+			this.panelBottomLeft.Dock = System.Windows.Forms.DockStyle.Left;
+			this.panelBottomLeft.Location = new System.Drawing.Point(0, 0);
+			this.panelBottomLeft.Name = "panelBottomLeft";
+			this.panelBottomLeft.Size = new System.Drawing.Size(296, 344);
+			this.panelBottomLeft.TabIndex = 12;
 			// 
 			// lblInputParameters
 			// 
-			lblInputParameters.Dock = DockStyle.Top;
-			lblInputParameters.Location = new Point(0, 0);
-			lblInputParameters.Name = "lblInputParameters";
-			lblInputParameters.Size = new Size(296, 16);
-			lblInputParameters.TabIndex = 0;
-			lblInputParameters.Text = "Input Parameters";
+			this.lblInputParameters.Dock = System.Windows.Forms.DockStyle.Top;
+			this.lblInputParameters.Location = new System.Drawing.Point(0, 0);
+			this.lblInputParameters.Name = "lblInputParameters";
+			this.lblInputParameters.Size = new System.Drawing.Size(296, 16);
+			this.lblInputParameters.TabIndex = 0;
+			this.lblInputParameters.Text = "Input Parameters";
 			// 
 			// splitterTop
 			// 
-			splitterTop.Location = new Point(296, 0);
-			splitterTop.Name = "splitterTop";
-			splitterTop.Size = new Size(8, 96);
-			splitterTop.TabIndex = 1;
-			splitterTop.TabStop = false;
+			this.splitterTop.Location = new System.Drawing.Point(296, 0);
+			this.splitterTop.Name = "splitterTop";
+			this.splitterTop.Size = new System.Drawing.Size(8, 96);
+			this.splitterTop.TabIndex = 1;
+			this.splitterTop.TabStop = false;
 			// 
 			// cboEngine
 			// 
-			cboEngine.Anchor = ((AnchorStyles) (((AnchorStyles.Top | AnchorStyles.Left)
-			                                     | AnchorStyles.Right)));
-			cboEngine.DropDownStyle = ComboBoxStyle.DropDownList;
-			cboEngine.Location = new Point(0, 64);
-			cboEngine.Name = "cboEngine";
-			cboEngine.Size = new Size(328, 21);
-			cboEngine.TabIndex = 4;
+			this.cboEngine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.cboEngine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboEngine.Location = new System.Drawing.Point(0, 64);
+			this.cboEngine.Name = "cboEngine";
+			this.cboEngine.Size = new System.Drawing.Size(328, 21);
+			this.cboEngine.TabIndex = 4;
 			// 
 			// chkOverwrite
 			// 
-			chkOverwrite.FlatStyle = FlatStyle.System;
-			chkOverwrite.Location = new Point(16, 80);
-			chkOverwrite.Name = "chkOverwrite";
-			chkOverwrite.Size = new Size(152, 24);
-			chkOverwrite.TabIndex = 8;
-			chkOverwrite.Text = "Overwrite existing file(s)";
+			this.chkOverwrite.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.chkOverwrite.Location = new System.Drawing.Point(16, 80);
+			this.chkOverwrite.Name = "chkOverwrite";
+			this.chkOverwrite.Size = new System.Drawing.Size(152, 24);
+			this.chkOverwrite.TabIndex = 8;
+			this.chkOverwrite.Text = "Overwrite existing file(s)";
 			// 
 			// lblPackage
 			// 
-			lblPackage.Anchor = ((AnchorStyles) (((AnchorStyles.Top | AnchorStyles.Left)
-			                                      | AnchorStyles.Right)));
-			lblPackage.Location = new Point(0, 8);
-			lblPackage.Name = "lblPackage";
-			lblPackage.Size = new Size(288, 16);
-			lblPackage.TabIndex = 5;
-			lblPackage.Text = "Package";
+			this.lblPackage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.lblPackage.Location = new System.Drawing.Point(0, 8);
+			this.lblPackage.Name = "lblPackage";
+			this.lblPackage.Size = new System.Drawing.Size(288, 16);
+			this.lblPackage.TabIndex = 5;
+			this.lblPackage.Text = "Package";
 			// 
 			// panelTopLeft
 			// 
-			panelTopLeft.Controls.Add(cboTemplate);
-			panelTopLeft.Controls.Add(cboPackage);
-			panelTopLeft.Controls.Add(btnEditTemplate);
-			panelTopLeft.Controls.Add(lblTemplate);
-			panelTopLeft.Controls.Add(lblPackage);
-			panelTopLeft.Dock = DockStyle.Left;
-			panelTopLeft.Location = new Point(0, 0);
-			panelTopLeft.Name = "panelTopLeft";
-			panelTopLeft.Size = new Size(296, 96);
-			panelTopLeft.TabIndex = 0;
+			this.panelTopLeft.Controls.Add(this.cboTemplate);
+			this.panelTopLeft.Controls.Add(this.cboPackage);
+			this.panelTopLeft.Controls.Add(this.btnEditTemplate);
+			this.panelTopLeft.Controls.Add(this.lblTemplate);
+			this.panelTopLeft.Controls.Add(this.lblPackage);
+			this.panelTopLeft.Dock = System.Windows.Forms.DockStyle.Left;
+			this.panelTopLeft.Location = new System.Drawing.Point(0, 0);
+			this.panelTopLeft.Name = "panelTopLeft";
+			this.panelTopLeft.Size = new System.Drawing.Size(296, 96);
+			this.panelTopLeft.TabIndex = 0;
 			// 
 			// cboTemplate
 			// 
-			cboTemplate.DropDownStyle = ComboBoxStyle.DropDownList;
-			cboTemplate.Location = new Point(8, 64);
-			cboTemplate.Name = "cboTemplate";
-			cboTemplate.Size = new Size(252, 21);
-			cboTemplate.Sorted = true;
-			cboTemplate.TabIndex = 1;
-			cboTemplate.DropDown += new EventHandler(cboTemplate_DropDown);
+			this.cboTemplate.Location = new System.Drawing.Point(8, 64);
+			this.cboTemplate.Name = "cboTemplate";
+			this.cboTemplate.Size = new System.Drawing.Size(252, 21);
+			this.cboTemplate.Sorted = true;
+			this.cboTemplate.TabIndex = 1;
+			this.cboTemplate.DropDown += new System.EventHandler(this.cboTemplate_DropDown);
 			// 
 			// cboPackage
 			// 
-			cboPackage.DropDownStyle = ComboBoxStyle.DropDownList;
-			cboPackage.Location = new Point(8, 24);
-			cboPackage.Name = "cboPackage";
-			cboPackage.Size = new Size(280, 21);
-			cboPackage.Sorted = true;
-			cboPackage.TabIndex = 0;
-			cboPackage.DropDown += new EventHandler(cboPackage_DropDown);
+			this.cboPackage.Location = new System.Drawing.Point(8, 24);
+			this.cboPackage.Name = "cboPackage";
+			this.cboPackage.Size = new System.Drawing.Size(280, 21);
+			this.cboPackage.Sorted = true;
+			this.cboPackage.TabIndex = 0;
+			this.cboPackage.DropDown += new System.EventHandler(this.cboPackage_DropDown);
 			// 
 			// btnEditTemplate
 			// 
-			btnEditTemplate.Anchor = ((AnchorStyles) ((AnchorStyles.Top | AnchorStyles.Right)));
-			btnEditTemplate.FlatStyle = FlatStyle.System;
-			btnEditTemplate.Location = new Point(264, 64);
-			btnEditTemplate.Name = "btnEditTemplate";
-			btnEditTemplate.Size = new Size(24, 21);
-			btnEditTemplate.TabIndex = 2;
-			btnEditTemplate.Text = "^";
-			btnEditTemplate.Click += new EventHandler(btnEditTemplate_Click);
+			this.btnEditTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnEditTemplate.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnEditTemplate.Location = new System.Drawing.Point(264, 64);
+			this.btnEditTemplate.Name = "btnEditTemplate";
+			this.btnEditTemplate.Size = new System.Drawing.Size(24, 21);
+			this.btnEditTemplate.TabIndex = 2;
+			this.btnEditTemplate.Text = "^";
+			this.btnEditTemplate.Click += new System.EventHandler(this.btnEditTemplate_Click);
 			// 
 			// lblTemplate
 			// 
-			lblTemplate.Anchor = ((AnchorStyles) (((AnchorStyles.Top | AnchorStyles.Left)
-			                                       | AnchorStyles.Right)));
-			lblTemplate.Location = new Point(0, 48);
-			lblTemplate.Name = "lblTemplate";
-			lblTemplate.Size = new Size(288, 16);
-			lblTemplate.TabIndex = 7;
-			lblTemplate.Text = "Template";
+			this.lblTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.lblTemplate.Location = new System.Drawing.Point(0, 48);
+			this.lblTemplate.Name = "lblTemplate";
+			this.lblTemplate.Size = new System.Drawing.Size(288, 16);
+			this.lblTemplate.TabIndex = 7;
+			this.lblTemplate.Text = "Template";
 			// 
 			// lblOutputPath
 			// 
-			lblOutputPath.Anchor = ((AnchorStyles) (((AnchorStyles.Top | AnchorStyles.Left)
-			                                         | AnchorStyles.Right)));
-			lblOutputPath.Location = new Point(0, 8);
-			lblOutputPath.Name = "lblOutputPath";
-			lblOutputPath.Size = new Size(320, 16);
-			lblOutputPath.TabIndex = 7;
-			lblOutputPath.Text = "Output Path";
+			this.lblOutputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.lblOutputPath.Location = new System.Drawing.Point(0, 8);
+			this.lblOutputPath.Name = "lblOutputPath";
+			this.lblOutputPath.Size = new System.Drawing.Size(320, 16);
+			this.lblOutputPath.TabIndex = 7;
+			this.lblOutputPath.Text = "Output Path";
 			// 
 			// splitterBottom
 			// 
-			splitterBottom.Location = new Point(296, 0);
-			splitterBottom.Name = "splitterBottom";
-			splitterBottom.Size = new Size(8, 344);
-			splitterBottom.TabIndex = 13;
-			splitterBottom.TabStop = false;
+			this.splitterBottom.Location = new System.Drawing.Point(296, 0);
+			this.splitterBottom.Name = "splitterBottom";
+			this.splitterBottom.Size = new System.Drawing.Size(8, 344);
+			this.splitterBottom.TabIndex = 13;
+			this.splitterBottom.TabStop = false;
 			// 
 			// panelTop
 			// 
-			panelTop.Controls.Add(panelTopRight);
-			panelTop.Controls.Add(splitterTop);
-			panelTop.Controls.Add(panelTopLeft);
-			panelTop.Dock = DockStyle.Top;
-			panelTop.Location = new Point(8, 8);
-			panelTop.Name = "panelTop";
-			panelTop.Size = new Size(632, 96);
-			panelTop.TabIndex = 6;
+			this.panelTop.Controls.Add(this.panelTopRight);
+			this.panelTop.Controls.Add(this.splitterTop);
+			this.panelTop.Controls.Add(this.panelTopLeft);
+			this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panelTop.Location = new System.Drawing.Point(8, 8);
+			this.panelTop.Name = "panelTop";
+			this.panelTop.Size = new System.Drawing.Size(632, 96);
+			this.panelTop.TabIndex = 6;
 			// 
 			// panelTopRight
 			// 
-			panelTopRight.Controls.Add(btnSelectOutputPath);
-			panelTopRight.Controls.Add(lblEngine);
-			panelTopRight.Controls.Add(cboEngine);
-			panelTopRight.Controls.Add(txtOutputPath);
-			panelTopRight.Controls.Add(lblOutputPath);
-			panelTopRight.Dock = DockStyle.Fill;
-			panelTopRight.Location = new Point(304, 0);
-			panelTopRight.Name = "panelTopRight";
-			panelTopRight.Size = new Size(328, 96);
-			panelTopRight.TabIndex = 2;
+			this.panelTopRight.Controls.Add(this.btnSelectOutputPath);
+			this.panelTopRight.Controls.Add(this.lblEngine);
+			this.panelTopRight.Controls.Add(this.cboEngine);
+			this.panelTopRight.Controls.Add(this.txtOutputPath);
+			this.panelTopRight.Controls.Add(this.lblOutputPath);
+			this.panelTopRight.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panelTopRight.Location = new System.Drawing.Point(304, 0);
+			this.panelTopRight.Name = "panelTopRight";
+			this.panelTopRight.Size = new System.Drawing.Size(328, 96);
+			this.panelTopRight.TabIndex = 2;
 			// 
 			// btnSelectOutputPath
 			// 
-			btnSelectOutputPath.Anchor = ((AnchorStyles) ((AnchorStyles.Top | AnchorStyles.Right)));
-			btnSelectOutputPath.FlatStyle = FlatStyle.System;
-			btnSelectOutputPath.Location = new Point(300, 24);
-			btnSelectOutputPath.Name = "btnSelectOutputPath";
-			btnSelectOutputPath.Size = new Size(24, 21);
-			btnSelectOutputPath.TabIndex = 7;
-			btnSelectOutputPath.Text = "...";
-			btnSelectOutputPath.Visible = false;
+			this.btnSelectOutputPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnSelectOutputPath.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnSelectOutputPath.Location = new System.Drawing.Point(300, 24);
+			this.btnSelectOutputPath.Name = "btnSelectOutputPath";
+			this.btnSelectOutputPath.Size = new System.Drawing.Size(24, 21);
+			this.btnSelectOutputPath.TabIndex = 7;
+			this.btnSelectOutputPath.Text = "...";
+			this.btnSelectOutputPath.Visible = false;
 			// 
 			// lblEngine
 			// 
-			lblEngine.Anchor = ((AnchorStyles) (((AnchorStyles.Top | AnchorStyles.Left)
-			                                     | AnchorStyles.Right)));
-			lblEngine.Location = new Point(0, 48);
-			lblEngine.Name = "lblEngine";
-			lblEngine.Size = new Size(224, 16);
-			lblEngine.TabIndex = 10;
-			lblEngine.Text = "Engine";
+			this.lblEngine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.lblEngine.Location = new System.Drawing.Point(0, 48);
+			this.lblEngine.Name = "lblEngine";
+			this.lblEngine.Size = new System.Drawing.Size(224, 16);
+			this.lblEngine.TabIndex = 10;
+			this.lblEngine.Text = "Engine";
 			// 
 			// txtOutputPath
 			// 
-			txtOutputPath.Anchor = ((AnchorStyles) (((AnchorStyles.Top | AnchorStyles.Left)
-			                                         | AnchorStyles.Right)));
-			txtOutputPath.Location = new Point(0, 24);
-			txtOutputPath.Name = "txtOutputPath";
-			txtOutputPath.Size = new Size(296, 20);
-			txtOutputPath.TabIndex = 3;
-			txtOutputPath.Text = "";
+			this.txtOutputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.txtOutputPath.Location = new System.Drawing.Point(0, 24);
+			this.txtOutputPath.Name = "txtOutputPath";
+			this.txtOutputPath.Size = new System.Drawing.Size(296, 20);
+			this.txtOutputPath.TabIndex = 3;
+			this.txtOutputPath.Text = "";
 			// 
 			// panelBottomRight
 			// 
-			panelBottomRight.Controls.Add(grpMultiOutput);
-			panelBottomRight.Controls.Add(grpOutputGeneration);
-			panelBottomRight.Dock = DockStyle.Fill;
-			panelBottomRight.Location = new Point(304, 0);
-			panelBottomRight.Name = "panelBottomRight";
-			panelBottomRight.Size = new Size(328, 344);
-			panelBottomRight.TabIndex = 14;
+			this.panelBottomRight.Controls.Add(this.grpMultiOutput);
+			this.panelBottomRight.Controls.Add(this.grpOutputGeneration);
+			this.panelBottomRight.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panelBottomRight.Location = new System.Drawing.Point(304, 0);
+			this.panelBottomRight.Name = "panelBottomRight";
+			this.panelBottomRight.Size = new System.Drawing.Size(328, 344);
+			this.panelBottomRight.TabIndex = 14;
 			// 
 			// grpMultiOutput
 			// 
-			grpMultiOutput.Controls.Add(panel1);
-			grpMultiOutput.Dock = DockStyle.Fill;
-			grpMultiOutput.Location = new Point(0, 112);
-			grpMultiOutput.Name = "grpMultiOutput";
-			grpMultiOutput.Size = new Size(328, 232);
-			grpMultiOutput.TabIndex = 11;
-			grpMultiOutput.TabStop = false;
-			grpMultiOutput.Text = "Selected metadata files";
+			this.grpMultiOutput.Controls.Add(this.panel1);
+			this.grpMultiOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.grpMultiOutput.Location = new System.Drawing.Point(0, 112);
+			this.grpMultiOutput.Name = "grpMultiOutput";
+			this.grpMultiOutput.Size = new System.Drawing.Size(328, 232);
+			this.grpMultiOutput.TabIndex = 11;
+			this.grpMultiOutput.TabStop = false;
+			this.grpMultiOutput.Text = "Selected metadata files";
 			// 
 			// panel1
 			// 
-			panel1.Controls.Add(cmdSelectAll);
-			panel1.Controls.Add(cmdSelectNone);
-			panel1.Controls.Add(cmdInvertSelection);
-			panel1.Dock = DockStyle.Right;
-			panel1.Location = new Point(221, 16);
-			panel1.Name = "panel1";
-			panel1.Size = new Size(104, 213);
-			panel1.TabIndex = 0;
+			this.panel1.Controls.Add(this.cmdSelectAll);
+			this.panel1.Controls.Add(this.cmdSelectNone);
+			this.panel1.Controls.Add(this.cmdInvertSelection);
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
+			this.panel1.Location = new System.Drawing.Point(221, 16);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(104, 213);
+			this.panel1.TabIndex = 0;
 			// 
 			// cmdSelectAll
 			// 
-			cmdSelectAll.Anchor = ((AnchorStyles) (((AnchorStyles.Top | AnchorStyles.Left)
-			                                        | AnchorStyles.Right)));
-			cmdSelectAll.FlatStyle = FlatStyle.System;
-			cmdSelectAll.Location = new Point(8, 8);
-			cmdSelectAll.Name = "cmdSelectAll";
-			cmdSelectAll.Size = new Size(91, 23);
-			cmdSelectAll.TabIndex = 0;
-			cmdSelectAll.Text = "Select All";
-			cmdSelectAll.Click += new EventHandler(cmdSelectAll_Click);
+			this.cmdSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.cmdSelectAll.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.cmdSelectAll.Location = new System.Drawing.Point(8, 8);
+			this.cmdSelectAll.Name = "cmdSelectAll";
+			this.cmdSelectAll.Size = new System.Drawing.Size(91, 23);
+			this.cmdSelectAll.TabIndex = 0;
+			this.cmdSelectAll.Text = "Select All";
+			this.cmdSelectAll.Click += new System.EventHandler(this.cmdSelectAll_Click);
 			// 
 			// cmdSelectNone
 			// 
-			cmdSelectNone.Anchor = ((AnchorStyles) (((AnchorStyles.Top | AnchorStyles.Left)
-			                                         | AnchorStyles.Right)));
-			cmdSelectNone.FlatStyle = FlatStyle.System;
-			cmdSelectNone.Location = new Point(8, 40);
-			cmdSelectNone.Name = "cmdSelectNone";
-			cmdSelectNone.Size = new Size(91, 23);
-			cmdSelectNone.TabIndex = 0;
-			cmdSelectNone.Text = "Select None";
-			cmdSelectNone.Click += new EventHandler(cmdSelectNone_Click);
+			this.cmdSelectNone.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.cmdSelectNone.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.cmdSelectNone.Location = new System.Drawing.Point(8, 40);
+			this.cmdSelectNone.Name = "cmdSelectNone";
+			this.cmdSelectNone.Size = new System.Drawing.Size(91, 23);
+			this.cmdSelectNone.TabIndex = 0;
+			this.cmdSelectNone.Text = "Select None";
+			this.cmdSelectNone.Click += new System.EventHandler(this.cmdSelectNone_Click);
 			// 
 			// cmdInvertSelection
 			// 
-			cmdInvertSelection.Anchor = ((AnchorStyles) (((AnchorStyles.Top | AnchorStyles.Left)
-			                                              | AnchorStyles.Right)));
-			cmdInvertSelection.FlatStyle = FlatStyle.System;
-			cmdInvertSelection.Location = new Point(8, 72);
-			cmdInvertSelection.Name = "cmdInvertSelection";
-			cmdInvertSelection.Size = new Size(91, 23);
-			cmdInvertSelection.TabIndex = 0;
-			cmdInvertSelection.Text = "Invert Selection";
-			cmdInvertSelection.Click += new EventHandler(cmdInvertSelection_Click);
+			this.cmdInvertSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.cmdInvertSelection.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.cmdInvertSelection.Location = new System.Drawing.Point(8, 72);
+			this.cmdInvertSelection.Name = "cmdInvertSelection";
+			this.cmdInvertSelection.Size = new System.Drawing.Size(91, 23);
+			this.cmdInvertSelection.TabIndex = 0;
+			this.cmdInvertSelection.Text = "Invert Selection";
+			this.cmdInvertSelection.Click += new System.EventHandler(this.cmdInvertSelection_Click);
 			// 
 			// grpOutputGeneration
 			// 
-			grpOutputGeneration.Controls.Add(optMultiOutput);
-			grpOutputGeneration.Controls.Add(optSingleOutput);
-			grpOutputGeneration.Controls.Add(chkOverwrite);
-			grpOutputGeneration.Dock = DockStyle.Top;
-			grpOutputGeneration.Location = new Point(0, 0);
-			grpOutputGeneration.Name = "grpOutputGeneration";
-			grpOutputGeneration.Size = new Size(328, 112);
-			grpOutputGeneration.TabIndex = 0;
-			grpOutputGeneration.TabStop = false;
-			grpOutputGeneration.Text = "Ouput generation";
+			this.grpOutputGeneration.Controls.Add(this.optMultiOutput);
+			this.grpOutputGeneration.Controls.Add(this.optSingleOutput);
+			this.grpOutputGeneration.Controls.Add(this.chkOverwrite);
+			this.grpOutputGeneration.Dock = System.Windows.Forms.DockStyle.Top;
+			this.grpOutputGeneration.Location = new System.Drawing.Point(0, 0);
+			this.grpOutputGeneration.Name = "grpOutputGeneration";
+			this.grpOutputGeneration.Size = new System.Drawing.Size(328, 112);
+			this.grpOutputGeneration.TabIndex = 0;
+			this.grpOutputGeneration.TabStop = false;
+			this.grpOutputGeneration.Text = "Ouput generation";
 			// 
 			// optMultiOutput
 			// 
-			optMultiOutput.FlatStyle = FlatStyle.System;
-			optMultiOutput.Location = new Point(16, 48);
-			optMultiOutput.Name = "optMultiOutput";
-			optMultiOutput.Size = new Size(280, 24);
-			optMultiOutput.TabIndex = 11;
-			optMultiOutput.Text = "Multiple output files  (one output per metadata file)";
-			optMultiOutput.CheckedChanged += new EventHandler(optMultiOutput_CheckedChanged);
+			this.optMultiOutput.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.optMultiOutput.Location = new System.Drawing.Point(16, 48);
+			this.optMultiOutput.Name = "optMultiOutput";
+			this.optMultiOutput.Size = new System.Drawing.Size(280, 24);
+			this.optMultiOutput.TabIndex = 11;
+			this.optMultiOutput.Text = "Multiple output files  (one output per metadata file)";
+			this.optMultiOutput.CheckedChanged += new System.EventHandler(this.optMultiOutput_CheckedChanged);
 			// 
 			// optSingleOutput
 			// 
-			optSingleOutput.Checked = true;
-			optSingleOutput.FlatStyle = FlatStyle.System;
-			optSingleOutput.Location = new Point(16, 24);
-			optSingleOutput.Name = "optSingleOutput";
-			optSingleOutput.Size = new Size(112, 24);
-			optSingleOutput.TabIndex = 9;
-			optSingleOutput.TabStop = true;
-			optSingleOutput.Text = "Single output file";
-			optSingleOutput.CheckedChanged += new EventHandler(optSingleOutput_CheckedChanged);
+			this.optSingleOutput.Checked = true;
+			this.optSingleOutput.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.optSingleOutput.Location = new System.Drawing.Point(16, 24);
+			this.optSingleOutput.Name = "optSingleOutput";
+			this.optSingleOutput.Size = new System.Drawing.Size(112, 24);
+			this.optSingleOutput.TabIndex = 9;
+			this.optSingleOutput.TabStop = true;
+			this.optSingleOutput.Text = "Single output file";
+			this.optSingleOutput.CheckedChanged += new System.EventHandler(this.optSingleOutput_CheckedChanged);
 			// 
 			// panelBottom
 			// 
-			panelBottom.Controls.Add(panelBottomRight);
-			panelBottom.Controls.Add(splitterBottom);
-			panelBottom.Controls.Add(panelBottomLeft);
-			panelBottom.Dock = DockStyle.Fill;
-			panelBottom.Location = new Point(8, 104);
-			panelBottom.Name = "panelBottom";
-			panelBottom.Size = new Size(632, 344);
-			panelBottom.TabIndex = 9;
+			this.panelBottom.Controls.Add(this.panelBottomRight);
+			this.panelBottom.Controls.Add(this.splitterBottom);
+			this.panelBottom.Controls.Add(this.panelBottomLeft);
+			this.panelBottom.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panelBottom.Location = new System.Drawing.Point(8, 104);
+			this.panelBottom.Name = "panelBottom";
+			this.panelBottom.Size = new System.Drawing.Size(632, 344);
+			this.panelBottom.TabIndex = 9;
 			// 
 			// CodeGeneratorCommandEditor
 			// 
-			Controls.Add(panelBottom);
-			Controls.Add(panelTop);
-			DockPadding.All = 8;
-			Name = "CodeGeneratorCommandEditor";
-			Size = new Size(648, 456);
-			Load += new EventHandler(CodeGeneratorCommandEditorLoad);
-			panelBottomLeft.ResumeLayout(false);
-			panelTopLeft.ResumeLayout(false);
-			panelTop.ResumeLayout(false);
-			panelTopRight.ResumeLayout(false);
-			panelBottomRight.ResumeLayout(false);
-			grpMultiOutput.ResumeLayout(false);
-			panel1.ResumeLayout(false);
-			grpOutputGeneration.ResumeLayout(false);
-			panelBottom.ResumeLayout(false);
-			ResumeLayout(false);
+			this.Controls.Add(this.panelBottom);
+			this.Controls.Add(this.panelTop);
+			this.DockPadding.All = 8;
+			this.Name = "CodeGeneratorCommandEditor";
+			this.Size = new System.Drawing.Size(648, 456);
+			this.Load += new System.EventHandler(this.CodeGeneratorCommandEditorLoad);
+			this.panelBottomLeft.ResumeLayout(false);
+			this.panelTopLeft.ResumeLayout(false);
+			this.panelTop.ResumeLayout(false);
+			this.panelTopRight.ResumeLayout(false);
+			this.panelBottomRight.ResumeLayout(false);
+			this.grpMultiOutput.ResumeLayout(false);
+			this.panel1.ResumeLayout(false);
+			this.grpOutputGeneration.ResumeLayout(false);
+			this.panelBottom.ResumeLayout(false);
+			this.ResumeLayout(false);
 
 		}
 

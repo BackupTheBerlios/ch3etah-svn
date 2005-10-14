@@ -111,11 +111,6 @@
                     HintPath = "..\Libraries\bin\WinFormsUI.dll"
                 />
                 <Reference
-                    Name = "Adapdev.Data"
-                    AssemblyName = "Adapdev.Data"
-                    HintPath = "..\..\Bin\Adapdev.Data.dll"
-                />
-                <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
                     HintPath = "..\Libraries\bin\NVelocity.dll"
@@ -126,9 +121,9 @@
                     HintPath = "..\Libraries\bin\Commons.dll"
                 />
                 <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\Libraries\bin\log4net.dll"
+                    Name = "Adapdev.Data"
+                    AssemblyName = "Adapdev.Data"
+                    HintPath = "..\Libraries\bin\Adapdev.Data.dll"
                 />
             </References>
         </Build>

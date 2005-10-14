@@ -378,8 +378,15 @@ namespace Ch3Etah.Core.ProjectLib {
 			return GetFullPath(OutputBaseDir);
 		}
 
-		private string GetFullPath(string path) {
-			return Path.GetFullPath(Path.Combine(Path.GetDirectoryName(FileName), path));
+		private string GetFullPath(string fileName) {
+			if (Path.IsPathRooted(fileName))
+			{
+				return fileName;
+			}
+			else
+			{
+				return Path.GetFullPath(Path.Combine(Path.GetDirectoryName(FileName), fileName));
+			}
 // REMOVED by Igor @ Oct 13, 2005
 //			string oldDirectory = Directory.GetCurrentDirectory();
 //			string fullPath = Directory.GetCurrentDirectory();

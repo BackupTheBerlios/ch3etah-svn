@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP LastOpenVersion = "7.10.3077" >
         <Build>
-            <Settings ReferencePath = "C:\Projetos.NET\Ch3Etah\src\csharp\Libraries\Bin\;C:\Projetos.NET\Ch3Etah\src\Libraries\Bin\" >
+            <Settings ReferencePath = "C:\Projetos.NET\Ch3Etah\src\csharp\Libraries\Bin\;C:\Projetos.NET\Ch3Etah\src\Libraries\Bin\;C:\Projetos.NET\Ch3Etah\Bin\" >
                 <Config
                     Name = "Debug"
                     EnableASPDebugging = "false"

@@ -142,7 +142,14 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 		}
 		
 		private string GetFullPath(string fileName) {
-			return Path.GetFullPath(Path.Combine(Package.GetFullBaseFolderPath(), fileName));
+			if (Path.IsPathRooted(fileName))
+			{
+				return fileName;
+			}
+			else
+			{
+				return Path.GetFullPath(Path.Combine(Package.GetFullBaseFolderPath(), fileName));
+			}
 // REMOVED by Igor @ Oct 13, 2005
 //			string oldBaseFolder = Directory.GetCurrentDirectory();
 //			string fullPath = fileName;

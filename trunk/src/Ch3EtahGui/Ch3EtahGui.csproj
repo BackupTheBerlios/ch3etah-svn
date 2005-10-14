@@ -121,11 +121,6 @@
                     HintPath = "..\Libraries\Bin\WinFormsUI.dll"
                 />
                 <Reference
-                    Name = "Interop.MSDASC"
-                    AssemblyName = "Interop.MSDASC"
-                    HintPath = "bin\Debug\Interop.MSDASC.dll"
-                />
-                <Reference
                     Name = "ICSharpCode.TextEditor"
                     AssemblyName = "ICSharpCode.TextEditor"
                     HintPath = "..\Libraries\Bin\ICSharpCode.TextEditor.dll"

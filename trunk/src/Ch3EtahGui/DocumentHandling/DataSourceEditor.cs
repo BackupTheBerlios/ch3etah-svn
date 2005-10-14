@@ -23,12 +23,13 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Adapdev.Data;
 using Adapdev.Data.Schema;
 using ADODB;
+using Ch3Etah.Core.Interop;
 using Ch3Etah.Core.Metadata;
 using Ch3Etah.Core.ProjectLib;
 using Ch3Etah.Metadata.OREntities;
-using MSDASC;
 
 namespace Ch3Etah.Gui.DocumentHandling {
 
@@ -678,7 +679,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			TreeNode tables = new TreeNode("Tables", Images.Indexes.FolderClosed, Images.Indexes.FolderOpen);
 			TreeNode views = new TreeNode("Views", Images.Indexes.FolderClosed, Images.Indexes.FolderOpen);
 			
-			DatabaseSchema schema = SchemaBuilder.CreateDatabaseSchema(_dataSource.ConnectionString);
+			DatabaseSchema schema = SchemaBuilder.CreateDatabaseSchema(_dataSource.ConnectionString, DbType.SQLSERVER, DbProviderType.OLEDB);
 			tvwEntities.Tag = schema;
 			foreach (TableSchema entity in schema.SortedTables.Values) {
 				if (entity.TableType == TableType.TABLE) {

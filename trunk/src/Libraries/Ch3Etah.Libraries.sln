@@ -31,6 +31,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "log4net", "log4net\log4net.
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapdev", "Adapdev\Adapdev\Adapdev.csproj", "{CC30A321-2569-4B1F-8E1A-781B5509B56D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapdev.Data", "Adapdev\Adapdev.Data\Adapdev.Data.csproj", "{08C5794D-44ED-4E75-A1C1-48A28C3D0044}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -69,6 +77,14 @@ Global
 		{F6A02431-167E-4347-BC43-65532C31CDB7}.Debug.Build.0 = Debug|.NET
 		{F6A02431-167E-4347-BC43-65532C31CDB7}.Release.ActiveCfg = Release|.NET
 		{F6A02431-167E-4347-BC43-65532C31CDB7}.Release.Build.0 = Release|.NET
+		{CC30A321-2569-4B1F-8E1A-781B5509B56D}.Debug.ActiveCfg = Debug|.NET
+		{CC30A321-2569-4B1F-8E1A-781B5509B56D}.Debug.Build.0 = Debug|.NET
+		{CC30A321-2569-4B1F-8E1A-781B5509B56D}.Release.ActiveCfg = Release|.NET
+		{CC30A321-2569-4B1F-8E1A-781B5509B56D}.Release.Build.0 = Release|.NET
+		{08C5794D-44ED-4E75-A1C1-48A28C3D0044}.Debug.ActiveCfg = Debug|.NET
+		{08C5794D-44ED-4E75-A1C1-48A28C3D0044}.Debug.Build.0 = Debug|.NET
+		{08C5794D-44ED-4E75-A1C1-48A28C3D0044}.Release.ActiveCfg = Release|.NET
+		{08C5794D-44ED-4E75-A1C1-48A28C3D0044}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
