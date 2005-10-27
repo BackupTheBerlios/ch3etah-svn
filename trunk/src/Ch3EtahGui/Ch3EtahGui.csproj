@@ -417,7 +417,7 @@
                 />
                 <File
                     RelPath = "DocumentHandling\MdiStrategy\ObjectEditorForm.cs"
-                    SubType = "Code"
+                    SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
@@ -541,7 +541,7 @@
                 />
                 <File
                     RelPath = "Widgets\OutputWindow.cs"
-                    SubType = "Code"
+                    SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
@@ -551,7 +551,7 @@
                 />
                 <File
                     RelPath = "Widgets\ProjectExplorer.cs"
-                    SubType = "Code"
+                    SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
@@ -561,7 +561,7 @@
                 />
                 <File
                     RelPath = "Widgets\PropertiesWindow.cs"
-                    SubType = "Code"
+                    SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
