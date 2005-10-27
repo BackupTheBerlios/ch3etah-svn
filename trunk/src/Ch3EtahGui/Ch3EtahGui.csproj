@@ -56,7 +56,7 @@
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "true"
-                    OutputPath = "..\..\bin\"
+                    OutputPath = "bin\Debug\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -151,6 +151,10 @@
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "_LICENSE.txt"
+                    BuildAction = "Content"
+                />
                 <File
                     RelPath = "app.config"
                     BuildAction = "None"
