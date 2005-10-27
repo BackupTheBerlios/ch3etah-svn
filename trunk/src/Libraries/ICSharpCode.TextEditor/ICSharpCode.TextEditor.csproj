@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = 'mkdir "$(ProjectDir)..\bin\"&#xd;&#xa;copy /y "$(TargetDir)*.dll" "$(ProjectDir)..\bin\"&#xd;&#xa;copy /y "$(TargetDir)*.pdb" "$(ProjectDir)..\bin\"'
                 RootNamespace = ""
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
