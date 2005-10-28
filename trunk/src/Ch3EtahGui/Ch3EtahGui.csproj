@@ -240,7 +240,7 @@
                 />
                 <File
                     RelPath = "Project.ico"
-                    BuildAction = "Content"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "ProjectExplorer.ico"
