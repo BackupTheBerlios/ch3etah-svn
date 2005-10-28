@@ -152,10 +152,6 @@
         <Files>
             <Include>
                 <File
-                    RelPath = "_LICENSE.txt"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "app.config"
                     BuildAction = "None"
                 />
