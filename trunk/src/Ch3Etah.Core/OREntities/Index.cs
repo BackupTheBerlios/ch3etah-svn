@@ -91,7 +91,7 @@ namespace Ch3Etah.Metadata.OREntities
 		
 		#region Entity
 		private Entity _entity;
-		
+
 		[XmlIgnore()]
 		public Entity Entity {
 			get { return _entity; }

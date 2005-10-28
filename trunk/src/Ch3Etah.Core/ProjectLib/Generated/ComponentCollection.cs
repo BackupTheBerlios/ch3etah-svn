@@ -4,12 +4,14 @@ using System.ComponentModel;
 
 namespace Ch3Etah.Core.ComponentModel {
 	
-	public class ComponentCollection : CollectionBase, ICustomTypeDescriptor, IComponent {
-		
+	[TypeConverter(typeof (StringConverter))]
+	public class ComponentCollection : CollectionBase, ICustomTypeDescriptor, IComponent 
+	{
 		private ISite site;
 
-		protected Attribute[] GetCustomAttributes() {
-			return new Attribute[]{};
+		protected Attribute[] GetCustomAttributes(object item) {
+			ArrayList ret = new ArrayList(item.GetType().GetCustomAttributes(typeof(Attribute), true));
+			return (Attribute[]) ret.ToArray(typeof(Attribute));
 		}
 
 		public override string ToString() {
@@ -63,8 +65,8 @@ namespace Ch3Etah.Core.ComponentModel {
 			ArrayList props = new ArrayList();
 
 			foreach (object item in this) {
-				PropertyDescriptor name = TypeDescriptor.GetProperties(item).Find("Name", true);
-				CollectionItemPropertyDescriptor pd = new CollectionItemPropertyDescriptor(name.GetValue(item).ToString(), item, this, GetCustomAttributes());
+				PropertyDescriptor namepd = TypeDescriptor.GetProperties(item).Find("Name", true);
+				CollectionItemPropertyDescriptor pd = new CollectionItemPropertyDescriptor(namepd.GetValue(item).ToString(), item, this, GetCustomAttributes(item));
 				props.Add(pd);
 			}
 			return (PropertyDescriptor[]) props.ToArray(typeof (CollectionItemPropertyDescriptor));

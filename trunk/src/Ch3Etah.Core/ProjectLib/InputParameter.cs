@@ -22,6 +22,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Xml.Serialization;
 
@@ -149,10 +150,18 @@ namespace Ch3Etah.Core.ProjectLib
 			}
 		}
 		#endregion IDataErrorInfo
+
+//		public override string ToString()
+//		{
+//			return _value;
+//		}
 	}
-	
-	public class InputParameterTypeConverter: StringConverter {
-		
+
+	#region TypeConverter
+
+	public class InputParameterTypeConverter: StringConverter 
+	{
+
 		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
 			if (sourceType == typeof(string)) {
 				return true;
@@ -188,4 +197,6 @@ namespace Ch3Etah.Core.ProjectLib
 			}
 		}
 	}
+
+	#endregion
 }

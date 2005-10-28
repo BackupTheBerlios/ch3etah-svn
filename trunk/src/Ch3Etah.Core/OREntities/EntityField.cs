@@ -110,7 +110,7 @@ namespace Ch3Etah.Metadata.OREntities {
 
 		#region Field Properties
 
-		[Category("Field")]
+		[Category("(General)")]
 		[XmlAttribute("name")]
 		public override string Name {
 			get {

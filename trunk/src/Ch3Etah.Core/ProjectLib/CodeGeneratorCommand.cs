@@ -339,7 +339,7 @@ namespace Ch3Etah.Core.ProjectLib {
 					generator.Context.CurrentMetadataFile = inputFile;
 					generator.Context.SelectedMetadataFiles = this.IndividualMetadataFiles;
 					string outputPath = generator.Context.Parameters["CodeGenOutputPath"].Value;
-					outputPath = Path.GetFullPath(outputPath);
+					outputPath = Path.GetFullPath(Path.Combine(this.Project.GetFullOutputPath(), outputPath));
 					FileSystemHelper.CreateDirectory(new FileInfo(outputPath));
 					Trace.WriteLine("GenerateFile(): '" + outputPath + "'");
 					Trace.Indent();

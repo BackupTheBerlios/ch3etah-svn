@@ -97,12 +97,13 @@ namespace Ch3Etah.Metadata.OREntities {
 		private EntityFieldCollection _fields = new EntityFieldCollection();
 		private IndexCollection _indexes = new IndexCollection();
 		private LinkCollection _links = new LinkCollection();
+		private bool _cacheable;
 
 		#endregion Member Variables
 
 		#region Entity Properties
 
-		[Category("Entity")]
+		[Category("(General)")]
 		[XmlAttribute("name")]
 		public override string Name {
 			get { return _name; }
@@ -148,6 +149,14 @@ namespace Ch3Etah.Metadata.OREntities {
 			set { _readOnly = value; }
 		}
 
+		[XmlAttribute("cacheable"),
+		Category("Entity")]
+		public bool Cacheable 
+		{
+			get { return _cacheable; }
+			set { _cacheable = value; }
+		}
+		
 		#endregion Entity Properties
 
 		#region Collection Properties

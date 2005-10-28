@@ -36,6 +36,17 @@ namespace Ch3Etah.Core.Metadata
 	/// </summary>
 	public abstract class MetadataNodeBase : IMetadataNode, ISupportInitialize
 	{
+
+		private string _description;
+		
+		[Category("(General)")]
+		[XmlAttribute("description")]
+		public string Description
+		{
+			get { return _description; }
+			set { _description = value; }
+		}
+
 		#region Changed event
 		
 		public event EventHandler Changed;
@@ -49,7 +60,7 @@ namespace Ch3Etah.Core.Metadata
 
 		private bool suspendEvents;				
 		private XmlNode _loadedXmlNode;
-		
+
 		XmlNode IMetadataNode.LoadedXmlNode {
 			get {
 				return _loadedXmlNode;

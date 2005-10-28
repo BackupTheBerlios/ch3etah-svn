@@ -170,8 +170,8 @@ namespace Ch3Etah.Core.ProjectLib
 		}
 		
 		public void Load(string fileName) {
-			Debug.WriteLine("Attempting to load metadata file '" + fileName + "'");
 			string fullPath = GetFullPath(fileName);
+			Debug.WriteLine(string.Format("Attempting to load metadata file '{0}' ({1})", fileName, fullPath));
             FileInfo file = new FileInfo(fullPath);
             if (!file.Exists){
 				throw new FileNotFoundException(fullPath + " does not exist. Make sure this project's MetadataBaseDir property is correct and that the file exists in the specified directory.");
@@ -283,7 +283,7 @@ namespace Ch3Etah.Core.ProjectLib
 			else
 			{
 				string fullMetadataPath = Project.GetFullMetadataPath();
-				string path = Path.Combine(fullMetadataPath, FileName);
+				string path = Path.Combine(fullMetadataPath, fileName);
 				string fullPath = Path.GetFullPath(path);
 				return fullPath;
 			}
