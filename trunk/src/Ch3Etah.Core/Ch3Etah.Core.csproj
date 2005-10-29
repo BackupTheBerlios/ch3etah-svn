@@ -153,6 +153,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+	        <File RelPath="CommonAssemblyInfo.cs" Link="..\CommonAssemblyInfo.cs" SubType="Code" BuildAction="Compile" />
                 <File
                     RelPath = "CodeGen\ITransformationEngine.cs"
                     SubType = "Code"
