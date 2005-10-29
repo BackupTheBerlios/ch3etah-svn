@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -77,10 +78,13 @@ namespace Ch3Etah.Gui.Widgets
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ReadOnly = true;
-			this.textBox1.Size = new System.Drawing.Size(492, 246);
+			this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBox1.Size = new System.Drawing.Size(492, 238);
 			this.textBox1.TabIndex = 1;
 			this.textBox1.TabStop = false;
-			this.textBox1.Text = @"Website - http://ch3etah.sourceforge.net
+			this.textBox1.Text = @"Product Version {0}
+
+Website - http://ch3etah.sourceforge.net
 
 CH3ETAH Project Contributors:
 Jacob Eggleston
@@ -101,7 +105,7 @@ Portions Copyright (c) 2001-2003 Lutz Roeder (http://www.aisto.com/roeder)";
 			// btnClose
 			// 
 			this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnClose.Location = new System.Drawing.Point(418, 406);
+			this.btnClose.Location = new System.Drawing.Point(418, 398);
 			this.btnClose.Name = "btnClose";
 			this.btnClose.TabIndex = 0;
 			this.btnClose.Text = "Close";
@@ -110,7 +114,7 @@ Portions Copyright (c) 2001-2003 Lutz Roeder (http://www.aisto.com/roeder)";
 			// AboutDialog
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-			this.ClientSize = new System.Drawing.Size(500, 436);
+			this.ClientSize = new System.Drawing.Size(500, 428);
 			this.ControlBox = false;
 			this.Controls.Add(this.btnClose);
 			this.Controls.Add(this.textBox1);
@@ -119,7 +123,8 @@ Portions Copyright (c) 2001-2003 Lutz Roeder (http://www.aisto.com/roeder)";
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Name = "AboutDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "About Ch3Etah";
+			this.Text = "About CH3ETAH";
+			this.Load += new System.EventHandler(this.AboutDialog_Load);
 			this.ResumeLayout(false);
 
 		}
@@ -132,5 +137,16 @@ Portions Copyright (c) 2001-2003 Lutz Roeder (http://www.aisto.com/roeder)";
 		private void btnClose_Click(object sender, System.EventArgs e) {
 			this.Close();
 		}
+
+		private void AboutDialog_Load(object sender, System.EventArgs e) {
+			this.textBox1.Text = string.Format(this.textBox1.Text, this.GetVersion());
+		}
+
+		private string GetVersion() {
+			Assembly assembly = GetType().Assembly;
+			AssemblyName name = assembly.GetName();
+			return string.Format("{0}.{1}.{2}.{3}", name.Version.Major, name.Version.Minor, name.Version.Build, name.Version.Revision);
+		}
+		
 	}
 }

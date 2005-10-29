@@ -66,9 +66,9 @@ namespace Ch3Etah.Gui.Widgets
 			this.lblVersion.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.lblVersion.Location = new System.Drawing.Point(8, 192);
 			this.lblVersion.Name = "lblVersion";
-			this.lblVersion.Size = new System.Drawing.Size(117, 23);
+			this.lblVersion.Size = new System.Drawing.Size(94, 23);
 			this.lblVersion.TabIndex = 0;
-			this.lblVersion.Text = "Version {0}";
+			this.lblVersion.Text = "Build {0}";
 			// 
 			// lblRevision
 			// 
@@ -145,14 +145,14 @@ namespace Ch3Etah.Gui.Widgets
 		{
 			Assembly assembly = GetType().Assembly;
 			AssemblyName name = assembly.GetName();
-			return string.Format("{0}.{1}", name.Version.Major, name.Version.Minor);
+			return string.Format("{0}.{1}.{2}", name.Version.Major, name.Version.Minor, name.Version.Build);
 		}
 		
 		private string GetRevision()
 		{
 			Assembly assembly = GetType().Assembly;
 			AssemblyName name = assembly.GetName();
-			return string.Format("{0}{1}", name.Version.Build, name.Version.Revision);
+			return string.Format("{0}", name.Version.Revision);
 		}
 	}
 }
