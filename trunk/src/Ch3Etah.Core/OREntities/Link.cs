@@ -58,7 +58,8 @@ namespace Ch3Etah.Metadata.OREntities
 		
 		#region Entity
 		private Entity _entity;
-		
+		private string _category;
+
 		[XmlIgnore()]
 		public Entity Entity {
 			get { return _entity; }
@@ -70,7 +71,7 @@ namespace Ch3Etah.Metadata.OREntities
 		#endregion Entity
 
 		#region Properties
-		[Category("field")]
+		[Category("(General)")]
 		[XmlAttribute("name")]
 		public override string Name {
 			get {
@@ -84,6 +85,14 @@ namespace Ch3Etah.Metadata.OREntities
 			set { _name = value; }
 		}
 		
+		[Category("(General)")]
+		[XmlAttribute("category")]
+		public string Category 
+		{
+			get { return _category; }
+			set { _category = value; }
+		}
+
 		[XmlAttribute("targetentity")]
 		[Category("Target setup")]
 		[TypeConverter("Ch3Etah.Design.Converters.EntitiesNameConverter,Ch3Etah.Design")]
