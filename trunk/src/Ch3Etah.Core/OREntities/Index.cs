@@ -91,6 +91,7 @@ namespace Ch3Etah.Metadata.OREntities
 		
 		#region Entity
 		private Entity _entity;
+		private string _category;
 
 		[XmlIgnore()]
 		public Entity Entity {
@@ -103,6 +104,7 @@ namespace Ch3Etah.Metadata.OREntities
 		#endregion Entity
 		
 		#region Properties
+		
 		[XmlAttribute("dbname"),
 		Category("Database field")]
 		public string DBName {
@@ -110,8 +112,8 @@ namespace Ch3Etah.Metadata.OREntities
 			set { _dbName = value; }
 		}
 		
-		[XmlAttribute("name"),
-		Category("field")]
+		[XmlAttribute("name")]
+		[Category("(General)")]
 		public override string Name {
 			get { return _name; }
 			set
@@ -121,6 +123,14 @@ namespace Ch3Etah.Metadata.OREntities
 			}
 		}
 		
+		[Category("(General)")]
+		[XmlAttribute("category")]
+		public string Category 
+		{
+			get { return _category; }
+			set { _category = value; }
+		}
+
 		[XmlAttribute("primarykey"),
 		Category("Database field")]
 		public bool PrimaryKey {
