@@ -34,6 +34,7 @@ using Ch3Etah.Core.Metadata;
 using Ch3Etah.Core.ProjectLib;
 using Ch3Etah.Gui.DocumentHandling;
 using Ch3Etah.Gui.DocumentHandling.MdiStrategy;
+using Ch3Etah.Gui.Util;
 using Ch3Etah.Gui.Widgets;
 using Ch3Etah.Metadata.OREntities;
 using Reflector.UserInterface;
@@ -469,25 +470,37 @@ namespace Ch3Etah.Gui {
 		}
 
 		private TreeNode SetupMetadataFilesNode(TreeNode projectNode) {
+			
 			TreeNode metadataFilesNode = GetContextNode(_project.MetadataFiles, tvwProject.Nodes);
+			SortedList sortedItems = new SortedList();
+			
 			if (metadataFilesNode == null) {
 				metadataFilesNode = projectNode.Nodes.Add("Metadata Files");
 			}
+			
 			//TreeNode metadataFilesNode = projectNode.Nodes.Add("Metadata Files");
 			metadataFilesNode.ImageIndex = Images.Indexes.FolderOpen;
 			metadataFilesNode.SelectedImageIndex = Images.Indexes.FolderOpen;
 			metadataFilesNode.Tag = _project.MetadataFiles;
 			metadataFilesNode.Nodes.Clear();
+			
 			foreach (MetadataFile file in _project.MetadataFiles) {
 				TreeNode node = GetContextNode(file, metadataFilesNode.Nodes);
 				if (node == null) {
-					node = metadataFilesNode.Nodes.Add(file.Name);
+					node = new TreeNode(file.Name);
+					sortedItems.Add(file.Name, node);
 				}
 				node.Text = file.Name;
 				node.ImageIndex = Images.Indexes.DocumentText;
 				node.SelectedImageIndex = Images.Indexes.DocumentText;
 				node.Tag = file;
 			}
+			
+			foreach (DictionaryEntry entry in sortedItems)
+			{
+				metadataFilesNode.Nodes.Add((TreeNode) entry.Value);
+			}
+			
 			foreach (TreeNode node in metadataFilesNode.Nodes) {
 				if (
 					node.Tag != null && node.Tag.GetType() == typeof (MetadataFile) &&
