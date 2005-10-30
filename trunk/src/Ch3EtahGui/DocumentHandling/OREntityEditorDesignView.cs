@@ -69,6 +69,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 			// 
 			this.treeViewFIL.Dock = System.Windows.Forms.DockStyle.Left;
 			this.treeViewFIL.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.treeViewFIL.HideSelection = false;
 			this.treeViewFIL.HotTracking = true;
 			this.treeViewFIL.ImageIndex = -1;
 			this.treeViewFIL.ItemHeight = 16;
