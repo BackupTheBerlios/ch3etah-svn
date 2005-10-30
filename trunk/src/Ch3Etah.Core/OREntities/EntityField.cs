@@ -89,12 +89,14 @@ namespace Ch3Etah.Metadata.OREntities {
 		private bool _dbIdentity = false;
 		private bool _dbReadOnly = false;
 
+		private Entity _entity;
+		private string _expression;
+		private bool _browsable;
+		private string _category;
+
 		#endregion Member Variables
 
 		#region Entity
-
-		private Entity _entity;
-		private string _expression;
 
 		[XmlIgnore()]
 		public Entity Entity {
@@ -146,6 +148,13 @@ namespace Ch3Etah.Metadata.OREntities {
 		}
 
 		[Category("Field")]
+		[XmlAttribute("browsable")]
+		public bool Browsable {
+			get { return _browsable; }
+			set { _browsable  = value; }
+		}
+
+		[Category("Field")]
 		[XmlAttribute("hidden")]
 		public bool Hidden {
 			get { return _hidden; }
@@ -164,6 +173,13 @@ namespace Ch3Etah.Metadata.OREntities {
 		public string Expression {
 			get { return _expression; }
 			set { _expression = value; }
+		}
+
+		[Category("(General)")]
+		[XmlAttribute("category")]
+		public string Category {
+			get { return _category; }
+			set { _category = value; }
 		}
 
 		[Category("Field")]
