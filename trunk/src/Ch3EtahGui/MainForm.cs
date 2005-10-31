@@ -34,7 +34,6 @@ using Ch3Etah.Core.Metadata;
 using Ch3Etah.Core.ProjectLib;
 using Ch3Etah.Gui.DocumentHandling;
 using Ch3Etah.Gui.DocumentHandling.MdiStrategy;
-using Ch3Etah.Gui.Util;
 using Ch3Etah.Gui.Widgets;
 using Ch3Etah.Metadata.OREntities;
 using Reflector.UserInterface;
