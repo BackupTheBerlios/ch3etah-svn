@@ -1,0 +1,1 @@
+This solution contains the source code of other open-source libraries used by CH3ETAH. It is included *only* for convenience in compiling CH3ETAH. To get the latest code for these libraries, you should go to each project's page.

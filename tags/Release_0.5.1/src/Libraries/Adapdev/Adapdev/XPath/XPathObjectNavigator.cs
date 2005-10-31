@@ -1,0 +1,514 @@
+#region license
+// Bamboo.Prevalence - a .NET object prevalence engine
+// Copyright (C) 2004 Rodrigo B. de Oliveira
+//
+// Based on the original concept and implementation of Prevayler (TM)
+// by Klaus Wuestefeld. Visit http://www.prevayler.org for details.
+//
+// Permission is hereby granted, free of charge, to any person 
+// obtaining a copy of this software and associated documentation 
+// files (the "Software"), to deal in the Software without restriction, 
+// including without limitation the rights to use, copy, modify, merge, 
+// publish, distribute, sublicense, and/or sell copies of the Software, 
+// and to permit persons to whom the Software is furnished to do so, 
+// subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included 
+// in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
+// CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
+// OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+// 
+// Contact Information
+//
+// http://bbooprevalence.sourceforge.net
+// mailto:rodrigobamboo@users.sourceforge.net
+#endregion
+
+using System;
+using System.Xml;
+using System.Xml.XPath;
+using Adapdev.XPath.Internal;
+
+namespace Adapdev.XPath
+{
+	/// <summary>
+	/// XPathNavigator implementation over an arbitrary
+	/// object graph.
+	/// </summary>
+	/// <example>
+	/// <code>
+	/// Address address = new Address("Al. Calder�o Branco", 784);
+	/// Customer customer = new Customer("Rodrigo", "Oliveira", address);
+	/// 
+	/// XPathObjectNavigator context = new XPathObjectNavigator(customer);
+	/// XPathNodeIterator i = context.Select("/Customer/Address/Street");			
+	/// AssertEquals(1, i.Count);
+	/// AssertEquals(true, i.MoveNext());			
+	/// AssertEquals(customer.Address.Street, i.Current.Value);
+	/// AssertEquals(customer.Address.Street, ((XPathObjectNavigator)i.Current).Node);
+	/// </code>
+	/// </example>
+	public class XPathObjectNavigator : XPathNavigator
+	{	
+		ObjectNavigatorState _state;
+
+		ObjectNavigatorState _root;
+
+		ObjectNavigationContext _context;
+
+		string _lang;
+
+		/// <summary>
+		/// Create a new navigator for the object graph
+		/// starting at node. The node's name is nodeName.
+		/// </summary>
+		/// <param name="node">root</param>
+		/// <param name="nodeName">root's name</param>
+		public XPathObjectNavigator(object node, string nodeName)
+		{
+			_context = new ObjectNavigationContext();
+			_context.NameTable.Add(string.Empty);			
+			_root = new ObjectNavigatorStateRoot(_context, node, nodeName);
+			_state = _root.MoveToFirstChild();
+			_lang = _context.NameTable.Add("en-US");
+		}
+
+		/// <summary>
+		/// Create a new navigator for the object graph
+		/// starting at node. The node name will be
+		/// node.GetType().Name.
+		/// </summary>
+		/// <param name="node">root</param>
+		public XPathObjectNavigator(object node) : this(node, null)
+		{
+		}
+
+		/// <summary>
+		/// copy constructor.
+		/// </summary>
+		/// <param name="other">navigator to be copied</param>
+		public XPathObjectNavigator(XPathObjectNavigator other)
+		{
+			_context = other._context;
+			_state = other._state;
+			_root = other._root;
+			_lang = other._lang;
+		}
+
+		/// <summary>
+		/// Selects a single object from the current node.
+		/// </summary>
+		/// <param name="xpath">selection expression</param>
+		/// <returns>the first object returned by the
+		/// expression or null</returns>
+		public object SelectObject(string xpath)
+		{
+			XPathNodeIterator i = Select(xpath);
+			if (i.MoveNext())
+			{
+				return ((XPathObjectNavigator)i.Current).Node;
+			}
+			return null;
+		}
+
+		/// <summary>
+		/// Selects a group of objects from the current node.
+		/// </summary>
+		/// <param name="xpath">selection expression</param>
+		/// <param name="returnItemType">array element type to be returned</param>
+		/// <returns>an array with all the objects returned
+		/// by the expression</returns>
+		public System.Array SelectObjects(string xpath, Type returnItemType)
+		{			
+			if (null == returnItemType)
+			{
+				throw new ArgumentNullException("returnItemType");
+			}
+
+			System.Collections.ArrayList result = new System.Collections.ArrayList();
+			XPathNodeIterator i = Select(xpath);
+			while (i.MoveNext())
+			{
+				result.Add(((XPathObjectNavigator)i.Current).Node);
+			}
+			return result.ToArray(returnItemType);
+		}
+
+		/// <summary>
+		/// Same as <see cref="SelectObjects(System.String, System.Type)"/> with
+		/// returnItemType iguals to typeof(object).
+		/// </summary>
+		/// <param name="xpath"></param>
+		/// <returns></returns>
+		public object[] SelectObjects(string xpath)
+		{
+			return (object[])SelectObjects(xpath, typeof(object));
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.BaseURI" /> for details.
+		/// </summary>
+		public override string BaseURI
+		{
+			get
+			{
+				Trace("get_BaseURI");
+				return _context.NameTable.Get(string.Empty);
+			}
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.Clone" /> for details.
+		/// </summary>
+		public override System.Xml.XPath.XPathNavigator Clone()
+		{
+			Trace("Clone");
+			return new XPathObjectNavigator(this);
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.GetAttribute(string, string)" /> for details.
+		/// </summary>
+		/// <remarks>No attributes are returned.</remarks>
+		public override string GetAttribute(string localName, string namespaceURI)
+		{
+			Trace("GetAttribute");
+			return string.Empty;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.GetNamespace(string)" /> for details.
+		/// </summary>
+		/// <remarks>Namespace is always empty</remarks>
+		public override string GetNamespace(string name)
+		{
+			Trace("GetNamespace");
+			return _context.NameTable.Get(string.Empty);
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.HasAttributes" /> for details.
+		/// </summary>
+		/// <remarks>false</remarks>
+		public override bool HasAttributes
+		{
+			get
+			{
+				Trace("HasAttributes");
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.HasChildren" /> for details.
+		/// </summary>
+		public override bool HasChildren
+		{
+			get
+			{
+				Trace("HasChildren");
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.IsEmptyElement" /> for details.
+		/// </summary>
+		public override bool IsEmptyElement
+		{
+			get
+			{
+				Trace("IsEmptyElement");
+				return true;
+			}
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.IsSamePosition" /> for details.
+		/// </summary>
+		public override bool IsSamePosition(System.Xml.XPath.XPathNavigator other)
+		{
+			Trace("IsSamePosition");
+			XPathObjectNavigator x = other as XPathObjectNavigator;
+			if (null == x)
+			{
+				return false;
+			}
+			return _state.IsSamePosition(x._state);
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.LocalName" /> for details.
+		/// </summary>
+		public override string LocalName
+		{
+			get
+			{
+				Trace("get_LocalName");
+				return _state.Name;
+			}
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.Name" /> for details.
+		/// </summary>
+		/// <remarks>Same as LocalName</remarks>
+		public override string Name
+		{
+			get
+			{
+				Trace("get_Name");
+				return _state.Name;
+			}
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.NamespaceURI" /> for details.
+		/// </summary>
+		/// <remarks>Always empty</remarks>
+		public override string NamespaceURI
+		{
+			get
+			{
+				Trace("get_NamespaceURI");
+				return _context.NameTable.Get(string.Empty);
+			}
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.NameTable" /> for details.
+		/// </summary>
+		public override System.Xml.XmlNameTable NameTable
+		{
+			get
+			{
+				Trace("get_NameTable");
+				return _context.NameTable;
+			}
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.MoveTo" /> for details.
+		/// </summary>
+		public override bool MoveTo(System.Xml.XPath.XPathNavigator other)
+		{
+			Trace("MoveTo");
+			XPathObjectNavigator navigator = other as XPathObjectNavigator;
+			if (null == other)
+			{
+				return false;
+			}
+			_state = navigator._state;
+			_root = navigator._root;
+			_context = navigator._context;
+			return true;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.MoveToAttribute" /> for details.
+		/// </summary>
+		public override bool MoveToAttribute(string localName, string namespaceURI)
+		{
+			Trace("MoveToAttribute");
+			return false;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.MoveToFirst" /> for details.
+		/// </summary>
+		/// <remarks>Not supported.</remarks>
+		public override bool MoveToFirst()
+		{
+			Trace("MoveToFirst");
+			return false;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.MoveToFirstAttribute" /> for details.
+		/// </summary>
+		public override bool MoveToFirstAttribute()
+		{
+			Trace("MoveToFirstAttribute");
+			return false;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.MoveToFirstChild" /> for details.
+		/// </summary>
+		public override bool MoveToFirstChild()
+		{
+			Trace("MoveToFirstChild");
+			ObjectNavigatorState newstate = _state.MoveToFirstChild();
+			if (null == newstate)
+			{
+				return false;
+			}
+			_state = newstate;
+			return true;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.MoveToFirstNamespace" /> for details.
+		/// </summary>
+		public override bool MoveToFirstNamespace(System.Xml.XPath.XPathNamespaceScope namespaceScope)
+		{
+			Trace("MoveToFirstNamespace");
+			return false;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.MoveToId" /> for details.
+		/// </summary>
+		/// <remarks>Not supported.</remarks>
+		public override bool MoveToId(string id)
+		{
+			Trace("MoveToId");
+			return false;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.MoveToNamespace(string)" /> for details.
+		/// </summary>
+		public override bool MoveToNamespace(string name)
+		{
+			Trace("MoveToNamespace");
+			return false;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.MoveToNext" /> for details.
+		/// </summary>
+		public override bool MoveToNext()
+		{
+			Trace("MoveToNext");
+			ObjectNavigatorState newstate = _state.MoveToNext();
+			if (null != newstate)
+			{
+				_state = newstate;
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.MoveToNextAttribute" /> for details.
+		/// </summary>
+		public override bool MoveToNextAttribute()
+		{
+			Trace("MoveToNextAttribute");
+			return false;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.MoveToNextNamespace" /> for details.
+		/// </summary>
+		public override bool MoveToNextNamespace(System.Xml.XPath.XPathNamespaceScope namespaceScope)
+		{
+			Trace("MoveToNextNamespace");
+			return false;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.MoveToParent" /> for details.
+		/// </summary>
+		public override bool MoveToParent()
+		{
+			Trace("MoveToParent");
+			if (null != _state.Parent)
+			{
+				_state = _state.Parent;
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.MoveToPrevious" /> for details.
+		/// </summary>
+		/// <remarks>Not supported.</remarks>
+		public override bool MoveToPrevious()
+		{
+			Trace("MoveToPrevious");
+			return false;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.MoveToRoot" /> for details.
+		/// </summary>
+		public override void MoveToRoot()
+		{
+			Trace("MoveToRoot");
+			_state = _root;
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.NodeType" /> for details.
+		/// </summary>
+		public override System.Xml.XPath.XPathNodeType NodeType
+		{
+			get
+			{
+				Trace("get_NodeType");
+				return _state.NodeType;
+			}
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.Value" /> for details.
+		/// </summary>
+		public override string Value
+		{
+			get
+			{
+				Trace("get_Value");
+				return _state.Value;
+			}
+		}
+
+		/// <summary>
+		/// The current object.
+		/// </summary>
+		public object Node
+		{
+			get
+			{
+				return _state.Node;
+			}
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.XmlLang" /> for details.
+		/// </summary>
+		public override string XmlLang
+		{
+			get
+			{
+				return _lang;
+			}
+		}
+
+		/// <summary>
+		/// See <see cref="System.Xml.XPath.XPathNavigator.Prefix" /> for details.
+		/// </summary>
+		/// <remarks>Always empty.</remarks>
+		public override string Prefix
+		{
+			get
+			{
+				Trace("get_Prefix");
+				return _context.NameTable.Get(string.Empty);
+			}
+		}	
+		
+		private void Trace(string format, params object[] args)
+		{
+			System.Diagnostics.Trace.WriteLine(string.Format(format, args));
+		}
+	}
+}

@@ -1,0 +1,690 @@
+<VisualStudioProject>
+    <CSHARP
+        ProjectType = "Local"
+        ProductVersion = "7.10.3077"
+        SchemaVersion = "2.0"
+        ProjectGuid = "{075D98F5-0DBB-4A5E-AAD9-1B9637B50656}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = "App.ico"
+                AssemblyKeyContainerName = ""
+                AssemblyName = "Ch3EtahGui"
+                AssemblyOriginatorKeyFile = ""
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "WinExe"
+                PreBuildEvent = ""
+                PostBuildEvent = 'copy "$(ProjectDir)\*Mode.xshd" "$(TargetDir)\"'
+                RootNamespace = "Ch3Etah.Gui"
+                RunPostBuildEvent = "OnBuildSuccess"
+                StartupObject = "Ch3Etah.Gui.MainClass"
+            >
+                <Config
+                    Name = "Debug"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "bin\Debug\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Release"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "true"
+                    OutputPath = "bin\Debug\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "System.Design"
+                    AssemblyName = "System.Design"
+                    HintPath = "C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Design.dll"
+                />
+                <Reference
+                    Name = "System.Configuration.Install"
+                    AssemblyName = "System.Configuration.Install"
+                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Configuration.Install.dll"
+                />
+                <Reference
+                    Name = "adodb"
+                    AssemblyName = "ADODB"
+                    HintPath = "..\..\..\..\..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\adodb.dll"
+                    AssemblyFolderKey = "hklm\primary interop assemblies"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
+                <Reference
+                    Name = "Ch3Etah.Design"
+                    Project = "{BDF3BE96-49F0-46C0-87CC-BFB5F4F41F00}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "WinFormsUI"
+                    AssemblyName = "WinFormsUI"
+                    HintPath = "..\Libraries\Bin\WinFormsUI.dll"
+                />
+                <Reference
+                    Name = "ICSharpCode.TextEditor"
+                    AssemblyName = "ICSharpCode.TextEditor"
+                    HintPath = "..\Libraries\Bin\ICSharpCode.TextEditor.dll"
+                />
+                <Reference
+                    Name = "CommandBar"
+                    AssemblyName = "CommandBar"
+                    HintPath = "..\Libraries\Bin\CommandBar.dll"
+                />
+                <Reference
+                    Name = "Adapdev.Data"
+                    AssemblyName = "Adapdev.Data"
+                    HintPath = "..\Libraries\Bin\Adapdev.Data.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\Libraries\Bin\log4net.dll"
+                    Private = "True"
+                />
+                <Reference
+                    Name = "Ch3Etah.Core"
+                    Project = "{2A171F7D-E0A0-4FFF-B63E-22F1D6E4DDA5}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Private = "True"
+                />
+            </References>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "app.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "App.ico"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ch3Etah About.jpg"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Ch3Etah Splash.jpg"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Ch3Etah.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Ch3Etah.Gui.MainForm.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Ch3EtahGui.exe.manifest"
+                    SubType = "UserControl"
+                    BuildAction = "None"
+                />
+                <File RelPath="CommonAssemblyInfo.cs" Link="..\CommonAssemblyInfo.cs" SubType="Code" BuildAction="Compile" />
+                <File
+                    RelPath = "DbEntitySelector.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DbEntitySelector.resx"
+                    DependentUpon = "DbEntitySelector.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "EventTraceListener.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ImageList16.png"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Images.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MainClass.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MainForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MainForm.resx"
+                    DependentUpon = "MainForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "MetadataFilePlaceholder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MRUList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "OutputWindow.ico"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Project.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ProjectExplorer.ico"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Properties.ico"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "ShellInstaller.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "VelocityCS-Mode.xshd"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "VelocityDefault-Mode.xshd"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "VelocityTSQL-Mode.xshd"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "VelocityVBNET-Mode.xshd"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XML-Mode.xshd"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "DocumentHandling\CodeGenerationTemplateEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\CodeGeneratorCommandEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\CodeGeneratorCommandEditor.resx"
+                    DependentUpon = "CodeGeneratorCommandEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DocumentHandling\DataSourceEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\DataSourceEditor.resx"
+                    DependentUpon = "DataSourceEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DocumentHandling\IDocumentHandlingStrategy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\InputParameterCollectionEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\IObjectEditor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\MetadataFileEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\MetadataFileEditor.resx"
+                    DependentUpon = "MetadataFileEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DocumentHandling\ObjectEditorFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\ObjectEditorManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\OleDbDataSourceEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\OleDbDataSourceEditor.resx"
+                    DependentUpon = "OleDbDataSourceEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DocumentHandling\OREntityEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\OREntityEditor.resx"
+                    DependentUpon = "OREntityEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DocumentHandling\OREntityEditorDesignView.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\OREntityEditorDesignView.resx"
+                    DependentUpon = "OREntityEditorDesignView.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DocumentHandling\OREntityFieldEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\OREntityFieldEditor.resx"
+                    DependentUpon = "OREntityFieldEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DocumentHandling\ORIndexEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\ORIndexEditor.resx"
+                    DependentUpon = "ORIndexEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DocumentHandling\ORLinkEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\ORLinkEditor.resx"
+                    DependentUpon = "ORLinkEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DocumentHandling\TextFileEditor.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\TextFileEditor.resx"
+                    DependentUpon = "TextFileEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DocumentHandling\MdiStrategy\IMdiContainer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\MdiStrategy\MdiDocumentHandlingStrategy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\MdiStrategy\ObjectEditorForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\MdiStrategy\ObjectEditorForm.resx"
+                    DependentUpon = "ObjectEditorForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.CodeGenerationTemplateEditor.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.CodeGeneratorCommandEditor.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.Form1.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.InputParametersEditor.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.MainForm.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.MainPanelBase.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.MetadataFileEditor.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.NCodeGenGeneratorCommandEditor.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.NCodeGenGeneratorCommandsEditor.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.NCodeGenTemplateEditor.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.ObjectEditorBase.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.ObjectEditorForm.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.ObjectEditorPanelBase.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.ProjectPropertiesForm.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.SourceCodeFileEditor.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Resources\Ch3Etah.Gui.TextFileEditor.resources"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\AboutDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\AboutDialog.resx"
+                    DependentUpon = "AboutDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\ComponentDragDrop.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\ComponentDragDrop.resx"
+                    DependentUpon = "ComponentDragDrop.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\DataGridComboBox.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\DataGridComboBoxColumn.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\DataGridHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\EnhancedTreeView.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\MetadataFileSelector.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\MetadataFileSelector.resx"
+                    DependentUpon = "MetadataFileSelector.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\OutputWindow.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\OutputWindow.resx"
+                    DependentUpon = "OutputWindow.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\ProjectExplorer.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\ProjectExplorer.resx"
+                    DependentUpon = "ProjectExplorer.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\PropertiesWindow.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\PropertiesWindow.resx"
+                    DependentUpon = "PropertiesWindow.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\SplashScreen.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\SplashScreen.resx"
+                    DependentUpon = "SplashScreen.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\Header.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\Header.resx"
+                    DependentUpon = "Header.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\HeaderDesigner.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\InfoContainer.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\InfoContainer.resx"
+                    DependentUpon = "InfoContainer.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\InfoContainerDesigner.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\InfoPage.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\InfoPage.resx"
+                    DependentUpon = "InfoPage.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\InfoPageDesigner.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\PageCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\PageEventHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\Wizard.bmp"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\WizardControl.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\WizardControl.resx"
+                    DependentUpon = "WizardControl.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\WizardDesigner.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\WizardPage.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\WizardPage.resx"
+                    DependentUpon = "WizardPage.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\WizardPageBase.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\WizardPageBase.resx"
+                    DependentUpon = "WizardPageBase.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\WizardPageDesigner.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\Wizard\wizBigOnlineFolder.gif"
+                    BuildAction = "Content"
+                />
+            </Include>
+        </Files>
+    </CSHARP>
+</VisualStudioProject>
+

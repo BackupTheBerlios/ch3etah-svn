@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<xs:schema id="adapdev" targetNamespace="http://tempuri.org/ProviderConfig.xsd" xmlns:mstns="http://tempuri.org/ProviderConfig.xsd" xmlns="http://tempuri.org/ProviderConfig.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:element name="adapdev" msdata:IsDataSet="true" msdata:Locale="en-NZ" msdata:EnforceConstraints="False">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element name="connections">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="connection" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="settings" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="file" form="unqualified" type="xs:string" />
+                        <xs:attribute name="server" form="unqualified" type="xs:string" />
+                        <xs:attribute name="name" form="unqualified" type="xs:string" />
+                        <xs:attribute name="userid" form="unqualified" type="xs:string" />
+                        <xs:attribute name="password" form="unqualified" type="xs:string" />
+                        <xs:attribute name="filter" form="unqualified" type="xs:string" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="providers" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="provider" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:simpleContent msdata:ColumnName="provider_Text" msdata:Ordinal="3">
+                                <xs:extension base="xs:string">
+                                  <xs:attribute name="name" form="unqualified" type="xs:string" />
+                                  <xs:attribute name="type" form="unqualified" type="xs:string" />
+                                  <xs:attribute name="allowEmptyParameters" form="unqualified" type="xs:string" />
+                                  <xs:attribute name="enabled" form="unqualified" type="xs:string" />
+                                  <xs:attribute name="fileMask" form="unqualified" type="xs:string" />
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="name" form="unqualified" type="xs:string" />
+                  <xs:attribute name="type" form="unqualified" type="xs:string" />
+                  <xs:attribute name="internalProvider" form="unqualified" type="xs:string" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
