@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Ch3EtahProject xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Guid="be489c58-8dbd-4af1-8495-e84295dbd014" FileVersionMajor="0" FileVersionMinor="46">
+  <MetadataBaseDir>.\Metadata</MetadataBaseDir>
+  <TemplatePackageBaseDir>.\Packages</TemplatePackageBaseDir>
+  <OutputBaseDir>..\</OutputBaseDir>
+  <MetadataFiles />
+  <InputParameters />
+  <GeneratorCommands>
+    <GeneratorCommand xsi:type="CodeGeneratorCommand" Guid="45174bb6-79c7-4f2d-991b-0fa76dfbacb1">
+      <Name>Visual Studio C# Project</Name>
+      <Enabled>true</Enabled>
+      <Package>OrmNet.xml</Package>
+      <Template>VisualStudioProject</Template>
+      <OutputPath>${EntityNamespace}.csproj</OutputPath>
+      <Engine>NVelocity</Engine>
+      <Overwrite>true</Overwrite>
+      <AutoSelectMetadataFiles>true</AutoSelectMetadataFiles>
+      <InputParameters />
+      <IndividualMetadataFileIDs />
+      <GenerationMode>SingleOutput</GenerationMode>
+    </GeneratorCommand>
+    <GeneratorCommand xsi:type="CodeGeneratorCommand" Guid="276bcd92-473d-4d71-9d97-899863e4a051">
+      <Name>Assembly Info</Name>
+      <Enabled>true</Enabled>
+      <Package>OrmNet.xml</Package>
+      <Template>CS_AssemblyInfo</Template>
+      <OutputPath>AssemblyInfo.cs</OutputPath>
+      <Engine>NVelocity</Engine>
+      <Overwrite>true</Overwrite>
+      <AutoSelectMetadataFiles>true</AutoSelectMetadataFiles>
+      <InputParameters />
+      <IndividualMetadataFileIDs />
+      <GenerationMode>SingleOutput</GenerationMode>
+    </GeneratorCommand>
+  </GeneratorCommands>
+  <DataSources />
+</Ch3EtahProject>
