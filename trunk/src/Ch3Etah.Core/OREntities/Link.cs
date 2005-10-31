@@ -59,6 +59,7 @@ namespace Ch3Etah.Metadata.OREntities
 		#region Entity
 		private Entity _entity;
 		private string _category;
+		private bool _browsable = false;
 
 		[XmlIgnore()]
 		public Entity Entity {
@@ -142,6 +143,14 @@ namespace Ch3Etah.Metadata.OREntities
 			}
 		}
 		
+		[Category("Field")]
+		[XmlAttribute("browsable")]
+		public bool Browsable 
+		{
+			get { return _browsable; }
+			set { _browsable  = value; }
+		}
+
 		[XmlAttribute("cascadedelete")]
 		[Category("Link setup")]
 		public bool CascadeDelete {

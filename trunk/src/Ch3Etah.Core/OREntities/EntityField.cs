@@ -91,7 +91,7 @@ namespace Ch3Etah.Metadata.OREntities {
 
 		private Entity _entity;
 		private string _expression;
-		private bool _browsable;
+		private bool _browsable= true;
 		private string _category;
 
 		#endregion Member Variables
