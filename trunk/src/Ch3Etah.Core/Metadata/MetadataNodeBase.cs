@@ -36,6 +36,13 @@ namespace Ch3Etah.Core.Metadata
 	/// </summary>
 	public abstract class MetadataNodeBase : IMetadataNode, ISupportInitialize
 	{
+		/*
+		 * Use PK index to lookup items for updating
+		 * in a collection of IXmlNodes kind of like
+		 * in O/R objects.
+		 * 
+		 * 
+		 */
 
 		private string _description;
 		

@@ -28,6 +28,47 @@ namespace Ch3Etah.Core.Metadata
 	/// </summary>
 	public interface IMetadataNode
 	{
+
+		// METHODS TO IMPLEMENT ONCE CODE IS BEING GENERATED
+		/// <summary>
+		/// Gets the current state of the object in the form 
+		/// of an XML string. <br><br>
+		/// <b>NOTE:</b>
+		/// Unlike the PersistChanges method, this method simply
+		/// returns a snapshot of the object's current state,
+		/// without affecting it's loaded state.
+		/// </summary>
+		//string GetCurrentState();
+		/// <summary>
+		/// Saves the current state of the object to an XML node.
+		/// <b>NOTE:</b>
+		/// Unlike the PersistChanges method, this method simply
+		/// saves a snapshot of the object's current state to the
+		/// XML node, without affecting it's loaded state.
+		/// </summary>
+		//void GetCurrentState(ref XmlNode saveToNode);
+		/// <summary>
+		/// Sets current state of the object, loading the state
+		/// from an XML node.
+		/// <b>NOTE:</b>
+		/// Unlike the LoadXml method, this method simply
+		/// sets the object's current state, without affecting 
+		/// it's loaded state.
+		/// </summary>
+		//void SetCurrentState(XmlNode node);
+		/// <summary>
+		/// Sets current state of the object, loading the state
+		/// from an XML string.
+		/// <b>NOTE:</b>
+		/// Unlike the LoadXml method, this method simply
+		/// sets the object's current state, without affecting 
+		/// it's loaded state.
+		/// </summary>
+		//void SetCurrentState(string xml);
+		
+		// Rename to IXmlNode or IXmlObject
+		// Should implement IUndoable
+		
 		XmlNode LoadedXmlNode { get; }
 		bool IsDirty { get; }
 		void LoadXml(XmlNode node);
