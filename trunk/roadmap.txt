@@ -1,8 +1,8 @@
-* AppDomain isolation of template engines
+* Region support with hash code generation and checking
 * CodeSmith support
 * SimpleEngine
-* Region support with hash code generation and checking
-* Assembly analyzer for creating metadata files
+* Assembly analyzer for reverse engeneering
+* AppDomain isolation of template engines
 
 
 
