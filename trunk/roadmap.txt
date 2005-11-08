@@ -1,0 +1,8 @@
+* AppDomain isolation of template engines
+* CodeSmith support
+* SimpleEngine
+* Region support with hash code generation and checking
+* Assembly analyzer for creating metadata files
+
+
+

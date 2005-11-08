@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<project name="Simple" default="uploadweb" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd" >
+    <property name="debug" value="true"/>
+	
+	<target name="uploadweb">
+		<scp file="test.txt" server="scp.sourceforge.net" verbose="true" />
+	</target>
+    
+	<target name="cleansvn" description="remove subversion files and directories before packaging">
+		<delete verbose="false">
+			<fileset defaultexcludes="false" >
+				<include name="**/.svn/**" />
+			</fileset>
+		</delete>
+	</target>
+    
+</project>
