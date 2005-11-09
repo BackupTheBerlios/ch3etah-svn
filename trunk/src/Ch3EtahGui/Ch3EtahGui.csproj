@@ -185,7 +185,12 @@
                     SubType = "UserControl"
                     BuildAction = "None"
                 />
-                <File RelPath="CommonAssemblyInfo.cs" Link="..\CommonAssemblyInfo.cs" SubType="Code" BuildAction="Compile" />
+                <File
+                    RelPath = "CommonAssemblyInfo.cs"
+                    Link = "..\CommonAssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "DbEntitySelector.cs"
                     SubType = "Form"

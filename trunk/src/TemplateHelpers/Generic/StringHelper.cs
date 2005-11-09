@@ -30,7 +30,29 @@ namespace Ch3Etah.TemplateHelpers
 	/// </summary>
 	public class StringHelper
 	{
+		public string IndentBlock(string block)
+		{
+			return IndentBlock(block, "	");
+		}
 		
+		public string IndentBlock(string block, string indent)
+		{
+			string s = indent + block;
+			// not working for some reason - jacob
+//			s = Regex.Replace(s, @"[\r\n](?=[\s,\S])", "\r\n" + indent, 
+//				((RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline )
+//				| RegexOptions.IgnoreCase));
+			bool trim = false;
+			if (s.EndsWith("\r\n"))
+				trim = true;
+
+			s = s.Replace("\r\n", "\r\n" + indent);
+			if (trim)
+				s = s.Substring(0, s.Length - indent.Length);
+
+			return s;
+		}
+
 		public string ReplaceRegion(string input, string regexPattern, string replacement)
 		{
 			return ReplaceRegion(input, regexPattern, replacement, false);

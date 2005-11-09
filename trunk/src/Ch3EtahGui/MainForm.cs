@@ -429,10 +429,17 @@ namespace Ch3Etah.Gui {
 						node.Remove();
 					}
 				}
-				tvwProject.SuspendLayout();
+				tvwProject.BeginUpdate();
 				tvwProject.ImageList = Images.GetImageList();
 
 				TreeNode projectNode = SetupProjectNode();
+				foreach (TreeNode node in projectNode.Nodes) 
+				{
+					if (node.Tag == null) 
+					{
+						node.Remove();
+					}
+				}
 
 				TreeNode generatorCommandsNode = SetupGeneratorCommandsNode(projectNode);
 				SetupDataSourcesNode(projectNode);
@@ -444,7 +451,7 @@ namespace Ch3Etah.Gui {
 
 			}
 			finally {
-				tvwProject.ResumeLayout();
+				tvwProject.EndUpdate();
 			}
 		}
 
@@ -453,6 +460,7 @@ namespace Ch3Etah.Gui {
 
 			if (projectNode == null) {
 				projectNode = tvwProject.Nodes.Add(_project.Name);
+				projectNode.Expand();
 
 				projectNode.Text = _project.Name;
 				projectNode.ImageIndex = Images.Indexes.DocumentCh3Etah;
@@ -481,7 +489,7 @@ namespace Ch3Etah.Gui {
 			metadataFilesNode.ImageIndex = Images.Indexes.FolderOpen;
 			metadataFilesNode.SelectedImageIndex = Images.Indexes.FolderOpen;
 			metadataFilesNode.Tag = _project.MetadataFiles;
-			metadataFilesNode.Nodes.Clear();
+			//metadataFilesNode.Nodes.Clear();
 			
 			foreach (MetadataFile file in _project.MetadataFiles) {
 				TreeNode node = GetContextNode(file, metadataFilesNode.Nodes);
@@ -489,10 +497,22 @@ namespace Ch3Etah.Gui {
 					node = new TreeNode(file.Name);
 					sortedItems.Add(file.Name, node);
 				}
-				node.Text = file.Name;
-				node.ImageIndex = Images.Indexes.DocumentText;
-				node.SelectedImageIndex = Images.Indexes.DocumentText;
-				node.Tag = file;
+				try 
+				{
+					node.Tag = file;
+					file.Load();
+					node.Text = file.Name;
+					node.ImageIndex = Images.Indexes.DocumentText;
+					node.SelectedImageIndex = Images.Indexes.DocumentText;
+					SetupMetadataFileNode(node);
+				}
+				catch
+				{
+					node.Text = file.Name + " [ERROR LOADING FILE - CHECK THAT FILE EXISTS AND THAT THE PROJECT'S MetadataBaseDir property is correct.]";
+					node.ImageIndex = Images.Indexes.Delete;
+					node.SelectedImageIndex = Images.Indexes.Delete;
+					node.Parent.Expand();
+				}
 			}
 			
 			foreach (DictionaryEntry entry in sortedItems)
@@ -502,15 +522,9 @@ namespace Ch3Etah.Gui {
 			
 			foreach (TreeNode node in metadataFilesNode.Nodes) {
 				if (
-					node.Tag != null && node.Tag.GetType() == typeof (MetadataFile) &&
+					node.Tag != null && node.Tag is MetadataFile &&
 					!_project.MetadataFiles.Contains((MetadataFile) node.Tag)) {
 					node.Remove();
-				}
-				else if (node.Tag.GetType() == typeof (MetadataFilePlaceholder)) {
-					node.Remove();
-				}
-				else {
-					SetupMetadataFileNode(node);
 				}
 			}
 			if (Directory.Exists(_project.GetFullMetadataPath())) {
@@ -638,10 +652,23 @@ namespace Ch3Etah.Gui {
 
 		private TreeNode SetupPackagesNode(TreeNode projectNode) 
 		{
-			TreeNode packagesNode = GetContextNode(_project.ListPackages(), tvwProject.Nodes);
+			TreeNode packagesNode;
+			try
+			{
+				packagesNode = GetContextNode(_project.ListPackages(), tvwProject.Nodes);
+			}
+			catch
+			{
+				packagesNode = projectNode.Nodes.Add("[ERROR LOADING PACKAGES - Check the 'PackagesBaseDir' of your project.]");
+				packagesNode.ImageIndex = Images.Indexes.Delete;
+				packagesNode.SelectedImageIndex = Images.Indexes.Delete;
+				return packagesNode;
+			}
+
 			if (packagesNode == null) 
 			{
 				packagesNode = projectNode.Nodes.Add("Packages");
+				packagesNode.Expand();
 			}
 
 			packagesNode.ImageIndex = Images.Indexes.FolderOpen;
@@ -654,6 +681,7 @@ namespace Ch3Etah.Gui {
 				if (node == null) 
 				{
 					node = packagesNode.Nodes.Add(p.Name);
+					node.Parent.Expand();
 				}
 				node.Text = p.Name;
 				//TreeNode node = generatorCommandsNode.Nodes.Add(command.Name);
@@ -679,7 +707,7 @@ namespace Ch3Etah.Gui {
 					node.Remove();
 				}
 			}
-
+			
 			return packagesNode;
 		}
 
@@ -690,6 +718,7 @@ namespace Ch3Etah.Gui {
 			if (templatesNode == null) 
 			{
 				templatesNode = packageNode.Nodes.Add("Templates");
+				packageNode.Expand();
 			}
 
 			templatesNode.ImageIndex = Images.Indexes.FolderOpen;
@@ -724,6 +753,7 @@ namespace Ch3Etah.Gui {
 			if (macrosNode == null) 
 			{
 				macrosNode = packageNode.Nodes.Add("Macro Libraries");
+				packageNode.Expand();
 			}
 
 			macrosNode.ImageIndex = Images.Indexes.FolderOpen;
@@ -1135,12 +1165,16 @@ namespace Ch3Etah.Gui {
 				}
 			}
 			foreach (ObjectEditorForm form in forms) {
-				bool cancel = false;
-				form.UnloadEditorPanel(out cancel);
-				if (cancel) {
-					return false;
+				if (form != null)
+				{
+					bool cancel = false;
+					form.UnloadEditorPanel(out cancel);
+					if (cancel) 
+					{
+						return false;
+					}
+					form.Close();
 				}
-				form.Close();
 			}
 			SaveDockSettings();
 			return true;
@@ -1454,16 +1488,25 @@ namespace Ch3Etah.Gui {
 		}
 
 		private void tvwProject_DoubleClick(object sender, EventArgs e) {
-			TreeNode node = tvwProject.SelectedNode; //.GetNodeAt(tvwProject.PointToClient(Cursor.Position));
-			if (node == null || node.Tag == null) {
-				return;
+			try
+			{
+				TreeNode node = tvwProject.SelectedNode; //.GetNodeAt(tvwProject.PointToClient(Cursor.Position));
+				if (node == null || node.Tag == null) 
+				{
+					return;
+				}
+
+				IObjectEditor editor = ObjectEditorFactory.CreateObjectEditor(node.Tag);
+
+				if (editor != null) 
+				{
+					editor.SelectedObjectChanged += new EventHandler(IObjectEditor_SelectedObjectChanged);
+					ObjectEditorManager.OpenObjectEditor(editor);
+				}
 			}
-
-			IObjectEditor editor = ObjectEditorFactory.CreateObjectEditor(node.Tag);
-
-			if (editor != null) {
-				editor.SelectedObjectChanged += new EventHandler(IObjectEditor_SelectedObjectChanged);
-				ObjectEditorManager.OpenObjectEditor(editor);
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 		}
 

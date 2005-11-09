@@ -71,18 +71,33 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 		#endregion Properties
 		
 		#region GetInstance
-		public object CreateInstance() {
+		public object CreateInstance()
+		{
+			Debug.WriteLine("WARNING: Helper.CreateInstance() - Currently loading from AppDomain.CurrentDomain.BaseDirectory instead of Package.BaseFolder.");
+			//return CreateInstance(AppDomain.CurrentDomain.BaseDirectory);
+			return CreateInstance(_package.BaseFolder);
+		}
+
+		public object CreateInstance(string baseDir) {
 			if (_instance != null) {
 				return _instance;
 			}
 			string oldFolder = Directory.GetCurrentDirectory();
-			if (_package != null && _package.BaseFolder != "") {
-				Directory.SetCurrentDirectory(_package.BaseFolder);
+			if (_package != null && baseDir != "") {
+				Directory.SetCurrentDirectory(baseDir);
 			}
 			try {
+				Debug.WriteLine("WARNING: Helper.CreateInstance() - Cannot load same assembly from two distinct paths.");
+				// A good solution that could possibly solve some of the NVelocity problems as well.
+				// Use Domain.CreateInstanceFromAndUnwrap()
+				// http://codebetter.com/blogs/ranjan.sakalley/archive/2005/04/08/61574.aspx
+				// http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dncscol/html/csharp05162002.asp
 				string assemblyName = this.Type.Substring(0, this.Type.IndexOf(","));
+				if (!File.Exists(assemblyName) && File.Exists(Path.GetFileName(assemblyName))) {
+					assemblyName = Path.GetFileName(assemblyName);
+				}
 				string typeName = this.Type.Substring(this.Type.IndexOf(",") + 1);
-				Type type = System.Reflection.Assembly.LoadFrom(assemblyName).GetType(typeName);
+				Type type = System.Reflection.Assembly.LoadFrom(Path.GetFullPath(assemblyName)).GetType(typeName);
 				//Type type = System.Type.GetType(this.Type);
 				if (type == null) {
 					throw new UnknownTypeException("Helper '" + this.Name + "' of type '" + this.Type + "' could not be created.");
@@ -97,6 +112,7 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 				Directory.SetCurrentDirectory(oldFolder);
 			}
 		}
+
 		#endregion GetInstance
 		
 	}

@@ -18,7 +18,7 @@
  *   User: Jacob Eggleston
  *   Date: 23/12/2004
  */
-
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Xml.Serialization;
@@ -125,6 +125,26 @@ namespace Ch3Etah.Metadata.OREntities
 		}
 		#endregion Properties
 		
+		public EntityField EntityField
+		{
+			get
+			{
+				if (this.Index == null || this.Index.Entity == null)
+					return null;
+
+				EntityField field = this.Index.Entity.Fields
+					.GetFieldFromName(this.Name);
+				if (field != null)
+					return field;
+				else
+					throw new NullReferenceException(string.Format(
+						"The field '{0}' is defined in the index '{1}', but no matching field with that name was found in the entity '{2}'.",
+						this.Name,
+						this.Index.Name,
+						this.Index.Entity.Name));
+			}
+		}
+
 		public override string ToString() {
 			return this.Name;
 		}

@@ -20,7 +20,7 @@
  */
 
 using System;
-
+using System.Diagnostics;
 using Ch3Etah.Core.CodeGen;
 using Ch3Etah.Core.CodeGen.NVelocityEngine;
 using Ch3Etah.Core.CodeGen.Xslt;
@@ -40,11 +40,20 @@ namespace Ch3Etah.Core.CodeGen
 		{
 		}
 		
-		public static ITransformationEngine CreateEngine(string name) {
+		public static ITransformationEngine CreateEngine() 
+		{
+			return CreateEngine(DEFAULT_ENGINE);
+		}
+		
+		public static ITransformationEngine CreateEngine(string name) 
+			{
 			ITransformationEngine engine = InternalCreateEngine(name);
 			if (engine != null) {
+				Debug.WriteLine("TransformationEngineFactory: Created code generation engine of type " + engine.GetType().ToString());
 				return engine;
 			}
+			Debug.WriteLine(string.Format(
+				"TransformationEngineFactory: Code generation engine of type '{0}' could not be loaded. Returning default engine.", name));
 			return InternalCreateEngine(DEFAULT_ENGINE);
 		}
 		
@@ -55,6 +64,8 @@ namespace Ch3Etah.Core.CodeGen
 					return new NVelocityTransformationEngine();
 				case "XSLT":
 					return new XsltTransformationEngine();
+				case "CODESMITH":
+					return null;//new CodeSmith.CodeSmithTransformationEngine();
 				default:
 					return null;
 			}

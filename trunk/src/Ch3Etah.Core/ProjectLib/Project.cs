@@ -305,7 +305,7 @@ namespace Ch3Etah.Core.ProjectLib {
 			project._fileName = originalFileName;
 			
 			project.SetLoadedState();
-			project.LoadMetadataFiles();
+			//project.LoadMetadataFiles();
 
 			// Set's Current Project
 			CurrentProject = project;
@@ -407,13 +407,13 @@ namespace Ch3Etah.Core.ProjectLib {
 
 		#endregion GetFullPaths
 		
-		private void LoadMetadataFiles()
-		{
-			foreach (MetadataFile file in this.MetadataFiles)
-			{
-				file.Load();
-			}
-		}
+//		private void LoadMetadataFiles()
+//		{
+//			foreach (MetadataFile file in this.MetadataFiles)
+//			{
+//				file.Load();
+//			}
+//		}
 
 		private void SetLoadedState()
 		{
@@ -441,9 +441,21 @@ namespace Ch3Etah.Core.ProjectLib {
 			return null;
 		}
 
-		public Package[] ListPackages()
+		public ArrayList ListPackages()
 		{
-			return Package.ListPackages(this.GetFullTemplatePath());
+			try
+			{
+				return Package.ListPackages(this.GetFullTemplatePath());
+			}
+			catch (Exception ex)
+			{
+				Trace.WriteLine("ERROR LOADING PACKAGES:\r\n" + ex.ToString());
+				throw ex;
+//				Package p = new Package();
+//				p.Name = "[ERROR LOADING PACKAGES - Check the 'PackagesBaseDir' of your project.]";
+//				p.PackageFileName = p.Name;
+//				return new Package[]{p};
+			}
 		}
 		
 	}

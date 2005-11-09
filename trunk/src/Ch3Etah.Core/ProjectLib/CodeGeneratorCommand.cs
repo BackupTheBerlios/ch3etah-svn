@@ -40,7 +40,8 @@ namespace Ch3Etah.Core.ProjectLib {
 
 	public enum CodeGeneratorEngine {
 		NVelocity,
-		Xslt
+		Xslt,
+		CodeSmith
 	}
 
 	#endregion CodeGeneratorEngine Enum
@@ -263,7 +264,7 @@ namespace Ch3Etah.Core.ProjectLib {
 			if (Template == String.Empty) {
 				return;
 			}
-			CodeGenerator generator = CreateGenerator();
+			CodeGenerator generator = CreateGenerator(file);
 			SetGeneratorTemplate(generator);
 			foreach (MetadataBrand brand in generator.Template.IndividualMetadataBrands) {
 				foreach (IMetadataEntity entity in file.MetadataEntities) {
@@ -335,9 +336,7 @@ namespace Ch3Etah.Core.ProjectLib {
 				SetOutputBaseFolder();
 				try {
 					XmlDocument document = PrepareMetadata(inputFile);
-					CodeGenerator generator = GetGenerator(document);
-					generator.Context.CurrentMetadataFile = inputFile;
-					generator.Context.SelectedMetadataFiles = this.IndividualMetadataFiles;
+					CodeGenerator generator = GetGenerator(document, inputFile);
 					string outputPath = generator.Context.Parameters["CodeGenOutputPath"].Value;
 					outputPath = Path.GetFullPath(Path.Combine(this.Project.GetFullOutputPath(), outputPath));
 					FileSystemHelper.CreateDirectory(new FileInfo(outputPath));
@@ -379,9 +378,7 @@ namespace Ch3Etah.Core.ProjectLib {
 			Trace.Indent();
 			try {
 				XmlDocument document = PrepareMetadata(inputFile);
-				CodeGenerator generator = GetGenerator(document);
-				generator.Context.CurrentMetadataFile = inputFile;
-				generator.Context.SelectedMetadataFiles = this.IndividualMetadataFiles;
+				CodeGenerator generator = GetGenerator(document, inputFile);
 				generator.Generate(document, outputWriter);
 				ResetGroupedMetadataCache();
 			}
@@ -394,18 +391,18 @@ namespace Ch3Etah.Core.ProjectLib {
 
 		#region Prepare generator
 
-		private CodeGenerator GetGenerator(XmlDocument metadata) {
+		private CodeGenerator GetGenerator(XmlDocument metadata, MetadataFile inputFile) {
 			// FIXME: Probably need to refactor generator, package, and template code into seperate classes
 			InputParameterCollection parameters = GetContextParameters();
 			//Trace.WriteLine("GetGenerator(): Command context has " + parameters.Count + " parameters - " + DateTime.Now.ToString());
-			PrepareParameters(metadata, parameters);
-			CodeGenerator generator = CreateGenerator();
+			PrepareParameters(metadata, inputFile, parameters);
+			CodeGenerator generator = CreateGenerator(inputFile);
 			SetGeneratorTemplate(generator);
 			SetCommandParameters(generator, parameters);
 			return generator;
 		}
 
-		private void PrepareParameters(XmlDocument metadata, InputParameterCollection parameters) {
+		private void PrepareParameters(XmlDocument metadata, MetadataFile inputFile, InputParameterCollection parameters) {
 			Debug.WriteLine("PrepareParameters(): Command context has " + parameters.Count + " parameters");
 			for (int x = 0; x < 10; x++) {
 				bool parameterChanged = false;
@@ -416,7 +413,7 @@ namespace Ch3Etah.Core.ProjectLib {
 					//Debug.WriteLine("PrepareParameters(): Preparing parameter '" + parameter.Name + "' Value='" + parameter.Value + "'");
 					Trace.Indent();
 					try {
-						CodeGenerator generator = CreateGenerator();
+						CodeGenerator generator = CreateGenerator(inputFile);
 						SetGeneratorTemplate(generator);
 						generator.Template.Name = "Prepare Parameter '" + parameter.Name + "' : value '" + parameter.Value + "'";
 						generator.Template.Content = new StringReader(parameter.Value);
@@ -426,6 +423,7 @@ namespace Ch3Etah.Core.ProjectLib {
 						//StringReader reader = ;
 						//generator.Template = reader;
 						StringWriter writer = new StringWriter();
+						generator.UseDefaultEngine = true;
 						generator.Generate(metadata, writer);
 						//Trace.WriteLineIf(parameter.Value != writer.ToString(), "Prepared parameter '" + parameter.Name + "': OldVal='" + parameter.Value + "' NewVal='" + writer.ToString() + "'");
 						if (parameter.Value != writer.ToString()) {
@@ -443,7 +441,7 @@ namespace Ch3Etah.Core.ProjectLib {
 			}
 		}
 
-		private CodeGenerator CreateGenerator() {
+		private CodeGenerator CreateGenerator(MetadataFile inputFile) {
 			CodeGenerator generator;
 			SetTemplateBaseFolder();
 			try {
@@ -457,6 +455,8 @@ namespace Ch3Etah.Core.ProjectLib {
 			finally {
 				RestoreTemplateBaseFolder();
 			}
+			generator.Context.CurrentMetadataFile = inputFile;
+			generator.Context.SelectedMetadataFiles = this.IndividualMetadataFiles;
 			return generator;
 		}
 
@@ -484,6 +484,9 @@ namespace Ch3Etah.Core.ProjectLib {
 			switch (Engine) {
 				case CodeGeneratorEngine.Xslt:
 					generator.Template.Engine = "Xslt";
+					break;
+				case CodeGeneratorEngine.CodeSmith:
+					generator.Template.Engine = "CodeSmith";
 					break;
 				default:
 					generator.Template.Engine = "NVelocity";

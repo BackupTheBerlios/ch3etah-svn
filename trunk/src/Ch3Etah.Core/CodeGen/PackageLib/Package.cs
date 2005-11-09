@@ -44,9 +44,9 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 		private string _name;
 		private string _baseFolder;
 		private string _packageFileName;
-		private TemplateCollection _templates;
-		private MacroLibraryCollection _libraries;
-		private HelperCollection _helpers;
+		private TemplateCollection _templates = new TemplateCollection();
+		private MacroLibraryCollection _libraries = new MacroLibraryCollection();
+		private HelperCollection _helpers = new HelperCollection();
 		private InputParameterCollection _inputParameters;
 		#endregion Fields
 
@@ -66,6 +66,7 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 		public string PackageFileName
 		{
 			get { return _packageFileName; }
+			set { _packageFileName = value; }
 		}
 
 		[XmlArrayItem("Template")]
@@ -154,7 +155,7 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 		
 		private static Package LoadFile(string fileName) {
 			Package package = (Package)XmlSerializationHelper.LoadObject(fileName, typeof(Package));
-			package._packageFileName = Path.GetFullPath(fileName);
+			package.PackageFileName = Path.GetFullPath(fileName);
 			package.BaseFolder = Path.GetDirectoryName(Path.GetFullPath(fileName));
 			package.Name = Path.GetFileName(fileName);
 			return package;
@@ -163,7 +164,7 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 		
 		#region List / Get
 		private static Hashtable _packagesDictionary = new Hashtable();
-		public static Package[] ListPackages(string baseDirectory)
+		public static ArrayList ListPackages(string baseDirectory)
 		{
 			string fulldir = Path.GetFullPath(baseDirectory);
 			ArrayList packages = GetPackagesEntry(fulldir);
@@ -191,7 +192,7 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 				SetPackagesEntry(baseDirectory, packages);
 			}
 
-			return packages.ToArray(typeof(Package)) as Package[];
+			return packages;
 		}
 		
 		private static ArrayList GetPackagesEntry(string baseDirectory)

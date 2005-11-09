@@ -75,6 +75,9 @@ namespace Ch3Etah.Core.CodeGen
 		public CodeGenerationContext Context {
 			get { return _context; }
 		}
+
+		public bool UseDefaultEngine = false;
+
 		#endregion Properties
 		
 		public void Generate(XmlDocument input, TextWriter output) {
@@ -98,7 +101,11 @@ namespace Ch3Etah.Core.CodeGen
 		}
 		
 		private ITransformationEngine GetEngine() {
-			ITransformationEngine engine = TransformationEngineFactory.CreateEngine(_template.Engine);
+			ITransformationEngine engine;
+			if (UseDefaultEngine)
+				engine = TransformationEngineFactory.CreateEngine();
+			else
+				engine = TransformationEngineFactory.CreateEngine(_template.Engine);
 			
 			engine.BaseFolder = _baseFolder;
 			engine.Template = this.Template;

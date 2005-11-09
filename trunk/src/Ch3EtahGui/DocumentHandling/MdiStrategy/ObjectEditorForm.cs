@@ -20,6 +20,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 using Ch3Etah.Gui.DocumentHandling;
@@ -104,18 +105,26 @@ namespace Ch3Etah.Gui.DocumentHandling.MdiStrategy
 		
 		void ObjectEditorForm_Activated(object sender, System.EventArgs e)
 		{
-			try {
+			try
+			{
 				((MainForm)this.MdiParent).SelectContextItem(_objectEditor.SelectedObject);
 			}
-			catch {}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("ObjectEditorForm_Activated:\r\n" + ex.ToString());
+			}
 		}
 		
 		void ObjectEditorForm_Enter(object sender, System.EventArgs e)
 		{
-			try {
+			try 
+			{
 				((MainForm)this.MdiParent).SelectContextItem(_objectEditor.SelectedObject);
 			}
-			catch {}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("ObjectEditorForm_Enter:\r\n" + ex.ToString());
+			}
 		}
 
 		private void control_TextChanged(object sender, EventArgs e) {

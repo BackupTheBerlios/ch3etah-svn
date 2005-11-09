@@ -486,6 +486,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			cboEngine.Items.Clear();
 			cboEngine.Items.Add(CodeGeneratorEngine.NVelocity);
 			cboEngine.Items.Add(CodeGeneratorEngine.Xslt);
+			cboEngine.Items.Add(CodeGeneratorEngine.CodeSmith);
 
 			cboPackage.Items.Clear();
 			cboPackage.Items.Add(_generatorCommand.Package);
@@ -631,10 +632,10 @@ namespace Ch3Etah.Gui.DocumentHandling {
 
 		private void cboPackage_DropDown(object sender, EventArgs e) {
 			
-			Package[] packages = Package.ListPackages(
+			ArrayList packages = Package.ListPackages(
 				_generatorCommand.Project.GetFullTemplatePath());
 
-			if (packages != null && packages.Length > 0) {
+			if (packages != null && packages.Count > 0) {
 				foreach (Package p in packages) {
 					if (!cboPackage.Items.Contains(p.Name))
 						cboPackage.Items.Add(p.Name);
