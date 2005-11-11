@@ -139,6 +139,12 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "CommonAssemblyInfo.cs"
+                    Link = "..\CommonAssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "FileSystemHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -153,7 +159,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-	        <File RelPath="CommonAssemblyInfo.cs" Link="..\CommonAssemblyInfo.cs" SubType="Code" BuildAction="Compile" />
                 <File
                     RelPath = "CodeGen\ITransformationEngine.cs"
                     SubType = "Code"
@@ -169,7 +174,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "CodeGen\CodeSmith\" />
                 <File
                     RelPath = "CodeGen\NVelocity\NVelocityTransformationEngine.cs"
                     SubType = "Code"
