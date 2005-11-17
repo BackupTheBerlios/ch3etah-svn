@@ -42,7 +42,8 @@ using WeifenLuo.WinFormsUI;
 namespace Ch3Etah.Gui {
 	
 	public class MainForm : Form, IMdiContainer {
-		
+		private const string ERROR_MESSAGE_1 = " [ERROR LOADING FILE - CHECK THAT FILE EXISTS AND THAT THE PROJECT'S MetadataBaseDir property is correct.]";
+
 		private Splitter splitter3;
 		private StatusBar statusBar;
 
@@ -341,6 +342,13 @@ namespace Ch3Etah.Gui {
 				throw new InvalidOperationException("This project is already being generated.");
 			}
 			try {
+				
+				// Fly-out the output window if needed
+				if (!outputWindow.IsFloat && outputWindow.DockState == DockState.DockBottomAutoHide)
+				{
+					outputWindow.Activate();
+				}
+				
 				_running = true;
 				_cancelGeneration = false;
 				EnableCommandBarButtons();
@@ -493,7 +501,7 @@ namespace Ch3Etah.Gui {
 			
 			foreach (MetadataFile file in _project.MetadataFiles) {
 				TreeNode node = GetContextNode(file, metadataFilesNode.Nodes);
-				if (node == null) {
+				if (node == null && !sortedItems.ContainsKey(file.Name)) {
 					node = new TreeNode(file.Name);
 					sortedItems.Add(file.Name, node);
 				}
@@ -508,10 +516,17 @@ namespace Ch3Etah.Gui {
 				}
 				catch
 				{
-					node.Text = file.Name + " [ERROR LOADING FILE - CHECK THAT FILE EXISTS AND THAT THE PROJECT'S MetadataBaseDir property is correct.]";
+					int i = 1;
+					if (node == null)
+						node = new TreeNode(file.Name);
+					node.Text = file.Name + ERROR_MESSAGE_1;
+					while (sortedItems.ContainsKey(node.Text))
+					{
+						node.Text = file.Name + string.Format(" ({0})", i++) + ERROR_MESSAGE_1;
+					}
+					sortedItems.Add(node.Text, node);
 					node.ImageIndex = Images.Indexes.Delete;
 					node.SelectedImageIndex = Images.Indexes.Delete;
-					node.Parent.Expand();
 				}
 			}
 			
