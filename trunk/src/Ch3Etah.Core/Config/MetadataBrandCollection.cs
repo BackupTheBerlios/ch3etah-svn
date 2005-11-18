@@ -23,9 +23,6 @@ using System;
 
 namespace Ch3Etah.Core.Config
 {
-	/// <summary>
-	/// Description of MetadataBrandCollection.
-	/// </summary>
 	public class MetadataBrandCollection : Ch3Etah.Core.Config.Generated.MetadataBrandCollection
 	{
 		public MetadataBrand this[string name] {

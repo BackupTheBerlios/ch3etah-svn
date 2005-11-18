@@ -532,7 +532,10 @@ namespace Ch3Etah.Gui {
 			
 			foreach (DictionaryEntry entry in sortedItems)
 			{
-				metadataFilesNode.Nodes.Add((TreeNode) entry.Value);
+				TreeNode node = (TreeNode)entry.Value;
+				metadataFilesNode.Nodes.Add(node);
+				if (node.Text.IndexOf("ERROR LOADING FILE") > 0)
+					node.Parent.Expand();	
 			}
 			
 			foreach (TreeNode node in metadataFilesNode.Nodes) {

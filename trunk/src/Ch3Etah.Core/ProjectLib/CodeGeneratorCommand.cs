@@ -38,11 +38,11 @@ namespace Ch3Etah.Core.ProjectLib {
 
 	#region CodeGeneratorEngine Enum
 
-	public enum CodeGeneratorEngine {
-		NVelocity,
-		Xslt,
-		CodeSmith
-	}
+//	public enum CodeGeneratorEngine {
+//		NVelocity,
+//		Xslt,
+//		CodeSmith
+//	}
 
 	#endregion CodeGeneratorEngine Enum
 
@@ -71,7 +71,7 @@ namespace Ch3Etah.Core.ProjectLib {
 		private bool _overwrite = true;
 		private bool _autoSelectMetadataFiles = true;
 		private CodeGenerationMode _codeGenerationMode;
-		private CodeGeneratorEngine _engine = CodeGeneratorEngine.NVelocity;
+		private string _engine = TransformationEngineFactory.DefaultEngineName;
 		private InputParameterCollection _inputParameters = new InputParameterCollection();
 		private Guid[] _individualMetadataFileIDs;
 		private MetadataFileCollection _individualMetadataFiles;
@@ -115,7 +115,7 @@ namespace Ch3Etah.Core.ProjectLib {
 		#region Engine
 
 		[Category("Code Generation")]
-		public CodeGeneratorEngine Engine {
+		public string Engine {
 			get { return _engine; }
 			set { _engine = value; }
 		}
@@ -480,18 +480,7 @@ namespace Ch3Etah.Core.ProjectLib {
 		}
 
 		private void SetGeneratorEngine(CodeGenerator generator) {
-			// TODO: REFACTOR - use xml file to define engines
-			switch (Engine) {
-				case CodeGeneratorEngine.Xslt:
-					generator.Template.Engine = "Xslt";
-					break;
-				case CodeGeneratorEngine.CodeSmith:
-					generator.Template.Engine = "CodeSmith";
-					break;
-				default:
-					generator.Template.Engine = "NVelocity";
-					break;
-			}
+			generator.Template.Engine = this.Engine;
 		}
 
 		private InputParameterCollection GetContextParameters() {

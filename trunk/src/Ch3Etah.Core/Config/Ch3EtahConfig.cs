@@ -20,6 +20,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -30,18 +31,24 @@ namespace Ch3Etah.Core.Config
 	public class Ch3EtahSettingsHelper
 	{
 		private MetadataBrandCollection _metadataBrands;
+		private TransformationEngineCollection _transformationEngines;
+
 		public Ch3EtahSettingsHelper()
 		{
 		}
 		
 		[XmlArrayItem("Brand")]
-		public MetadataBrandCollection MetadataBrands {
-			get {
-				return _metadataBrands;
-			}
-			set {
-				_metadataBrands = value;
-			}
+		public MetadataBrandCollection MetadataBrands
+		{
+			get { return _metadataBrands; }
+			set { _metadataBrands = value; }
+		}
+		
+		[XmlArrayItem("Engine")]
+		public TransformationEngineCollection TransformationEngines
+		{
+			get { return _transformationEngines; }
+			set { _transformationEngines = value; }
 		}
 	}
 	#endregion Ch3EtahSettings helper class
@@ -57,7 +64,6 @@ namespace Ch3Etah.Core.Config
 		private const string CONFIG_RESOURCE_NAME = "Ch3Etah.Core.Ch3Etah.config";
 
 		private static Ch3EtahSettingsHelper _settings;
-
 		private static Ch3EtahSettingsHelper Settings {
 			get {
 				if (_settings == null) {
@@ -70,6 +76,7 @@ namespace Ch3Etah.Core.Config
 			}
 		}
 		
+		
 		public static MetadataBrandCollection MetadataBrands {
 			get {
 				if (Settings.MetadataBrands == null) {
@@ -79,20 +86,36 @@ namespace Ch3Etah.Core.Config
 			}
 		}
 		
+		public static TransformationEngineCollection TransformationEngines {
+			get {
+				if (Settings.TransformationEngines == null) 
+				{
+					throw new NullReferenceException();
+				}
+				return Settings.TransformationEngines;
+			}
+		}
+
+		
 		#region Load / Save
-		public static void LoadSettings() {
+		public static void LoadSettings() 
+		{
 			LoadSettings(CONFIG_FILE_NAME);
 		}
 
 		public static void LoadSettings(string fileName) {
 			try
 			{
+				Debug.WriteLine("Attempting to load configuration settings from: " + fileName);
 				_settings = (Ch3EtahSettingsHelper)XmlSerializationHelper.LoadObject(GetFullPath(fileName), typeof(Ch3EtahSettingsHelper));
 			}
-			catch
+			catch (Exception ex)
 			{
+				Debug.WriteLine("Loading configuration settings failed: '" + ex.Message + "'");
+				Debug.WriteLine("Attempting to load configuration settings from embeded resource.");
 				_settings = (Ch3EtahSettingsHelper)XmlSerializationHelper.LoadObject(typeof(Ch3EtahConfig).Assembly.GetManifestResourceStream(CONFIG_RESOURCE_NAME), typeof(Ch3EtahSettingsHelper));
 			}
+			Debug.WriteLine("Configuration settings loaded successfully.");
 		}
 
 		public static void SaveSettings() {

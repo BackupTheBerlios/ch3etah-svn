@@ -14,26 +14,37 @@
  *
  *   ========================================================================
  *
- *   File Created using SharpDevelop.
  *   User: Jacob Eggleston
- *   Date: 22/9/2004
+ *   Date: 16/11/2005
  */
 
 using System;
+using System.ComponentModel;
 using System.Xml.Serialization;
 
 namespace Ch3Etah.Core.Config
 {
-
-	/// <summary>
-	/// Describes a MetadataBrand entry in a Ch3Etah config file. This
-	/// object contains information used to create MetadataEntities.
-	/// </summary>
-	public class MetadataBrand
+	public class TransformationEngineCollection : Ch3Etah.Core.Config.Generated.TransformationEngineCollection
 	{
-		[XmlAttribute] public string Name = "";
-		[XmlAttribute] public string ProviderType = "";
-		[XmlAttribute] public string EntityType = "";
+
+		public TransformationEngine this[string name] 
+		{
+			get 
+			{
+				foreach (TransformationEngine eng in this) 
+				{
+					if (eng.Name.ToUpper() == name.ToUpper()) 
+					{
+						return eng;
+					}
+				}
+				return null;
+			}
+		}
+		
+		public bool Contains(string name) 
+		{
+			return (this[name] != null);
+		}
 	}
-	
 }

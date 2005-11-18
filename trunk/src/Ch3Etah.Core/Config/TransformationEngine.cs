@@ -16,7 +16,7 @@
  *
  *   File Created using SharpDevelop.
  *   User: Jacob Eggleston
- *   Date: 22/9/2004
+ *   Date: 15/11/2004
  */
 
 using System;
@@ -24,16 +24,14 @@ using System.Xml.Serialization;
 
 namespace Ch3Etah.Core.Config
 {
-
 	/// <summary>
-	/// Describes a MetadataBrand entry in a Ch3Etah config file. This
-	/// object contains information used to create MetadataEntities.
+	/// Represents an information in the config file used 
+	/// to instanciate ITransformationEngine implementations.
 	/// </summary>
-	public class MetadataBrand
+	public class TransformationEngine
 	{
 		[XmlAttribute] public string Name = "";
-		[XmlAttribute] public string ProviderType = "";
-		[XmlAttribute] public string EntityType = "";
+		[XmlAttribute] public string Description = "";
+		[XmlAttribute] public string EngineType = "";
 	}
-	
 }

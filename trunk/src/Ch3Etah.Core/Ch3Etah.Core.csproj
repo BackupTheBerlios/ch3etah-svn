@@ -155,6 +155,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CodeGen\CodeGenerationException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CodeGen\CodeGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -250,7 +255,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CodeGen\XSLT\XsltEngine.cs"
+                    RelPath = "CodeGen\Xslt\XsltEngine.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -275,12 +280,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Config\TransformationEngine.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Config\TransformationEngineCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Config\XmlSerializationHelper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Config\Generated\MetadataBrandCollection .cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Config\Generated\TransformationEngineCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

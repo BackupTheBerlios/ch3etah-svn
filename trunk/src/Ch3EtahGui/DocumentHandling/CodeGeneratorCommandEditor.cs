@@ -26,6 +26,8 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+
+using Ch3Etah.Core.CodeGen;
 using Ch3Etah.Core.CodeGen.PackageLib;
 using Ch3Etah.Core.ProjectLib;
 using Ch3Etah.Gui.Widgets;
@@ -185,7 +187,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			this.cboEngine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
-			this.cboEngine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboEngine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
 			this.cboEngine.Location = new System.Drawing.Point(0, 64);
 			this.cboEngine.Name = "cboEngine";
 			this.cboEngine.Size = new System.Drawing.Size(328, 21);
@@ -484,9 +486,10 @@ namespace Ch3Etah.Gui.DocumentHandling {
 
 		private void DoBinding() {
 			cboEngine.Items.Clear();
-			cboEngine.Items.Add(CodeGeneratorEngine.NVelocity);
-			cboEngine.Items.Add(CodeGeneratorEngine.Xslt);
-			cboEngine.Items.Add(CodeGeneratorEngine.CodeSmith);
+			foreach(string engine in TransformationEngineFactory.GetConfiguredEngineNames())
+			{
+				cboEngine.Items.Add(engine);
+			}
 
 			cboPackage.Items.Clear();
 			cboPackage.Items.Add(_generatorCommand.Package);
@@ -504,7 +507,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			cboTemplate.DataBindings.Add("Text", _generatorCommand, "Template");
 			txtOutputPath.DataBindings.Add("Text", _generatorCommand, "OutputPath");
 			chkOverwrite.DataBindings.Add("Checked", _generatorCommand, "Overwrite");
-			cboEngine.DataBindings.Add("SelectedItem", _generatorCommand, "Engine");
+			cboEngine.DataBindings.Add("Text", _generatorCommand, "Engine");
 
 			tvwIndividualMetadataFiles.Bind(_generatorCommand.Project.MetadataFiles, _generatorCommand.IndividualMetadataFiles);
 			optMultiOutput.Checked = (_generatorCommand.CodeGenerationMode == CodeGenerationMode.MultipleOutput);
