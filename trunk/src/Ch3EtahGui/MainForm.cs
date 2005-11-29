@@ -1263,9 +1263,7 @@ namespace Ch3Etah.Gui {
 		}
 
 		private void WebSite_Click(object sender, EventArgs e) {
-			// TODO: open web site
-			// http://sourceforge.net/projects/ch3etah/
-			// http://ch3etah.sourceforge.net/
+			Process.Start(@"http://ch3etah.sourceforge.net/");
 		}
 
 		private void EditProjectParameters_Click(object sender, EventArgs e) {
