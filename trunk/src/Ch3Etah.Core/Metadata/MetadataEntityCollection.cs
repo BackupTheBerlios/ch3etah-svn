@@ -22,6 +22,7 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -34,7 +35,8 @@ namespace Ch3Etah.Core.Metadata
 	/// </summary>
 	public class MetadataEntityCollection : Ch3Etah.Core.Metadata.Generated.MetadataEntityCollection
 	{
-		
+		private const int INITIAL_XML_BUFFER = 4096;
+
 		protected MetadataFile _owningMetadataFile;
 		
 		public MetadataEntityCollection()
@@ -53,11 +55,11 @@ namespace Ch3Etah.Core.Metadata
 		}
 
 		public string SaveAsXmlString() {
-			string returnValue = "";
-			foreach ( IMetadataEntity entity in this ) {
-				returnValue += entity.SaveAsXmlString();
+			StringBuilder sb = new StringBuilder(INITIAL_XML_BUFFER);
+			foreach (IMetadataEntity entity in this ) {
+				sb.Append(entity.SaveAsXmlString());
 			}
-			return returnValue;
+			return sb.ToString();
 		}
 		
 		public bool IsDirty {

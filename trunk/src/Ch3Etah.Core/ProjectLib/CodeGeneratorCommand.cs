@@ -27,6 +27,7 @@ using System.Diagnostics;
 using System.Drawing.Design;
 using System.IO;
 using System.Security.Principal;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using Ch3Etah.Core.CodeGen;
@@ -62,7 +63,8 @@ namespace Ch3Etah.Core.ProjectLib {
 	/// using the Ch3Etah.Core.CodeGen abstraction layer.
 	/// </summary>
 	public class CodeGeneratorCommand : GeneratorCommand, IMetadataFileObserver {
-		
+		private const int INITIAL_XML_CAPACITY = 4096;
+
 		#region Constructors and Member Variables
 
 		private string _package = string.Empty;
@@ -300,28 +302,33 @@ namespace Ch3Etah.Core.ProjectLib {
 		#region Execute
 
 		public override void Execute() {
+
 			if (!Enabled) {
 				return;
 			}
+
 			if (OutputPath == String.Empty) {
 				throw
 					new InvalidOperationException(
 						"The property 'OutputPath' was not specified. You must either specify an output path or a TextWriter object to write to."
 						);
 			}
+
 			if (_codeGenerationMode == CodeGenerationMode.MultipleOutput) {
 				ExecuteIndividually();
 			}
 			else {
 				GenerateFile(null);
 			}
+
+			// Clears cache after execution
+			ResetGroupedMetadataCache();
 		}
 
 		private void ExecuteIndividually() {
 			foreach (MetadataFile inputFile in IndividualMetadataFiles) {
 				GenerateFile(inputFile);
 			}
-			ResetGroupedMetadataCache();
 		}
 
 		private void GenerateFile(MetadataFile inputFile) {
@@ -335,6 +342,7 @@ namespace Ch3Etah.Core.ProjectLib {
 			try {
 				SetOutputBaseFolder();
 				try {
+					AssembleGroupedMetadata();
 					XmlDocument document = PrepareMetadata(inputFile);
 					CodeGenerator generator = GetGenerator(document, inputFile);
 					string outputPath = generator.Context.Parameters["CodeGenOutputPath"].Value;
@@ -649,37 +657,50 @@ namespace Ch3Etah.Core.ProjectLib {
 //			return sb.ToString();
 //		}
 
-		private XmlNode _groupedMetadataCache = null;
+		private XmlDocument _groupedMetadataCache = null;
 
 		private void AppendGroupedMetadata(XmlDocument document) {
-			if (_groupedMetadataCache == null) {
-				document.DocumentElement.InnerXml += AssembleGroupedMetadata();
-//				_groupedMetadataCache = document.DocumentElement.GetElementsByTagName("GroupedMetadata").Item(0);
-			}
-			else {
-				XmlNode node = document.ImportNode(_groupedMetadataCache, true);
-				document.DocumentElement.AppendChild(node);
-			}
+			XmlNode node = document.ImportNode(AssembleGroupedMetadata(), true);
+			document.DocumentElement.AppendChild(node);
 		}
 
 		private void ResetGroupedMetadataCache() {
 			_groupedMetadataCache = null;
 		}
 
-		private string AssembleGroupedMetadata() {
-			Hashtable entityCollections = 
-				GroupMetadataEntities(
+		private XmlNode AssembleGroupedMetadata() {
+
+			if (_groupedMetadataCache == null) 
+			{
+
+				StringBuilder sb = new StringBuilder(INITIAL_XML_CAPACITY);
+
+				sb.Append("<GroupedMetadata>");
+
+				Hashtable entityCollections = GroupMetadataEntities(
 					_codeGenerationMode == CodeGenerationMode.SingleOutput? 
-						IndividualMetadataFiles: Project.MetadataFiles);
-			string xml = "";
-			foreach (DictionaryEntry entry in entityCollections) {
-				string name = entry.Key.ToString();
-				MetadataEntityCollection entityCollection = (MetadataEntityCollection) entry.Value;
-				if (entityCollection.Count > 0) {
-					xml += "<" + name + ">" + entityCollection.SaveAsXmlString() + "</" + name + ">";
+				IndividualMetadataFiles: Project.MetadataFiles);
+
+				foreach (DictionaryEntry entry in entityCollections) 
+				{
+					string name = entry.Key.ToString();
+					MetadataEntityCollection entityCollection = (MetadataEntityCollection) entry.Value;
+					if (entityCollection.Count > 0) 
+					{
+						sb.AppendFormat("<{0}>{1}</{0}>", name, entityCollection.SaveAsXmlString());
+					}
 				}
+
+				sb.Append("</GroupedMetadata>");
+
+				XmlDocument doc = new XmlDocument();
+				doc.LoadXml(sb.ToString());
+
+				_groupedMetadataCache = doc;
+
 			}
-			return "<GroupedMetadata>" + xml + "</GroupedMetadata>";
+
+			return _groupedMetadataCache.DocumentElement;
 		}
 
 		private Hashtable GroupMetadataEntities(MetadataFileCollection files) {
