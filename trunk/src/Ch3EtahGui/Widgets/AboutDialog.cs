@@ -100,7 +100,15 @@ Portions Copyright (c) 2004 NVelocity (http://nvelocity.sourceforge.net)
 Portions Copyright (c) 2004 Adapdev Technologies, LLC (http://www.adapdev.net)
 Portions Copyright (c) 2002-2004 The Genghis Group (http://www.genghisgroup.com)
 Portions Copyright (c) 2005 Weifen Luo 
-Portions Copyright (c) 2001-2003 Lutz Roeder (http://www.aisto.com/roeder)";
+Portions Copyright (c) 2001-2003 Lutz Roeder (http://www.aisto.com/roeder)
+
+
+System Information:
+
+Running instance: {1}
+Command-line: {2}
+Current directory: {3}
+";
 			// 
 			// btnClose
 			// 
@@ -139,7 +147,11 @@ Portions Copyright (c) 2001-2003 Lutz Roeder (http://www.aisto.com/roeder)";
 		}
 
 		private void AboutDialog_Load(object sender, System.EventArgs e) {
-			this.textBox1.Text = string.Format(this.textBox1.Text, this.GetVersion());
+			this.textBox1.Text = string.Format(this.textBox1.Text,
+				this.GetVersion(), 
+				Assembly.GetExecutingAssembly().GetName().CodeBase, 
+				Environment.CommandLine,
+				Environment.CurrentDirectory);
 		}
 
 		private string GetVersion() {
