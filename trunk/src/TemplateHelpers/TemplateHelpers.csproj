@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = 'copy /y "$(TargetDir)*TemplateHelpers*" "$(ProjectDir)..\Ch3EtahGui\bin\Debug\"'
                 RootNamespace = "Ch3Etah.TemplateHelpers"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -88,7 +88,12 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File RelPath="CommonAssemblyInfo.cs" Link="..\CommonAssemblyInfo.cs" SubType="Code" BuildAction="Compile" />
+                <File
+                    RelPath = "CommonAssemblyInfo.cs"
+                    Link = "..\CommonAssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "TypeHelper.cs"
                     SubType = "Code"
