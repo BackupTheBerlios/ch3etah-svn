@@ -268,6 +268,9 @@ namespace Ch3Etah.Core.ProjectLib {
 			}
 			CodeGenerator generator = CreateGenerator(file);
 			SetGeneratorTemplate(generator);
+			if (generator.Template == null)
+				return;
+			
 			foreach (MetadataBrand brand in generator.Template.IndividualMetadataBrands) {
 				foreach (IMetadataEntity entity in file.MetadataEntities) {
 					if (entity.BrandName == brand.Name ||
@@ -480,6 +483,15 @@ namespace Ch3Etah.Core.ProjectLib {
 				else {
 					generator.Template = generator.Package.Templates[Template];
 				}
+
+				if (generator.Template == null)
+				{
+					Trace.WriteLine(string.Format(
+						"WARNING: Template '{0}' on generator command '{1}' could not be loaded. Make sure you have referenced the correct template and that the template file exists."
+						, Template
+						, this.Name
+						));
+				}
 				SetGeneratorEngine(generator);
 			}
 			finally {
@@ -488,7 +500,10 @@ namespace Ch3Etah.Core.ProjectLib {
 		}
 
 		private void SetGeneratorEngine(CodeGenerator generator) {
-			generator.Template.Engine = this.Engine;
+			if (generator.Template != null)
+			{
+				generator.Template.Engine = this.Engine;
+			}
 		}
 
 		private InputParameterCollection GetContextParameters() {
