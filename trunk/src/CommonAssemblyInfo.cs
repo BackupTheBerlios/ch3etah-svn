@@ -7,9 +7,9 @@ using System.Reflection;
 [assembly: AssemblyCulture("")]		
 
 #if DEBUG
-[assembly: AssemblyVersion("0.5.1.*")]
+[assembly: AssemblyVersion("0.5.2.*")]
 #else
-[assembly: AssemblyVersion("0.5.1.*")]
+[assembly: AssemblyVersion("0.5.2.*")]
 #endif
 
 #if SignAssembly
