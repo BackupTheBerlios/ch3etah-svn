@@ -79,7 +79,8 @@ namespace Ch3Etah.Core.CodeGen
 		{
 			if (Ch3EtahConfig.TransformationEngines.Contains(name))
 			{
-				TransformationEngine engInfo = Ch3EtahConfig.TransformationEngines[name];
+				Ch3Etah.Core.Config.TransformationEngine engInfo = 
+					Ch3EtahConfig.TransformationEngines[name];
 				Type engType = null;
 			
 				string oldDir = Directory.GetCurrentDirectory();
