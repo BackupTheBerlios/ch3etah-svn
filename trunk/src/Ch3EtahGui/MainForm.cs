@@ -497,13 +497,12 @@ namespace Ch3Etah.Gui {
 			metadataFilesNode.ImageIndex = Images.Indexes.FolderOpen;
 			metadataFilesNode.SelectedImageIndex = Images.Indexes.FolderOpen;
 			metadataFilesNode.Tag = _project.MetadataFiles;
-			//metadataFilesNode.Nodes.Clear();
+			metadataFilesNode.Nodes.Clear();
 			
 			foreach (MetadataFile file in _project.MetadataFiles) {
 				TreeNode node = GetContextNode(file, metadataFilesNode.Nodes);
 				if (node == null && !sortedItems.ContainsKey(file.Name)) {
 					node = new TreeNode(file.Name);
-					sortedItems.Add(file.Name, node);
 				}
 				try 
 				{
@@ -513,13 +512,14 @@ namespace Ch3Etah.Gui {
 					node.ImageIndex = Images.Indexes.DocumentText;
 					node.SelectedImageIndex = Images.Indexes.DocumentText;
 					SetupMetadataFileNode(node);
+					sortedItems.Add(file.Name, node);
 				}
 				catch
 				{
-					int i = 1;
 					if (node == null)
 						node = new TreeNode(file.Name);
 					node.Text = file.Name + ERROR_MESSAGE_1;
+					int i = 1;
 					while (sortedItems.ContainsKey(node.Text))
 					{
 						node.Text = file.Name + string.Format(" ({0})", i++) + ERROR_MESSAGE_1;
@@ -530,6 +530,15 @@ namespace Ch3Etah.Gui {
 				}
 			}
 			
+			foreach (TreeNode node in metadataFilesNode.Nodes) 
+			{
+				if (
+					node.Tag != null && node.Tag is MetadataFile &&
+					!_project.MetadataFiles.Contains((MetadataFile) node.Tag)) 
+				{
+					node.Remove();
+				}
+			}
 			foreach (DictionaryEntry entry in sortedItems)
 			{
 				TreeNode node = (TreeNode)entry.Value;
@@ -538,13 +547,6 @@ namespace Ch3Etah.Gui {
 					node.Parent.Expand();	
 			}
 			
-			foreach (TreeNode node in metadataFilesNode.Nodes) {
-				if (
-					node.Tag != null && node.Tag is MetadataFile &&
-					!_project.MetadataFiles.Contains((MetadataFile) node.Tag)) {
-					node.Remove();
-				}
-			}
 			if (Directory.Exists(_project.GetFullMetadataPath())) {
 				string[] files = Directory.GetFiles(_project.GetFullMetadataPath(), "*.xml");
 				foreach (string file in files) {
