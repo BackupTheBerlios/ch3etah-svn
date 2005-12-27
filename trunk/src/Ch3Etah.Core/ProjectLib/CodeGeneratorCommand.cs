@@ -523,7 +523,7 @@ namespace Ch3Etah.Core.ProjectLib {
 			if (Project != null) {
 				foreach (InputParameter parameter in Project.InputParameters) {
 					if (!parameters.Contains(parameter.Name)) {
-						parameters.Add(parameter);
+						parameters.Add(parameter.Name, parameter.Value);
 					}
 				}
 			}
