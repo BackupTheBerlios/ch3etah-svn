@@ -57,13 +57,13 @@ namespace Ch3Etah.Gui.DocumentHandling
 		private CommandBarButton cbiRemoveIndex;
 		private CommandBarButton cbiSaveChanges;
 		private ErrorProvider errorProvider;
-		private Panel pnlXmlEditor;
-		private TextFileEditor textFileEditor1;
 		private ToolBarButton tbiEditor;
 		private ToolBarButton tbiXML;
 		private ToolBar tlbMode;
 		private OREntityEditorDesignView designView;
 		private System.Windows.Forms.ToolBarButton tbiSep1;
+		private System.Windows.Forms.Panel pnlXmlEditor;
+		private Ch3Etah.Gui.DocumentHandling.TextFileEditor textFileEditor1;
 
 		/// <summary>
 		/// Required designer variable.
@@ -112,41 +112,19 @@ namespace Ch3Etah.Gui.DocumentHandling
 		private void InitializeComponent()
 		{
 			this.errorProvider = new System.Windows.Forms.ErrorProvider();
-			this.pnlXmlEditor = new System.Windows.Forms.Panel();
-			this.textFileEditor1 = new Ch3Etah.Gui.DocumentHandling.TextFileEditor();
 			this.tlbMode = new System.Windows.Forms.ToolBar();
 			this.tbiEditor = new System.Windows.Forms.ToolBarButton();
+			this.tbiSep1 = new System.Windows.Forms.ToolBarButton();
 			this.tbiXML = new System.Windows.Forms.ToolBarButton();
 			this.designView = new Ch3Etah.Gui.DocumentHandling.OREntityEditorDesignView();
-			this.tbiSep1 = new System.Windows.Forms.ToolBarButton();
+			this.pnlXmlEditor = new System.Windows.Forms.Panel();
+			this.textFileEditor1 = new Ch3Etah.Gui.DocumentHandling.TextFileEditor();
 			this.pnlXmlEditor.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// errorProvider
 			// 
 			this.errorProvider.ContainerControl = this;
-			// 
-			// pnlXmlEditor
-			// 
-			this.pnlXmlEditor.Controls.Add(this.textFileEditor1);
-			this.pnlXmlEditor.Location = new System.Drawing.Point(48, 36);
-			this.pnlXmlEditor.Name = "pnlXmlEditor";
-			this.pnlXmlEditor.Size = new System.Drawing.Size(236, 420);
-			this.pnlXmlEditor.TabIndex = 3;
-			this.pnlXmlEditor.Visible = false;
-			// 
-			// textFileEditor1
-			// 
-			this.textFileEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textFileEditor1.FileName = null;
-			this.textFileEditor1.IsDirty = false;
-			this.textFileEditor1.Location = new System.Drawing.Point(0, 0);
-			this.textFileEditor1.Name = "textFileEditor1";
-			this.textFileEditor1.ReadOnly = false;
-			this.textFileEditor1.SelectedObject = null;
-			this.textFileEditor1.Size = new System.Drawing.Size(236, 420);
-			this.textFileEditor1.TabIndex = 0;
-			this.textFileEditor1.IsDirtyChanged += new System.EventHandler(this.textFileEditor1_IsDirtyChanged);
 			// 
 			// tlbMode
 			// 
@@ -159,10 +137,10 @@ namespace Ch3Etah.Gui.DocumentHandling
 			this.tlbMode.Divider = false;
 			this.tlbMode.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.tlbMode.DropDownArrows = true;
-			this.tlbMode.Location = new System.Drawing.Point(2, 520);
+			this.tlbMode.Location = new System.Drawing.Point(2, 518);
 			this.tlbMode.Name = "tlbMode";
 			this.tlbMode.ShowToolTips = true;
-			this.tlbMode.Size = new System.Drawing.Size(772, 26);
+			this.tlbMode.Size = new System.Drawing.Size(772, 28);
 			this.tlbMode.TabIndex = 4;
 			this.tlbMode.TextAlign = System.Windows.Forms.ToolBarTextAlign.Right;
 			this.tlbMode.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.tlbMode_ButtonClick);
@@ -173,6 +151,10 @@ namespace Ch3Etah.Gui.DocumentHandling
 			this.tbiEditor.Pushed = true;
 			this.tbiEditor.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton;
 			this.tbiEditor.Text = "Design";
+			// 
+			// tbiSep1
+			// 
+			this.tbiSep1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
 			// 
 			// tbiXML
 			// 
@@ -193,15 +175,32 @@ namespace Ch3Etah.Gui.DocumentHandling
 			this.designView.OnTreeViewSelectItem += new System.EventHandler(this.designView_OnTreeViewSelectItem);
 			this.designView.OnRename += new System.EventHandler(this.designView_OnRename);
 			// 
-			// tbiSep1
+			// pnlXmlEditor
 			// 
-			this.tbiSep1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator;
+			this.pnlXmlEditor.Controls.Add(this.textFileEditor1);
+			this.pnlXmlEditor.Location = new System.Drawing.Point(56, 60);
+			this.pnlXmlEditor.Name = "pnlXmlEditor";
+			this.pnlXmlEditor.Size = new System.Drawing.Size(236, 420);
+			this.pnlXmlEditor.TabIndex = 6;
+			this.pnlXmlEditor.Visible = false;
+			// 
+			// textFileEditor1
+			// 
+			this.textFileEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textFileEditor1.FileName = null;
+			this.textFileEditor1.IsDirty = false;
+			this.textFileEditor1.Location = new System.Drawing.Point(0, 0);
+			this.textFileEditor1.Name = "textFileEditor1";
+			this.textFileEditor1.ReadOnly = false;
+			this.textFileEditor1.SelectedObject = null;
+			this.textFileEditor1.Size = new System.Drawing.Size(236, 420);
+			this.textFileEditor1.TabIndex = 0;
 			// 
 			// OREntityEditor
 			// 
+			this.Controls.Add(this.pnlXmlEditor);
 			this.Controls.Add(this.designView);
 			this.Controls.Add(this.tlbMode);
-			this.Controls.Add(this.pnlXmlEditor);
 			this.DockPadding.All = 2;
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.Name = "OREntityEditor";
