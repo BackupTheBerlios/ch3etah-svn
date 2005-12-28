@@ -36,6 +36,8 @@ namespace Ch3Etah.Core.Metadata
 	/// </summary>
 	public abstract class MetadataNodeBase : IMetadataNode, ISupportInitialize
 	{
+		protected static string CH3ETAH_NAMESPACE_PREFIX = "ch3";
+		protected static string CH3ETAH_NAMESPACE_URI = "http://ch3etah.sourceforge.net/xmlns/ch3";
 		/*
 		 * Use PK index to lookup items for updating
 		 * in a collection of IXmlNodes kind of like
@@ -45,7 +47,8 @@ namespace Ch3Etah.Core.Metadata
 		 */
 
 		private string _description;
-		
+		private bool isExcluded = false;
+
 		[Category("(General)")]
 		[XmlAttribute("description")]
 		public string Description
@@ -64,6 +67,13 @@ namespace Ch3Etah.Core.Metadata
 		}
 
 		#endregion
+		
+		[XmlAttribute("ch3:exclude")]
+		public bool IsExcluded
+		{
+			get { return isExcluded; }
+			set { isExcluded = value; }
+		}
 
 		private bool suspendEvents;				
 		private XmlNode _loadedXmlNode;
@@ -225,7 +235,13 @@ namespace Ch3Etah.Core.Metadata
 				object memberValue = GetMemberValue(member, false);
 				XmlAttribute memberAttr = parentNode.Attributes[attributeName];
 				if (memberAttr == null) {
-					memberAttr = parentNode.OwnerDocument.CreateAttribute(attributeName);
+					// TODO: Replace this with an extensible solution that allows more namespaces.
+					if (attributeName.Trim().StartsWith(CH3ETAH_NAMESPACE_PREFIX + ":")) {
+						memberAttr = parentNode.OwnerDocument.CreateAttribute(attributeName, CH3ETAH_NAMESPACE_URI);
+					}
+					else {
+						memberAttr = parentNode.OwnerDocument.CreateAttribute(attributeName);
+					}
 					parentNode.Attributes.Append(memberAttr);
 				}
 				memberAttr.Value = GetXmlString(memberValue);
@@ -236,7 +252,14 @@ namespace Ch3Etah.Core.Metadata
 				object[] collectionAttributes = member.GetCustomAttributes(typeof(MetadataNodeCollectionAttribute), false);
 				XmlNode memberNode = parentNode.SelectSingleNode(elementName);
 				if (memberNode == null) {
-					memberNode = parentNode.OwnerDocument.CreateElement(elementName);
+					// TODO: Replace this with an extensible solution that allows more namespaces.
+					if (elementName.Trim().StartsWith(CH3ETAH_NAMESPACE_PREFIX + ":")) 
+					{
+						memberNode = parentNode.OwnerDocument.CreateElement(elementName, CH3ETAH_NAMESPACE_URI);
+					}
+					else {
+						memberNode = parentNode.OwnerDocument.CreateElement(elementName);
+					}
 					parentNode.AppendChild(memberNode);
 				}
 				

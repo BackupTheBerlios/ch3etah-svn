@@ -164,8 +164,8 @@ namespace Ch3Etah.Metadata.OREntities {
 		[Category("Field")]
 		[XmlAttribute("exclude")]
 		public bool Exclude {
-			get { return _exclude; }
-			set { _exclude = value; }
+			get { return this.IsExcluded; }
+			set { this.IsExcluded = value; }
 		}
 
 		[Category("Field")]
