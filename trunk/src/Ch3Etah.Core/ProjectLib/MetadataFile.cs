@@ -133,8 +133,12 @@ namespace Ch3Etah.Core.ProjectLib
 		[Category("File Info")]
 		public string FileName {
 			get {
-				//return GetRelativePath(_fileName);
-				return _fileName;
+				if (Path.IsPathRooted(_fileName)) {
+					return GetRelativePath(_fileName);
+				}
+				else {
+					return _fileName;
+				}
 			}
 			set {
 				_fileName = value;
