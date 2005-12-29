@@ -22,6 +22,8 @@ namespace Ch3Etah.CodeSmithSupport.BaseTemplates
 		private MetadataFileCollection _selectedMetadataFiles;
 		private StringHelper _stringHelper;
 		private TypeHelper _typeHelper;
+		private string _codeGenSystemLogin;
+		private string _codeGenOutputPath;
 		#endregion Private fields
 
 		[CodeTemplateProperty(CodeTemplatePropertyOption.Required)]
@@ -39,6 +41,20 @@ namespace Ch3Etah.CodeSmithSupport.BaseTemplates
 		}
 
 
+		[CodeTemplateProperty(CodeTemplatePropertyOption.Required)]
+		public string CodeGenSystemLogin
+		{
+			get { return _codeGenSystemLogin; }
+			set { _codeGenSystemLogin = value; }
+		}
+
+		[CodeTemplateProperty(CodeTemplatePropertyOption.Required)]
+		public string CodeGenOutputPath
+		{
+			get { return _codeGenOutputPath; }
+			set { _codeGenOutputPath = value; }
+		}
+		
 		[CodeTemplateProperty(CodeTemplatePropertyOption.Required)]
 		public StringHelper StringHelper
 		{

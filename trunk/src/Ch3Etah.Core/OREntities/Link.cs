@@ -192,6 +192,62 @@ namespace Ch3Etah.Metadata.OREntities
 			set { _fields = value; }
 		}
 		#endregion Collection Properties
+		
+		/// <summary>
+		/// Returns whether or not the local (from) side of an association/link is
+		/// unique. In other words, returns true if the link is on the "one" side 
+		/// of a one-to-many or one-to-one association.
+		/// </summary>
+		public bool IsFromUniqueSide
+		{
+			get
+			{
+				bool isMatch = false;
+				
+				// check any fields marked as key fields for this entity
+				foreach (EntityField field in this.Entity.Fields)
+				{
+					if (field.KeyField)
+					{
+						isMatch = this.ContainsSourceField(field.Name);
+						if (!isMatch)
+							break;
+					}
+				}
+				if (isMatch) return true;
+				
+				// check primary keys and unique indexes
+				foreach (Index index in this.Entity.Indexes)
+				{
+					if (index.PrimaryKey || index.Unique)
+					{
+						foreach (IndexField field in index.Fields)
+						{
+							isMatch = this.ContainsSourceField(field.Name);
+							if (!isMatch)
+								break;
+						}
+						if (isMatch)
+							break;
+					}
+				}
+				if (isMatch) return true;
+				
+				// no unique index or PK on this side of the link
+				return false;
+			}
+		}
+		
+		
+		private bool ContainsSourceField(string sourceFieldName)
+		{
+			foreach (LinkField field in this.Fields)
+			{
+				if (field.SourceFieldName == sourceFieldName)
+					return true;
+			}
+			return false;
+		}
 
 		public override string ToString() {
 			return this.Name;
