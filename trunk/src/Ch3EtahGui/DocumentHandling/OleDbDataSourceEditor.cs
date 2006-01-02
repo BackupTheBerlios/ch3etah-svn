@@ -3,8 +3,11 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using System.Xml;
+
 using Adapdev.Data;
 using Adapdev.Data.Schema;
+
 using Ch3Etah.Core.Metadata;
 using Ch3Etah.Core.ProjectLib;
 using Ch3Etah.Design.CustomUI;
@@ -405,6 +408,20 @@ namespace Ch3Etah.Gui.DocumentHandling {
 				Entity entity = GetMetadataEntity(table);
 				entity.RefreshDBInfo(_dataSource, db, table);
 				entity.OwningMetadataFile.Save();
+				if (_dataSource.CustomAttributes.Count > 0)
+				{
+					foreach (InputParameter att in _dataSource.CustomAttributes)
+					{
+						XmlAttribute xmlAtt = ((IMetadataNode)entity).LoadedXmlNode.Attributes[att.Name];
+						if (xmlAtt == null)
+						{
+							xmlAtt = ((IMetadataNode)entity).LoadedXmlNode.OwnerDocument.CreateAttribute(att.Name);
+							((IMetadataNode)entity).LoadedXmlNode.Attributes.Append(xmlAtt);
+						}
+						xmlAtt.Value = att.Value;
+					}
+					entity.OwningMetadataFile.Save();
+				}
 			}
 			OnSelectedObjectChanged();
 		}
