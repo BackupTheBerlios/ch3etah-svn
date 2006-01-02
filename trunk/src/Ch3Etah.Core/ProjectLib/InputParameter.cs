@@ -151,10 +151,10 @@ namespace Ch3Etah.Core.ProjectLib
 		}
 		#endregion IDataErrorInfo
 
-//		public override string ToString()
-//		{
-//			return _value;
-//		}
+		public override string ToString()
+		{
+			return _name + "=\"" + _value + "\"";
+		}
 	}
 
 	#region TypeConverter

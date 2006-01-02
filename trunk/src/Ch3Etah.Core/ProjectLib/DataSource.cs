@@ -77,8 +77,8 @@ namespace Ch3Etah.Core.ProjectLib {
 		private ConnectionType _connectionType;
 		private string _connectionTypeName = string.Empty;
 		private string _connectionString = string.Empty;
+		private InputParameterCollection _customAttributes = new InputParameterCollection();
 		private Project _project;
-
 		#endregion
 
 		#region Constructors
@@ -207,11 +207,22 @@ namespace Ch3Etah.Core.ProjectLib {
 			set { _connectionString = value; }
 		}
 
+		[Description("Allows the definition of custom XML attributes that will be added to entities created from this datasource.")]
+		[Browsable(true)]
+		[TypeConverter(typeof (ExpandableObjectConverter))]
+		[XmlArrayItem("Attribute")]
+		public InputParameterCollection CustomAttributes 
+		{
+			get { return _customAttributes; }
+			set { _customAttributes = value; }
+		}
+
 		#endregion
 
 		#region TestConnection
 
-		public void TestConnection() {
+		public void TestConnection() 
+		{
 			OleDbConnection cn = new OleDbConnection(ConnectionString);
 			cn.Open();
 			cn.Close();
