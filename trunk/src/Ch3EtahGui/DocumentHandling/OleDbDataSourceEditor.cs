@@ -378,6 +378,10 @@ namespace Ch3Etah.Gui.DocumentHandling {
 						TreeNode node = new TreeNode(entity.Name, Images.Indexes.Details, Images.Indexes.Details);
 						node.Tag = entity;
 						tables.Nodes.Add(node);
+						if (DataSourcedEntityExistsInProject(entity))
+						{
+							node.Checked = true;
+						}
 					}
 					else if (entity.TableType == TableType.VIEW) {
 						TreeNode node = new TreeNode(entity.Name, Images.Indexes.Edit, Images.Indexes.Edit);
@@ -394,18 +398,28 @@ namespace Ch3Etah.Gui.DocumentHandling {
 				if (views.Nodes.Count > 0) {
 					tvwEntities.Nodes.Add(views);
 				}
+				DoEnableButtons();
 			}
 			catch (Exception ex) {
+				btnAddEntities.Enabled = false;
 				MessageBox.Show("The following error occurred refreshing the entity list: \r\n\r\n" + ex.ToString());
 			}
-
+		}
+		
+		private bool DataSourcedEntityExistsInProject(TableSchema table)
+		{
+			Entity entity = GetMetadataEntity(table, false);
+			if (entity != null && entity.DataSourceName == _dataSource.Name)
+				return true;
+			else
+				return false;
 		}
 
 		private void UpdateProjectEntities() {
 			//loop through selected entities and add / update each one
 			DatabaseSchema db = (DatabaseSchema) tvwEntities.Tag;
 			foreach (TableSchema table in GetSelectedTables()) {
-				Entity entity = GetMetadataEntity(table);
+				Entity entity = GetMetadataEntity(table, true);
 				entity.RefreshDBInfo(_dataSource, db, table);
 				entity.OwningMetadataFile.Save();
 				if (_dataSource.CustomAttributes.Count > 0)
@@ -438,7 +452,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			return tables;
 		}
 
-		private Entity GetMetadataEntity(TableSchema table) {
+		private Entity GetMetadataEntity(TableSchema table, bool create) {
 			foreach (MetadataFile file in _dataSource.Project.MetadataFiles) {
 				foreach (IMetadataEntity entity in file.MetadataEntities) {
 					if ((entity as Entity) != null &&
@@ -448,7 +462,10 @@ namespace Ch3Etah.Gui.DocumentHandling {
 					}
 				}
 			}
-			return CreateMetadataEntity(table);
+			if (create)
+				return CreateMetadataEntity(table);
+			else
+				return null;
 		}
 
 		private Entity CreateMetadataEntity(TableSchema table) {
@@ -468,6 +485,11 @@ namespace Ch3Etah.Gui.DocumentHandling {
 		#endregion Private methods
 
 		private void tvwEntities_AfterCheck(object sender, TreeViewEventArgs e) {
+			DoEnableButtons();
+		}
+		
+		private void DoEnableButtons()
+		{
 			bool enabled = false;
 			foreach (TreeNode groupNode in tvwEntities.Nodes) {
 				foreach (TreeNode node in groupNode.Nodes) {
