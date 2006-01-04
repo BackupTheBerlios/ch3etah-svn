@@ -221,22 +221,43 @@ namespace Ch3Etah.Gui {
 			}
 		}
 
-		private bool SaveDocument() {
-			object activeMdiChild = dockPanel1.ActiveDocument;
-
+		private bool SaveDocument(DockContent document) {
 			if (_project == null) {
 				return true;
 			}
 
-			if (activeMdiChild != null) {
-				if (activeMdiChild is ObjectEditorForm) {
-					((ObjectEditorForm) activeMdiChild).ObjectEditor.CommitChanges();
+			if (document != null) {
+				if (document is ObjectEditorForm) {
+					((ObjectEditorForm) document).ObjectEditor.CommitChanges();
 				}
 				else {
-					MessageBox.Show(activeMdiChild.GetType().FullName);
+					Debug.WriteLine(
+						"WARNING: Document could not be saved because it is not of the type 'ObjectEditorForm'. System type of document content is: " + document.GetType().FullName);
+					return false;
 				}
 			}
 			return true;
+		}
+
+		private bool SaveActiveDocument()
+		{
+			return SaveDocument(this.dockPanel1.ActiveContent);
+		}
+
+		private bool SaveAllOpenDocuments()
+		{
+			bool successfull = true;
+			foreach (DockContent document in this.dockPanel1.Contents)
+			{
+				if (document is ObjectEditorForm) 
+				{
+					if (((ObjectEditorForm)document).ObjectEditor.IsDirty)
+					{
+						successfull &= SaveDocument(document);
+					}
+				}
+			}
+			return successfull;
 		}
 
 		private void VerifyOpenProject() {
@@ -342,7 +363,22 @@ namespace Ch3Etah.Gui {
 				throw new InvalidOperationException("This project is already being generated.");
 			}
 			try {
-				
+				try {
+					SaveAllOpenDocuments();
+				}
+				catch (UnauthorizedAccessException ex) {
+					MessageBox.Show(
+						"Error saving one of the open documents: \r\n\r\n" + ex.Message +
+						"\r\n\r\n Make sure that you have permission to access the file and that it is not read-only.",
+						"Error saving document", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+					return;
+				}
+				catch (Exception ex) {
+					MessageBox.Show("Error saving one of the open documents: \r\n\r\n" + ex.ToString(), "Error saving document", MessageBoxButtons.OK,
+						MessageBoxIcon.Error);
+					return;
+				}
+
 				// Fly-out the output window if needed
 				if (!outputWindow.IsFloat && outputWindow.DockState == DockState.DockBottomAutoHide)
 				{
@@ -1236,7 +1272,7 @@ namespace Ch3Etah.Gui {
 
 		private void SaveDocument_Click(object sender, EventArgs e) {
 			try {
-				SaveDocument();
+				SaveActiveDocument();
 			}
 			catch (UnauthorizedAccessException ex) {
 				MessageBox.Show(
@@ -1407,6 +1443,21 @@ namespace Ch3Etah.Gui {
 		private void RunCommand_Click(object sender, EventArgs e) {
 			GeneratorCommand command = (GeneratorCommand) ((CommandBarItem) sender).Tag;
 			try {
+				try {
+					SaveAllOpenDocuments();
+				}
+				catch (UnauthorizedAccessException ex) {
+					MessageBox.Show(
+						"Error saving one of the open documents: \r\n\r\n" + ex.Message +
+						"\r\n\r\n Make sure that you have permission to access the file and that it is not read-only.",
+						"Error saving document", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+					return;
+				}
+				catch (Exception ex) {
+					MessageBox.Show("Error saving one of the open documents: \r\n\r\n" + ex.ToString(), "Error saving document", MessageBoxButtons.OK,
+						MessageBoxIcon.Error);
+					return;
+				}
 				command.Execute();
 				MessageBox.Show("Done!");
 			}
