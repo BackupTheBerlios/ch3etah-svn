@@ -312,15 +312,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 		}
 
 		private void btnRefreshEntityList_Click(object sender, EventArgs e) {
-			try
-			{
-				this.Cursor = Cursors.WaitCursor;
-				UpdateEntityList();
-			}
-			finally
-			{
-				this.Cursor = Cursors.Default;
-			}
+			UpdateEntityList();
 		}
 
 		private void cmdTest_Click(object sender, EventArgs e) {
@@ -366,6 +358,9 @@ namespace Ch3Etah.Gui.DocumentHandling {
 
 		private void UpdateEntityList() {
 			try {
+				this.Cursor = Cursors.WaitCursor;
+				this.btnRefreshEntityList.Enabled = false;
+				this.btnAddEntities.Enabled = false;
 				tvwEntities.Nodes.Clear();
 				tvwEntities.ImageList = Images.GetImageList();
 				TreeNode tables = new TreeNode("Tables", Images.Indexes.FolderClosed, Images.Indexes.FolderOpen);
@@ -404,6 +399,11 @@ namespace Ch3Etah.Gui.DocumentHandling {
 				btnAddEntities.Enabled = false;
 				MessageBox.Show("The following error occurred refreshing the entity list: \r\n\r\n" + ex.ToString());
 			}
+			finally {
+				this.Cursor = Cursors.Default;
+				this.btnRefreshEntityList.Enabled = true;
+			}
+
 		}
 		
 		private bool DataSourcedEntityExistsInProject(TableSchema table)
