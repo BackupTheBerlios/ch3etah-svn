@@ -73,6 +73,7 @@ namespace Ch3Etah.Gui.DocumentHandling.MdiStrategy
  			if (f == null) {
 				f = new ObjectEditorForm((IObjectEditor)editor);
 				try {
+					f.MainForm = this.MdiParent as MainForm;
 					f.Show(((IMdiContainer)_mdiParent).DockPanel);
 				}
 				catch (Exception ex) {

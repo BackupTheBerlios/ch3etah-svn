@@ -34,6 +34,13 @@ namespace Ch3Etah.Gui.DocumentHandling.MdiStrategy
 	public class ObjectEditorForm : DockContent
 	{
 		private IObjectEditor _objectEditor;
+		private MainForm _mainForm = null;
+		
+		public MainForm MainForm
+		{
+			get { return _mainForm; }
+			set { _mainForm = value; }
+		}
 		
 		public ObjectEditorForm(IObjectEditor editor)
 		{
@@ -119,11 +126,11 @@ namespace Ch3Etah.Gui.DocumentHandling.MdiStrategy
 		{
 			try 
 			{
-				((MainForm)this.MdiParent).SelectContextItem(_objectEditor.SelectedObject);
+				this.MainForm.SelectContextItem(_objectEditor.SelectedObject);
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("ObjectEditorForm_Enter:\r\n" + ex.ToString());
+				Debug.WriteLine("WARNING: ObjectEditorForm_Enter:\r\n" + ex.ToString());
 			}
 		}
 

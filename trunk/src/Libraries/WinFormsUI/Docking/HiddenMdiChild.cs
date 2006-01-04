@@ -73,7 +73,14 @@ namespace WeifenLuo.WinFormsUI
 		protected override void WndProc(ref Message m)
 		{
 			if (m.Msg == (int)Win32.Msgs.WM_MDIACTIVATE && m.HWnd == m.LParam)
-				Content.Show();
+			{
+				// HACK: Sometimes the show comes after close, causing an exception.
+				try
+				{
+					Content.Show();
+				}
+				catch{}
+			}
 
 			if (m.Msg == (int)Win32.Msgs.WM_CLOSE && Content.DockState == DockState.Document && Content.Pane != null)
 			{
