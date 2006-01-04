@@ -19,7 +19,7 @@ namespace Ch3Etah.CodeSmithSupport.BaseTemplates
 	{
 		#region Private fields
 		private MetadataFile _currentMetadataFile;
-		private MetadataFileCollection _selectedMetadataFiles;
+		private MetadataFileCollection _contextMetadataFiles;
 		private StringHelper _stringHelper;
 		private TypeHelper _typeHelper;
 		private string _codeGenSystemLogin;
@@ -34,12 +34,11 @@ namespace Ch3Etah.CodeSmithSupport.BaseTemplates
 		}
 		
 		[CodeTemplateProperty(CodeTemplatePropertyOption.Required)]
-		public MetadataFileCollection SelectedMetadataFiles
+		public MetadataFileCollection ContextMetadataFiles
 		{
-			get { return _selectedMetadataFiles; }
-			set { _selectedMetadataFiles = value; }
+			get { return _contextMetadataFiles; }
+			set { _contextMetadataFiles = value; }
 		}
-
 
 		[CodeTemplateProperty(CodeTemplatePropertyOption.Required)]
 		public string CodeGenSystemLogin
@@ -94,7 +93,7 @@ namespace Ch3Etah.CodeSmithSupport.BaseTemplates
 	
 		protected Entity FindEntity(string name, string searchNamespace)
 		{
-			foreach (MetadataFile file in SelectedMetadataFiles)
+			foreach (MetadataFile file in ContextMetadataFiles)
 			{
 				foreach (IMetadataEntity metaentity in file.MetadataEntities)
 				{

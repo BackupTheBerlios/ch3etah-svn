@@ -349,6 +349,14 @@ namespace Ch3Etah.Core.ProjectLib {
 					XmlDocument document = PrepareMetadata(inputFile);
 					CodeGenerator generator = GetGenerator(document, inputFile);
 					string outputPath = generator.Context.Parameters["CodeGenOutputPath"].Value;
+					if (outputPath.IndexOf("${") >= 0 || outputPath.IndexOf("$!{") >= 0)
+					{
+						throw new CodeGenerationException(string.Format(
+							"One or more expressions in the output path for the generator command '{0}' could not be evaluated for the metadata file '{1}'. The output path returned was: {2}"
+							, this.Name
+							, inputFile == null ? "NULL" : inputFile.Name
+							, outputPath));
+					}
 					outputPath = Path.GetFullPath(Path.Combine(this.Project.GetFullOutputPath(), outputPath));
 					generator.Context.Parameters["CodeGenOutputPath"].Value = outputPath;
 					FileSystemHelper.CreateDirectory(new FileInfo(outputPath));
@@ -468,7 +476,7 @@ namespace Ch3Etah.Core.ProjectLib {
 				RestoreTemplateBaseFolder();
 			}
 			generator.Context.CurrentMetadataFile = inputFile;
-			generator.Context.SelectedMetadataFiles = this.IndividualMetadataFiles;
+			generator.Context.ProjectMetadataFiles = this.Project.MetadataFiles;
 			return generator;
 		}
 
@@ -693,9 +701,10 @@ namespace Ch3Etah.Core.ProjectLib {
 
 				sb.Append("<GroupedMetadata>");
 
-				Hashtable entityCollections = GroupMetadataEntities(
-					_codeGenerationMode == CodeGenerationMode.SingleOutput? 
-				IndividualMetadataFiles: Project.MetadataFiles);
+//				Hashtable entityCollections = GroupMetadataEntities(
+//					_codeGenerationMode == CodeGenerationMode.SingleOutput? 
+//				IndividualMetadataFiles: Project.MetadataFiles);
+				Hashtable entityCollections = GroupMetadataEntities(Project.MetadataFiles);
 
 				foreach (DictionaryEntry entry in entityCollections) 
 				{

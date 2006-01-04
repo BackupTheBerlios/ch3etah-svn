@@ -32,7 +32,7 @@ namespace Ch3Etah.CodeSmithSupport.Engine
 				CodeTemplate template = compiler.CreateInstance();
 				
 				template.SetProperty("CurrentMetadataFile", base.Context.CurrentMetadataFile);
-				template.SetProperty("SelectedMetadataFiles", base.Context.SelectedMetadataFiles);
+				template.SetProperty("ContextMetadataFiles", base.Context.ProjectMetadataFiles);
 				foreach (InputParameter param in base.Context.Parameters)
 				{
 					template.SetProperty(param.Name, param.Value);

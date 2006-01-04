@@ -39,7 +39,7 @@ namespace Ch3Etah.Core.CodeGen
 			.InputParameterCollection _parameters = 
 			new Ch3Etah.Core.CodeGen.PackageLib.InputParameterCollection();
 		private MetadataFile _currentMetadataFile;
-		private MetadataFileCollection _selectedMetadataFiles = new MetadataFileCollection();
+		private MetadataFileCollection _projectMetadataFiles = new MetadataFileCollection();
 
 		public CodeGenerationContext()
 		{
@@ -68,10 +68,10 @@ namespace Ch3Etah.Core.CodeGen
 			set { _currentMetadataFile = value; }
 		}
 
-		public MetadataFileCollection SelectedMetadataFiles
+		public MetadataFileCollection ProjectMetadataFiles
 		{
-			get { return _selectedMetadataFiles; }
-			set { _selectedMetadataFiles = value; }
+			get { return _projectMetadataFiles; }
+			set { _projectMetadataFiles = value; }
 		}
 
 	}
