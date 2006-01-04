@@ -51,7 +51,7 @@ namespace Ch3Etah.CodeSmithSupport.Engine
 				{
 					errs += error.ToString() + "\r\n";
 				}
-				throw new CodeGenerationException("The following compiler error(s) occured while trying to compile the CodeSmith template:\r\n" + errs);
+				throw new CodeGenerationException("The following compiler error(s) occured while trying to compile the CodeSmith template '" + this.Template.FileName + "': " + errs);
 			}
 		}
 		

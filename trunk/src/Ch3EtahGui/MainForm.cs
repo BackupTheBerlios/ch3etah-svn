@@ -1321,6 +1321,7 @@ namespace Ch3Etah.Gui {
 		private void AddExistingMetadataFile_Click(object sender, EventArgs e) {
 			// TODO: Add metadata file to appropriate generator commands
 			OpenFileDialog dlg = new OpenFileDialog();
+			dlg.InitialDirectory = _project.GetFullMetadataPath();
 			dlg.Filter = "XML Files (.XML)|*.xml|All Files (*.*)|*.*";
 			dlg.Multiselect = true;
 			if (dlg.ShowDialog(this) == DialogResult.OK) {

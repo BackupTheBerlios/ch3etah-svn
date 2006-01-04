@@ -350,6 +350,7 @@ namespace Ch3Etah.Core.ProjectLib {
 					CodeGenerator generator = GetGenerator(document, inputFile);
 					string outputPath = generator.Context.Parameters["CodeGenOutputPath"].Value;
 					outputPath = Path.GetFullPath(Path.Combine(this.Project.GetFullOutputPath(), outputPath));
+					generator.Context.Parameters["CodeGenOutputPath"].Value = outputPath;
 					FileSystemHelper.CreateDirectory(new FileInfo(outputPath));
 					Trace.WriteLine("GenerateFile(): '" + outputPath + "'");
 					Trace.Indent();
