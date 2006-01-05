@@ -862,9 +862,10 @@ namespace Ch3Etah.Gui {
 						command = new CommandBarButton(Images.Edit, "&Edit O/R Entity", new EventHandler(EditOREntity_Click));
 						command.Tag = entity;
 						treeviewContextMenu.Items.Add(command);
+						break;
 					}
 				}
-				command = new CommandBarButton(Images.Delete, "&Remove Metadata File", new EventHandler(RemoveMetadataFile_Click));
+				command = new CommandBarButton("&Exclude From Project", new EventHandler(RemoveMetadataFile_Click));
 				treeviewContextMenu.Items.Add(command);
 				command.Tag = node.Tag;
 			}
@@ -874,7 +875,7 @@ namespace Ch3Etah.Gui {
 				treeviewContextMenu.Items.Add(command);
 				command.Tag = node.Tag;
 			}
-			if (node.Tag.GetType() == typeof (MetadataFileCollection)) {
+			if (node.Tag.GetType() == typeof (MetadataFileCollection) || node.Tag.GetType() == typeof (Project)) {
 				treeviewContextMenu.Items.Add(cbiAddExistingMetadataFile);
 				treeviewContextMenu.Items.Add(cbiAddNewMetadataFile);
 			}
@@ -890,13 +891,17 @@ namespace Ch3Etah.Gui {
 				command.Tag = node.Tag;
 				treeviewContextMenu.Items.Add(command);
 			}
-			if (node.Tag.GetType() == typeof (GeneratorCommandCollection)) {
+			if (node.Tag.GetType() == typeof (GeneratorCommandCollection) || node.Tag.GetType() == typeof (Project)) {
 				treeviewContextMenu.Items.Add(cbiAddCodeGenCommand);
 			}
-			if (node.Tag.GetType() == typeof (DataSourceCollection)) {
+			if (node.Tag.GetType() == typeof (DataSourceCollection) || node.Tag.GetType() == typeof (Project)) {
 				treeviewContextMenu.Items.Add(cbiAddDataSource);
 			}
-
+			if (node.Tag.GetType() == typeof (DataSource)) {
+				CommandBarItem command = new CommandBarButton(Images.Delete, "&Delete Data Source", new EventHandler(RemoveDataSource_Click));
+				treeviewContextMenu.Items.Add(command);
+				command.Tag = node.Tag;
+			}
 		}
 
 		public void SelectContextItem(object contextItem) {
@@ -1423,6 +1428,19 @@ namespace Ch3Etah.Gui {
 			ObjectEditorManager.OpenObjectEditor(editor);
 		}
 
+		private void RemoveDataSource_Click(object sender, EventArgs e) 
+		{
+			if (
+				MessageBox.Show("Are you sure you want to permanently delete this data source?", "Confirmation", MessageBoxButtons.YesNo,
+				MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) != DialogResult.Yes) 
+			{
+				return;
+			}
+			DataSource ds = (DataSource) ((CommandBarItem) sender).Tag;
+			_project.DataSources.Remove(ds);
+			RefreshUI();
+		}
+		
 		private void EditTemplate_Click(object sender, EventArgs e) {
 			CodeGeneratorCommand command = (CodeGeneratorCommand) ((CommandBarItem) sender).Tag;
 			if (command.Template == "") {
@@ -1591,6 +1609,18 @@ namespace Ch3Etah.Gui {
 			}
 		}
 
+
+		private void tvwProject_KeyDown(object sender, KeyEventArgs e) {
+			switch (e.KeyData)
+			{
+				case Keys.Enter :
+					tvwProject_DoubleClick (sender, e);
+					return;
+				case Keys.Delete :
+					return;
+			}
+		}
+		
 		private void tvwProject_DoubleClick(object sender, EventArgs e) {
 			try
 			{
@@ -1692,6 +1722,7 @@ namespace Ch3Etah.Gui {
 					tvwProject = projectExplorer.TvwProject;
 					tvwProject.AfterSelect += new TreeViewEventHandler(tvwProject_AfterSelect);
 					tvwProject.DoubleClick += new EventHandler(tvwProject_DoubleClick);
+					tvwProject.KeyDown +=new KeyEventHandler(tvwProject_KeyDown);
 					tvwProject.MouseDown += new MouseEventHandler(tvwProject_MouseDown);
 				}
 				else if (content is PropertiesWindow) {
