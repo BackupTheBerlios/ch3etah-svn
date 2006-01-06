@@ -485,6 +485,9 @@ namespace Ch3Etah.Gui.DocumentHandling {
 		#endregion Private methods
 
 		private void tvwEntities_AfterCheck(object sender, TreeViewEventArgs e) {
+			foreach (TreeNode node in e.Node.Nodes) {
+				node.Checked = e.Node.Checked;
+			}
 			DoEnableButtons();
 		}
 		

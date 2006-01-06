@@ -228,7 +228,8 @@ namespace Ch3Etah.Metadata.OREntities
 		}
 		
 		public void RemoveUnusedFields(DataView schema) {
-			foreach (IndexField field in this.Fields) {
+			for (int i=this.Fields.Count-1; i>=0; i--) {
+				IndexField field = this.Fields[i];
 				if (!SchemaContainsField(schema, field)) {
 					this.Fields.Remove(field);
 				}
