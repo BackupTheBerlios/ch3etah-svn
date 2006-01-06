@@ -68,7 +68,7 @@ namespace Ch3Etah.Core.ProjectLib {
 
 		#region Fields
 
-		private Guid _guid = new Guid();
+		private Guid _guid = Guid.NewGuid();
 		private string _name = string.Empty;
 		private string _server = string.Empty;
 		private string _database = string.Empty;
@@ -113,7 +113,7 @@ namespace Ch3Etah.Core.ProjectLib {
 		[Browsable(false)]
 		public Guid Guid {
 			get { return _guid; }
-			set { _guid = value; }
+			set { if (value != Guid.Empty) _guid = value; }
 		}
 
 		public string Name {

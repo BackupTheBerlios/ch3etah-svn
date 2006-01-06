@@ -48,7 +48,7 @@ namespace Ch3Etah.Core.ProjectLib {
 		#region Constructors and Member Variables
 
 		private const int FILE_VERSION_MAJOR = 0;
-		private const int FILE_VERSION_MINOR = 46;
+		private const int FILE_VERSION_MINOR = 50;
 		
 		private string _loadedState;
 		private Guid _guid = Guid.NewGuid();

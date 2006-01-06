@@ -282,14 +282,24 @@ namespace Ch3Etah.Metadata.OREntities {
 		#region RefreshDBInfo
 
 		public void RefreshDBInfo(DataSource dataSource, DatabaseSchema database, TableSchema table) {
-			DataSourceName = dataSource.Name;
-			DBName = database.Name;
-			DBEntityName = table.Name;
-			if (Name == string.Empty) {
-				Name = table.Name.Replace(" ", "");
+			Debug.WriteLine("Parsing data source information for the table [" + table.Name + "].");
+			Debug.Indent();
+			try
+			{
+				DataSourceName = dataSource.Name;
+				DBName = database.Name;
+				DBEntityName = table.Name;
+				if (Name == string.Empty) 
+				{
+					Name = table.Name.Replace(" ", "");
+				}
+				FillFields(table);
+				FillIndexes(dataSource);
 			}
-			FillFields(table);
-			FillIndexes(dataSource);
+			finally
+			{
+				Debug.Unindent();
+			}
 		}
 
 		public void AutoFillLinks(DataSource ds)
@@ -447,6 +457,7 @@ namespace Ch3Etah.Metadata.OREntities {
 		private void FillFields(TableSchema table) {
 			foreach (ColumnSchema column in table.Columns.Values) {
 				EntityField field = GetEntityField(column);
+				field.SetEntity(this);
 				field.RefreshDBInfo(column);
 				if (!Fields.Contains(field)) {
 					Fields.Add(field);

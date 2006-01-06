@@ -333,6 +333,8 @@ namespace Ch3Etah.Metadata.OREntities {
 					return "nvarchar";
 				case 203:
 					return "ntext";
+				case 204:
+					return "varbinary";
 				case 205:
 					return "image";
 				default:
