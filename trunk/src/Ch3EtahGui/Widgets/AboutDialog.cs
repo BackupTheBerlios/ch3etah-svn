@@ -57,6 +57,7 @@ namespace Ch3Etah.Gui.Widgets
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.btnClose = new System.Windows.Forms.Button();
+			this.btnTestExceptionHandling = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// pictureBox1
@@ -113,17 +114,30 @@ Current directory: {3}
 			// btnClose
 			// 
 			this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnClose.Location = new System.Drawing.Point(418, 398);
 			this.btnClose.Name = "btnClose";
 			this.btnClose.TabIndex = 0;
 			this.btnClose.Text = "Close";
 			this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
 			// 
+			// btnTestExceptionHandling
+			// 
+			this.btnTestExceptionHandling.Location = new System.Drawing.Point(4, 400);
+			this.btnTestExceptionHandling.Name = "btnTestExceptionHandling";
+			this.btnTestExceptionHandling.Size = new System.Drawing.Size(164, 23);
+			this.btnTestExceptionHandling.TabIndex = 2;
+			this.btnTestExceptionHandling.Text = "Test global exception handling";
+			this.btnTestExceptionHandling.Click += new System.EventHandler(this.btnTestExceptionHandling_Click);
+			// 
 			// AboutDialog
 			// 
+			this.AcceptButton = this.btnClose;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+			this.CancelButton = this.btnClose;
 			this.ClientSize = new System.Drawing.Size(500, 428);
 			this.ControlBox = false;
+			this.Controls.Add(this.btnTestExceptionHandling);
 			this.Controls.Add(this.btnClose);
 			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.pictureBox1);
@@ -140,6 +154,7 @@ Current directory: {3}
 
 		private System.Windows.Forms.PictureBox pictureBox1;
 		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.Button btnTestExceptionHandling;
 		private System.Windows.Forms.Button btnClose;
 
 		private void btnClose_Click(object sender, System.EventArgs e) {
@@ -148,16 +163,15 @@ Current directory: {3}
 
 		private void AboutDialog_Load(object sender, System.EventArgs e) {
 			this.textBox1.Text = string.Format(this.textBox1.Text,
-				this.GetVersion(), 
+				Utility.GetCh3EtahVersion(), 
 				Assembly.GetExecutingAssembly().GetName().CodeBase, 
 				Environment.CommandLine,
 				Environment.CurrentDirectory);
 		}
 
-		private string GetVersion() {
-			Assembly assembly = GetType().Assembly;
-			AssemblyName name = assembly.GetName();
-			return string.Format("{0}.{1}.{2}.{3}", name.Version.Major, name.Version.Minor, name.Version.Build, name.Version.Revision);
+		private void btnTestExceptionHandling_Click(object sender, System.EventArgs e)
+		{
+			throw new Exception();
 		}
 		
 	}

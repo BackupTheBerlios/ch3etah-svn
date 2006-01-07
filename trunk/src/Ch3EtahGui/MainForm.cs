@@ -1306,41 +1306,7 @@ namespace Ch3Etah.Gui {
 		}
 
 		private void WebSite_Click(object sender, EventArgs e) {
-			string browser = GetDefaultBrowser();
-			if (browser != string.Empty)
-			{
-				Process p = new Process();
-				p.StartInfo.FileName = browser;
-				p.StartInfo.Arguments = @"http://ch3etah.sourceforge.net/";
-				p.Start();
-			}
-			else
-			{
-				Process.Start(@"http://ch3etah.sourceforge.net/");
-			}
-		}
-
-		private string GetDefaultBrowser()
-		{
-			string browser = string.Empty;
-			Microsoft.Win32.RegistryKey key = null;
-			try
-			{
-				key = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(@"HTTP\shell\open\command", false);
-
-				//trim off quotes
-				browser = key.GetValue(null).ToString().ToLower().Replace("\"", "");
-				if (!browser.EndsWith("exe"))
-				{
-					//get rid of everything after the ".exe"
-					browser = browser.Substring(0, browser.LastIndexOf(".exe")+4);
-				}
-			}
-			finally
-			{
-				if (key != null) key.Close();
-			}
-			return browser;
+			Utility.OpenUrl(@"http://ch3etah.sourceforge.net/");
 		}
 
 		private void EditProjectParameters_Click(object sender, EventArgs e) {

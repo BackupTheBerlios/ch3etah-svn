@@ -41,7 +41,7 @@ namespace Ch3Etah.Gui {
 			
 			SplashScreen.Show();
 
-//			ErrorReporter.Register();
+			ExceptionReporter.Register();
 
 //			try {
 //				Application.EnableVisualStyles();

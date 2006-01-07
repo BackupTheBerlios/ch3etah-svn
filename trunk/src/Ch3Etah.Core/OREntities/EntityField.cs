@@ -74,7 +74,6 @@ namespace Ch3Etah.Metadata.OREntities {
 		private bool _readOnly = false;
 		private bool _hidden = false;
 		private string _defaultValue = "";
-		private bool _exclude = false;
 		private string _type = "";
 		private string _vbType = "";
 		private bool _serialize = true;
