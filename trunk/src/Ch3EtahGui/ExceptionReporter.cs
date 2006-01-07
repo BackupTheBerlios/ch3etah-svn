@@ -167,6 +167,8 @@ namespace Ch3Etah.Gui
 		{
 			try
 			{
+				if (IsFilteredException(e.Exception))
+					return;
 				string msg = "CH3ETAH Version: " + Utility.GetCh3EtahVersion() + "\r\n";
 				msg += e.Exception.ToString();
 				ExceptionReporter dlg = new ExceptionReporter();
@@ -177,6 +179,21 @@ namespace Ch3Etah.Gui
 			{
 				MessageBox.Show("ERROR OPENING GLOBAL EXCEPTION HANDLER: " + ex.ToString());
 			}
+		}
+
+		private bool IsFilteredException(Exception ex)
+		{
+			// This is a very ugly hack, but there's a veeeery 
+			// intermittent exception related to the DockPane. This
+			// error is nearly impossible to debug and doesn't seem
+			// to have any real impact on usability. So we'll eat it
+			// until we figure out how to fix it.
+			if (ex is ObjectDisposedException
+				&& ex.Message.IndexOf("\"DockPane\"") > 0)
+			{
+				return true;
+			}
+			return false;
 		}
 
 		private void btnReportError_Click(object sender, System.EventArgs e)

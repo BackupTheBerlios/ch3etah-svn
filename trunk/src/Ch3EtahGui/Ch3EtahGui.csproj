@@ -207,6 +207,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ExceptionReporter.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ExceptionReporter.resx"
+                    DependentUpon = "ExceptionReporter.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "ImageList16.png"
                     BuildAction = "EmbeddedResource"
                 />
@@ -259,6 +269,11 @@
                 <File
                     RelPath = "ShellInstaller.cs"
                     SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Utility.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
