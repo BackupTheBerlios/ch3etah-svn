@@ -181,7 +181,7 @@ namespace Ch3Etah.Gui
 			}
 		}
 
-		private bool IsFilteredException(Exception ex)
+		private static bool IsFilteredException(Exception ex)
 		{
 			// This is a very ugly hack, but there's a veeeery 
 			// intermittent exception related to the DockPane. This
