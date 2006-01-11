@@ -50,6 +50,15 @@ namespace Ch3Etah.Metadata.OREntities
 			}
 		}
 		#endregion Entity
+
+		public Link FindByDBName(string dbName)
+		{
+			foreach (Link val in this)
+			{
+				if (val.DBName == dbName) return val;
+			}
+			return null;
+		}
 		
 		#region Overridden properties and methods
 		new public int Add(Link val)

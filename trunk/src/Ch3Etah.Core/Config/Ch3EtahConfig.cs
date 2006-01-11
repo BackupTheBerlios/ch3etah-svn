@@ -30,26 +30,27 @@ namespace Ch3Etah.Core.Config
 	[XmlRoot("Ch3EtahSettings")]
 	public class Ch3EtahSettingsHelper
 	{
-		private MetadataBrandCollection _metadataBrands;
-		private TransformationEngineCollection _transformationEngines;
+		//private MetadataBrandCollection _metadataBrands;
+		//private TransformationEngineCollection _transformationEngines;
 
-		public Ch3EtahSettingsHelper()
-		{
-		}
-		
 		[XmlArrayItem("Brand")]
-		public MetadataBrandCollection MetadataBrands
-		{
-			get { return _metadataBrands; }
-			set { _metadataBrands = value; }
-		}
+		public MetadataBrandCollection MetadataBrands;
+//		{
+//			get { return _metadataBrands; }
+//			set { _metadataBrands = value; }
+//		}
 		
 		[XmlArrayItem("Engine")]
-		public TransformationEngineCollection TransformationEngines
-		{
-			get { return _transformationEngines; }
-			set { _transformationEngines = value; }
-		}
+		public TransformationEngineCollection TransformationEngines;
+//		{
+//			get { return _transformationEngines; }
+//			set { _transformationEngines = value; }
+//		}
+
+		[XmlArrayItem("ParsingConfiguration")]
+		public ParsingConfigurationCollection ParsingConfigurations;
+
+		public OrmConfiguration OrmConfiguration = new OrmConfiguration();
 	}
 	#endregion Ch3EtahSettings helper class
 
@@ -96,7 +97,11 @@ namespace Ch3Etah.Core.Config
 			}
 		}
 
-		
+		public static OrmConfiguration OrmConfiguration
+		{
+			get { return Settings.OrmConfiguration; }
+		}
+
 		#region Load / Save
 		public static void LoadSettings() 
 		{

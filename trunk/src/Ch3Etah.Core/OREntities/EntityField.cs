@@ -25,6 +25,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Xml.Serialization;
 using Adapdev.Data.Schema;
+using Ch3Etah.Core.Config;
 using Ch3Etah.Core.Metadata;
 
 namespace Ch3Etah.Metadata.OREntities {
@@ -273,7 +274,7 @@ namespace Ch3Etah.Metadata.OREntities {
 
 		#region RefreshDBInfo
 
-		public void RefreshDBInfo(ColumnSchema column) {
+		public void RefreshDBInfo(OrmConfiguration config, ColumnSchema column) {
 			if (Name == string.Empty) {
 				Name = column.Name.Replace(" ", "");
 				ReadOnly = column.IsReadOnly;
@@ -284,6 +285,7 @@ namespace Ch3Etah.Metadata.OREntities {
 				column.DefaultValue + " " + column.DefaultTestValue);
 			DBColumn = column.Name;
 			KeyField = column.IsPrimaryKey;
+			if (KeyField && config.RenameSurrogateKeys && config.SurrogateKeyName != "") this.Name = config.SurrogateKeyName;
 			DBIdentity = column.IsAutoIncrement;
 			DBReadOnly = column.IsReadOnly;
 			DBType = GetDbType(column.DataTypeId);

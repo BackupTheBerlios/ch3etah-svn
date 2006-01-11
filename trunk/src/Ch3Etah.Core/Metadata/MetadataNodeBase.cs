@@ -115,6 +115,22 @@ namespace Ch3Etah.Core.Metadata
 			OnChanged();
 		}
 		
+		public virtual void SetAttributeValue(string attributeName, string value)
+		{
+			XmlAttribute attr = _loadedXmlNode.Attributes[attributeName];
+			if (attr == null) {
+				attr = _loadedXmlNode.OwnerDocument.CreateAttribute(attributeName);
+				_loadedXmlNode.Attributes.Append(attr);
+			}
+			attr.Value = value;
+			foreach (FieldInfo field in this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)) {
+				SetAttributeMemberValue(attributeName, field);
+			}
+			foreach (PropertyInfo property in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+				SetAttributeMemberValue(attributeName, property);
+			}
+		}
+
 		public virtual void PersistChanges(XmlNode xmlNode) {
 			foreach (FieldInfo field in this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)) {
 				PersistMember(xmlNode, field);
@@ -130,6 +146,16 @@ namespace Ch3Etah.Core.Metadata
 		public abstract string Name { get; set; }
 		
 		#region Private methods
+		private void SetAttributeMemberValue(string attributeName, MemberInfo member)
+		{
+			if (IsXmlIgnore(member)) {
+				return;
+			}
+			if (attributeName == GetAttributeName(member)) {
+				FillMemberFromAttribute(_loadedXmlNode, member, attributeName);
+			}
+		}
+
 		private void FillMember(XmlNode parentNode, MemberInfo member) {
 			if (IsXmlIgnore(member)) {
 				return;
@@ -152,10 +178,10 @@ namespace Ch3Etah.Core.Metadata
 				return;
 			}
 
-			if ((member as PropertyInfo) != null) {
+			if (member is PropertyInfo) {
 				SetPropertyValue((PropertyInfo)member, attr.Value);
 			}
-			else if ((member as FieldInfo) != null) {
+			else if (member is FieldInfo) {
 				SetFieldValue((FieldInfo)member, attr.Value);
 			}
 		}

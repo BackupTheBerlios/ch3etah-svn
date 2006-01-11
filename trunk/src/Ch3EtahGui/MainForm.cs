@@ -140,6 +140,7 @@ namespace Ch3Etah.Gui {
 		private CommandBarItem cbiViewProjectExplorer;
 		private CommandBarItem cbiViewPropertiesWindow;
 		private CommandBarItem cbiViewOutputWindow;
+		private CommandBarItem cbiViewApplicationSettings;
 
 		private CommandBarItem cbiExit;
 
@@ -211,7 +212,18 @@ namespace Ch3Etah.Gui {
 				MessageBox.Show("Do you wish to save the changes made to the open project?", "Confirmation", MessageBoxButtons.YesNoCancel,
 				                MessageBoxIcon.Question, MessageBoxDefaultButton.Button3);
 			if (result == DialogResult.Yes) {
-				return SaveProject();
+				try
+				{
+					return SaveProject();
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(
+						"Error saving the project: \r\n\r\n" + ex.Message +
+						"\r\n\r\n Make sure that you have permission to access the file and that it is not read-only.",
+						"Error saving project", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+					return false;
+				}
 			}
 			else if (result == DialogResult.No) {
 				return true;
@@ -956,6 +968,7 @@ namespace Ch3Etah.Gui {
 			viewMenu.Items.Add(cbiViewProjectExplorer);
 			viewMenu.Items.Add(cbiViewPropertiesWindow);
 			viewMenu.Items.Add(cbiViewOutputWindow);
+			viewMenu.Items.Add(cbiViewApplicationSettings);
 
 			CommandBarMenu projectMenu = menuBar.Items.AddMenu("&Project");
 			projectMenu.Items.Add(cbiRunProject);
@@ -970,10 +983,10 @@ namespace Ch3Etah.Gui {
 			CommandBarMenu helpMenu = menuBar.Items.AddMenu("&Help");
 			helpMenu.Items.Add(cbiWebSite);
 			helpMenu.Items.AddSeparator();
-			helpMenu.Items.Add(cbiRunTests);
-			helpMenu.Items.AddSeparator();
-			helpMenu.Items.Add(cbiFixFileAssociations);
-			helpMenu.Items.AddSeparator();
+//			helpMenu.Items.Add(cbiRunTests);
+//			helpMenu.Items.AddSeparator();
+//			helpMenu.Items.Add(cbiFixFileAssociations);
+//			helpMenu.Items.AddSeparator();
 			helpMenu.Items.Add(cbiAbout);
 
 			// Toolbar
@@ -1050,6 +1063,8 @@ namespace Ch3Etah.Gui {
 				new CommandBarButton(Images.Properties, "&Properties", new EventHandler(ViewProperties_Click), Keys.F4);
 			cbiViewOutputWindow =
 				new CommandBarButton(Images.Output, "&Output", new EventHandler(ViewOutput_Click));
+			cbiViewApplicationSettings = 
+				new CommandBarButton("&Application Settings", new EventHandler(ViewApplicationSettings_Click));
 
 			cbiWebSite = new CommandBarButton(Images.Home, "CH3ETAH &Web Site", new EventHandler(WebSite_Click));
 			cbiRunTests = new CommandBarButton(Images.Properties, "&Run Tests", new EventHandler(RunTests_Click));
@@ -1058,6 +1073,12 @@ namespace Ch3Etah.Gui {
 			cbiAbout = new CommandBarButton(Images.Help, "&About", new EventHandler(About_Click));
 
 			cbiExit = new CommandBarButton("E&xit", new EventHandler(Exit_Click));
+		}
+
+		private void ViewApplicationSettings_Click(object sender, EventArgs e) 
+		{
+			SettingsDialog dlg = new SettingsDialog();
+			dlg.ShowDialog(this);
 		}
 
 		private void ViewOutput_Click(object sender, EventArgs e) {

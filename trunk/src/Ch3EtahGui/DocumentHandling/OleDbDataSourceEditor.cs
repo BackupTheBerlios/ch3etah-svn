@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Xml;
 using Adapdev.Data;
 using Adapdev.Data.Schema;
 
+using Ch3Etah.Core.Config;
 using Ch3Etah.Core.Metadata;
 using Ch3Etah.Core.ProjectLib;
 using Ch3Etah.Design.CustomUI;
@@ -43,117 +45,117 @@ namespace Ch3Etah.Gui.DocumentHandling {
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			cmdBuild = new Button();
-			txtConnectionString = new TextBox();
-			grpConnectionString = new GroupBox();
-			cmdTest = new Button();
-			btnAddEntities = new Button();
-			btnRefreshEntityList = new Button();
-			tvwEntities = new TreeView();
-			label7 = new Label();
-			grpConnectionString.SuspendLayout();
-			SuspendLayout();
+			this.cmdBuild = new System.Windows.Forms.Button();
+			this.txtConnectionString = new System.Windows.Forms.TextBox();
+			this.grpConnectionString = new System.Windows.Forms.GroupBox();
+			this.cmdTest = new System.Windows.Forms.Button();
+			this.btnAddEntities = new System.Windows.Forms.Button();
+			this.btnRefreshEntityList = new System.Windows.Forms.Button();
+			this.tvwEntities = new System.Windows.Forms.TreeView();
+			this.label7 = new System.Windows.Forms.Label();
+			this.grpConnectionString.SuspendLayout();
+			this.SuspendLayout();
 			// 
 			// cmdBuild
 			// 
-			cmdBuild.Anchor = ((AnchorStyles) ((AnchorStyles.Bottom | AnchorStyles.Right)));
-			cmdBuild.Location = new Point(376, 88);
-			cmdBuild.Name = "cmdBuild";
-			cmdBuild.Size = new Size(88, 24);
-			cmdBuild.TabIndex = 3;
-			cmdBuild.Text = "&Build...";
-			cmdBuild.Click += new EventHandler(cmdBuild_Click);
+			this.cmdBuild.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.cmdBuild.Location = new System.Drawing.Point(376, 88);
+			this.cmdBuild.Name = "cmdBuild";
+			this.cmdBuild.Size = new System.Drawing.Size(88, 24);
+			this.cmdBuild.TabIndex = 3;
+			this.cmdBuild.Text = "&Build...";
+			this.cmdBuild.Click += new System.EventHandler(this.cmdBuild_Click);
 			// 
 			// txtConnectionString
 			// 
-			txtConnectionString.Anchor = ((AnchorStyles) ((((AnchorStyles.Top | AnchorStyles.Bottom)
-			                                                | AnchorStyles.Left)
-			                                               | AnchorStyles.Right)));
-			txtConnectionString.Location = new Point(8, 26);
-			txtConnectionString.Multiline = true;
-			txtConnectionString.Name = "txtConnectionString";
-			txtConnectionString.Size = new Size(456, 54);
-			txtConnectionString.TabIndex = 1;
-			txtConnectionString.Text = "";
+			this.txtConnectionString.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.txtConnectionString.Location = new System.Drawing.Point(8, 27);
+			this.txtConnectionString.Multiline = true;
+			this.txtConnectionString.Name = "txtConnectionString";
+			this.txtConnectionString.Size = new System.Drawing.Size(456, 53);
+			this.txtConnectionString.TabIndex = 1;
+			this.txtConnectionString.Text = "";
 			// 
 			// grpConnectionString
 			// 
-			grpConnectionString.Controls.Add(cmdTest);
-			grpConnectionString.Controls.Add(txtConnectionString);
-			grpConnectionString.Controls.Add(cmdBuild);
-			grpConnectionString.Location = new Point(8, 8);
-			grpConnectionString.Name = "grpConnectionString";
-			grpConnectionString.Size = new Size(472, 120);
-			grpConnectionString.TabIndex = 0;
-			grpConnectionString.TabStop = false;
-			grpConnectionString.Text = "Connection String";
+			this.grpConnectionString.Controls.Add(this.cmdTest);
+			this.grpConnectionString.Controls.Add(this.txtConnectionString);
+			this.grpConnectionString.Controls.Add(this.cmdBuild);
+			this.grpConnectionString.Location = new System.Drawing.Point(8, 8);
+			this.grpConnectionString.Name = "grpConnectionString";
+			this.grpConnectionString.Size = new System.Drawing.Size(472, 120);
+			this.grpConnectionString.TabIndex = 0;
+			this.grpConnectionString.TabStop = false;
+			this.grpConnectionString.Text = "Connection String";
 			// 
 			// cmdTest
 			// 
-			cmdTest.Anchor = ((AnchorStyles) ((AnchorStyles.Bottom | AnchorStyles.Left)));
-			cmdTest.Location = new Point(240, 88);
-			cmdTest.Name = "cmdTest";
-			cmdTest.Size = new Size(128, 24);
-			cmdTest.TabIndex = 2;
-			cmdTest.Text = "&Test connection...";
-			cmdTest.Click += new EventHandler(cmdTest_Click);
+			this.cmdTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.cmdTest.Location = new System.Drawing.Point(240, 88);
+			this.cmdTest.Name = "cmdTest";
+			this.cmdTest.Size = new System.Drawing.Size(128, 24);
+			this.cmdTest.TabIndex = 2;
+			this.cmdTest.Text = "&Test connection...";
+			this.cmdTest.Click += new System.EventHandler(this.cmdTest_Click);
 			// 
 			// btnAddEntities
 			// 
-			btnAddEntities.Anchor = ((AnchorStyles) ((AnchorStyles.Top | AnchorStyles.Right)));
-			btnAddEntities.Enabled = false;
-			btnAddEntities.Location = new Point(400, 184);
-			btnAddEntities.Name = "btnAddEntities";
-			btnAddEntities.Size = new Size(88, 23);
-			btnAddEntities.TabIndex = 6;
-			btnAddEntities.Text = "&Add to Project";
-			btnAddEntities.Click += new EventHandler(btnAddEntities_Click);
+			this.btnAddEntities.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnAddEntities.Enabled = false;
+			this.btnAddEntities.Location = new System.Drawing.Point(488, 184);
+			this.btnAddEntities.Name = "btnAddEntities";
+			this.btnAddEntities.Size = new System.Drawing.Size(128, 23);
+			this.btnAddEntities.TabIndex = 6;
+			this.btnAddEntities.Text = "&Add / Update Selected";
+			this.btnAddEntities.Click += new System.EventHandler(this.btnAddEntities_Click);
 			// 
 			// btnRefreshEntityList
 			// 
-			btnRefreshEntityList.Anchor = ((AnchorStyles) ((AnchorStyles.Top | AnchorStyles.Right)));
-			btnRefreshEntityList.Location = new Point(400, 152);
-			btnRefreshEntityList.Name = "btnRefreshEntityList";
-			btnRefreshEntityList.Size = new Size(88, 23);
-			btnRefreshEntityList.TabIndex = 5;
-			btnRefreshEntityList.Text = "&Refresh List";
-			btnRefreshEntityList.Click += new EventHandler(btnRefreshEntityList_Click);
+			this.btnRefreshEntityList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnRefreshEntityList.Location = new System.Drawing.Point(488, 152);
+			this.btnRefreshEntityList.Name = "btnRefreshEntityList";
+			this.btnRefreshEntityList.Size = new System.Drawing.Size(128, 23);
+			this.btnRefreshEntityList.TabIndex = 5;
+			this.btnRefreshEntityList.Text = "&Refresh List";
+			this.btnRefreshEntityList.Click += new System.EventHandler(this.btnRefreshEntityList_Click);
 			// 
 			// tvwEntities
 			// 
-			tvwEntities.Anchor = ((AnchorStyles) ((((AnchorStyles.Top | AnchorStyles.Bottom)
-			                                        | AnchorStyles.Left)
-			                                       | AnchorStyles.Right)));
-			tvwEntities.CheckBoxes = true;
-			tvwEntities.ImageIndex = -1;
-			tvwEntities.Location = new Point(8, 152);
-			tvwEntities.Name = "tvwEntities";
-			tvwEntities.SelectedImageIndex = -1;
-			tvwEntities.Size = new Size(384, 240);
-			tvwEntities.TabIndex = 4;
-			tvwEntities.AfterCheck += new TreeViewEventHandler(tvwEntities_AfterCheck);
+			this.tvwEntities.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.tvwEntities.CheckBoxes = true;
+			this.tvwEntities.ImageIndex = -1;
+			this.tvwEntities.Location = new System.Drawing.Point(8, 152);
+			this.tvwEntities.Name = "tvwEntities";
+			this.tvwEntities.SelectedImageIndex = -1;
+			this.tvwEntities.Size = new System.Drawing.Size(472, 240);
+			this.tvwEntities.TabIndex = 4;
+			this.tvwEntities.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tvwEntities_AfterCheck);
 			// 
 			// label7
 			// 
-			label7.Location = new Point(8, 136);
-			label7.Name = "label7";
-			label7.Size = new Size(308, 16);
-			label7.TabIndex = 7;
-			label7.Text = "Select the database entities to add to this project";
+			this.label7.Location = new System.Drawing.Point(8, 136);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(308, 16);
+			this.label7.TabIndex = 7;
+			this.label7.Text = "Select the database entities to add to this project";
 			// 
 			// OleDbDataSourceEditor
 			// 
-			Controls.Add(label7);
-			Controls.Add(btnAddEntities);
-			Controls.Add(btnRefreshEntityList);
-			Controls.Add(tvwEntities);
-			Controls.Add(grpConnectionString);
-			Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((Byte) (0)));
-			Name = "OleDbDataSourceEditor";
-			Size = new Size(496, 400);
-			Load += new EventHandler(OleDbDataSourceEditor_Load);
-			grpConnectionString.ResumeLayout(false);
-			ResumeLayout(false);
+			this.Controls.Add(this.label7);
+			this.Controls.Add(this.btnAddEntities);
+			this.Controls.Add(this.btnRefreshEntityList);
+			this.Controls.Add(this.tvwEntities);
+			this.Controls.Add(this.grpConnectionString);
+			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.Name = "OleDbDataSourceEditor";
+			this.Size = new System.Drawing.Size(624, 400);
+			this.Load += new System.EventHandler(this.OleDbDataSourceEditor_Load);
+			this.grpConnectionString.ResumeLayout(false);
+			this.ResumeLayout(false);
 
 		}
 
@@ -416,24 +418,34 @@ namespace Ch3Etah.Gui.DocumentHandling {
 		}
 
 		private void UpdateProjectEntities() {
+			ArrayList updatedEntities = new ArrayList();
 			//loop through selected entities and add / update each one
 			DatabaseSchema db = (DatabaseSchema) tvwEntities.Tag;
 			foreach (TableSchema table in GetSelectedTables()) {
 				Entity entity = GetMetadataEntity(table, true);
 				entity.RefreshDBInfo(_dataSource, db, table);
-				entity.OwningMetadataFile.Save();
-				if (_dataSource.CustomAttributes.Count > 0)
+				updatedEntities.Add(entity);
+				if (_dataSource.OrmConfiguration.CustomEntityAttributes.Count > 0)
 				{
-					foreach (InputParameter att in _dataSource.CustomAttributes)
+					foreach (NameValuePair att in _dataSource.OrmConfiguration.CustomEntityAttributes)
 					{
-						XmlAttribute xmlAtt = ((IMetadataNode)entity).LoadedXmlNode.Attributes[att.Name];
-						if (xmlAtt == null)
-						{
-							xmlAtt = ((IMetadataNode)entity).LoadedXmlNode.OwnerDocument.CreateAttribute(att.Name);
-							((IMetadataNode)entity).LoadedXmlNode.Attributes.Append(xmlAtt);
-						}
-						xmlAtt.Value = att.Value;
+						((IMetadataNode)entity).SetAttributeValue(att.Name, att.Value);
+//						XmlAttribute xmlAtt = ((IMetadataNode)entity).LoadedXmlNode.Attributes[att.Name];
+//						if (xmlAtt == null)
+//						{
+//							xmlAtt = ((IMetadataNode)entity).LoadedXmlNode.OwnerDocument.CreateAttribute(att.Name);
+//							((IMetadataNode)entity).LoadedXmlNode.Attributes.Append(xmlAtt);
+//						}
+//						xmlAtt.Value = att.Value;
 					}
+				}
+				entity.OwningMetadataFile.Save();
+			}
+			if (_dataSource.OrmConfiguration.AutoMapLinks)
+			{
+				foreach (Entity entity in updatedEntities)
+				{
+					entity.RefreshDBLinks(_dataSource);
 					entity.OwningMetadataFile.Save();
 				}
 			}

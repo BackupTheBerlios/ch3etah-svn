@@ -267,6 +267,16 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "SettingsDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SettingsDialog.resx"
+                    DependentUpon = "SettingsDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "ShellInstaller.cs"
                     SubType = "Component"
                     BuildAction = "Compile"

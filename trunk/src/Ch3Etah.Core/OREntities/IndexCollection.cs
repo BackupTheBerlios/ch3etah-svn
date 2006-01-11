@@ -51,6 +51,15 @@ namespace Ch3Etah.Metadata.OREntities
 		}
 		#endregion Entity
 		
+		public Index FindByDBName(string dbName)
+		{
+			foreach (Index val in this)
+			{
+				if (val.DBName == dbName) return val;
+			}
+			return null;
+		}
+
 		#region Overridden properties and methods
 		new public int Add(Index val)
 		{

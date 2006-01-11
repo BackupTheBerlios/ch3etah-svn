@@ -73,5 +73,6 @@ namespace Ch3Etah.Core.Metadata
 		bool IsDirty { get; }
 		void LoadXml(XmlNode node);
 		void PersistChanges(XmlNode node);
+		void SetAttributeValue(string attributeName, string value);
 	}
 }

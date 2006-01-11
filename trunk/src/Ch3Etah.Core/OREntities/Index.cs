@@ -24,7 +24,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing.Design;
 using System.Xml.Serialization;
-
+using Ch3Etah.Core.Config;
 using Ch3Etah.Core.Metadata;
 
 namespace Ch3Etah.Metadata.OREntities
@@ -200,7 +200,7 @@ namespace Ch3Etah.Metadata.OREntities
 		}
 		#endregion Collection Properties
 
-		public void RefreshDBInfo(DataRowView schema, EntityField entityField) {
+		public void RefreshDBInfo(OrmConfiguration config, DataRowView schema, EntityField entityField) {
 			IndexField indexField = null;
 			foreach (IndexField f in this.Fields) {
 				if (f.Name == entityField.Name) {
@@ -215,13 +215,22 @@ namespace Ch3Etah.Metadata.OREntities
 			}
 			this.DBName = (string)schema["INDEX_NAME"];
 			this.PrimaryKey = (bool)schema["PRIMARY_KEY"];
+			//if (this.PrimaryKey) this.Name = "ID";
+			//else this.IsExcluded = true;
 			this.Unique = (bool)schema["UNIQUE"];
 			if (this.Name == string.Empty) {
 				if (this.PrimaryKey) {
-					this.Name = "PK";
+					this.IsExcluded = !config.AutoEnableMappedIndexes && !config.AutoEnablePrimaryIndex;
+					if (config.RenamePrimaryIndex && config.PrimaryIndexName != "") {
+						this.Name = config.PrimaryIndexName;
+					}
+					else {
+						this.Name = this.DBName;
+					}
 					this.DeleteBy = true;
 				}
 				else {
+					this.IsExcluded = !config.AutoEnableMappedIndexes;
 					this.Name = this.DBName;
 				}
 			}

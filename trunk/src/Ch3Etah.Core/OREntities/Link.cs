@@ -45,6 +45,7 @@ namespace Ch3Etah.Metadata.OREntities
 		
 		#region Member Variables
 		private string _name = "";
+		private string _dbName = "";
 		private string _targetEntityName = "";
 		private string _targetIndexName = "";
 		private bool _isProperty = true;
@@ -84,6 +85,14 @@ namespace Ch3Etah.Metadata.OREntities
 				}
 			}
 			set { _name = value; }
+		}
+		
+		[Category("Database")]
+		[XmlAttribute("dbname")]
+		public string DBName 
+		{
+			get { return _dbName; }
+			set { _dbName = value; }
 		}
 		
 		[Category("(General)")]

@@ -150,6 +150,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Utility.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CodeGen\CodeGenerationContext.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -275,6 +280,31 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Config\NameValuePair.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Config\NameValuePairCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Config\OrmConfiguration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Config\ParsingConfiguration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Config\ParsingConfigurationCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Config\PathResolver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -296,6 +326,16 @@
                 />
                 <File
                     RelPath = "Config\Generated\MetadataBrandCollection .cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Config\Generated\NameValuePairCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Config\Generated\ParsingConfigurationCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

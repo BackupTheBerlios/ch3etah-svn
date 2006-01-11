@@ -27,6 +27,8 @@ using System.Drawing.Design;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
+using Ch3Etah.Core.Config;
+
 namespace Ch3Etah.Core.ProjectLib {
 	
 	#region DataSourceNameChangedEvent
@@ -77,7 +79,7 @@ namespace Ch3Etah.Core.ProjectLib {
 		private ConnectionType _connectionType;
 		private string _connectionTypeName = string.Empty;
 		private string _connectionString = string.Empty;
-		private InputParameterCollection _customAttributes = new InputParameterCollection();
+		private OrmConfiguration _ormConfiguration = Ch3EtahConfig.OrmConfiguration.Clone();
 		private Project _project;
 		#endregion
 
@@ -207,16 +209,12 @@ namespace Ch3Etah.Core.ProjectLib {
 			set { _connectionString = value; }
 		}
 
-		[Description("Allows the definition of custom XML attributes that will be added to entities created from this datasource.")]
-		[Browsable(true)]
 		[TypeConverter(typeof (ExpandableObjectConverter))]
-		[XmlArrayItem("Attribute")]
-		public InputParameterCollection CustomAttributes 
+		public OrmConfiguration OrmConfiguration
 		{
-			get { return _customAttributes; }
-			set { _customAttributes = value; }
+			get { return _ormConfiguration; }
+			set { _ormConfiguration = value; }
 		}
-
 		#endregion
 
 		#region TestConnection

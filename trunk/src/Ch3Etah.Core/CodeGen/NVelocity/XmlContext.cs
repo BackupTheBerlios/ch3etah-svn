@@ -145,7 +145,7 @@ namespace Ch3Etah.Core.CodeGen.NVelocityEngine
 					ArrayList singularNodes = new ArrayList();
 					foreach (XmlNode childNode in _node.ChildNodes) {
 						//But maybe Nodes in Singular form (Table)
-						if (GetPluralForm(childNode.Name) == key) {
+						if (Utility.GetPluralForm(childNode.Name) == key) {
 							singularNodes.Add(childNode);
 						}
 					}
@@ -232,33 +232,6 @@ namespace Ch3Etah.Core.CodeGen.NVelocityEngine
 			return null;
 		}
 		#endregion Not Implemented IContext interface members
-		
-		/// <summary>
-		/// Gets the plural form of a word.
-		/// INCLUDED FOR TEMPLATE COMPATABILITY WITH THE NCodeGen FRAMEWORK.
-		/// </summary>
-		private string GetPluralForm(string word) {
-			if (word.EndsWith("y")) {
-				if (word.EndsWith("ay") || word.EndsWith("ey") || word.EndsWith("oy") || word.EndsWith("iy") || word.EndsWith("uy")) {
-					return word+ "s";
-				}
-				else {
-					return word.Remove(word.Length-1,1) + "ies";
-				}
-			}
-			else if (word.EndsWith("f")) {
-				return word.Remove(word.Length-1,1) + "ves";
-			}
-			else if (word.EndsWith("fe")) {
-				return word.Remove(word.Length-2,2) + "ves";
-			}
-			else if (word.EndsWith("x")) {
-				return word + "es";
-			}
-			else {
-				return word + "s";
-			}
-		}
 		
 	}
 }
