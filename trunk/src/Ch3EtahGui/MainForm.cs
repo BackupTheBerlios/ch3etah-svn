@@ -202,6 +202,15 @@ namespace Ch3Etah.Gui {
 
 		#endregion Constructors and Member variables
 
+		private void ShowOutputWindow()
+		{
+			// Fly-out the output window if needed
+			if (!outputWindow.IsFloat && outputWindow.DockState == DockState.DockBottomAutoHide)
+			{
+				outputWindow.Activate();
+			}
+		}
+
 		#region Project operations
 
 		private bool DoSaveConfirmation() {
@@ -391,11 +400,7 @@ namespace Ch3Etah.Gui {
 					return;
 				}
 
-				// Fly-out the output window if needed
-				if (!outputWindow.IsFloat && outputWindow.DockState == DockState.DockBottomAutoHide)
-				{
-					outputWindow.Activate();
-				}
+				ShowOutputWindow();
 				
 				_running = true;
 				_cancelGeneration = false;
@@ -1463,6 +1468,7 @@ namespace Ch3Etah.Gui {
 						MessageBoxIcon.Error);
 					return;
 				}
+				ShowOutputWindow();
 				command.Execute();
 				MessageBox.Show("Done!");
 			}
