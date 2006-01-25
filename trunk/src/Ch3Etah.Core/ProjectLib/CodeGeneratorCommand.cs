@@ -369,9 +369,27 @@ namespace Ch3Etah.Core.ProjectLib {
 						}
 						using (StringWriter stringWriter = new StringWriter()) {
 							generator.Generate(document, stringWriter);
+							string oldContent = "";
+							if (File.Exists(outputPath))
+							{
+								Debug.WriteLine("Checking to see if file content has changed.");
+								using (FileStream stream = new FileStream(outputPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+								{
+									using (StreamReader reader = new StreamReader(stream))
+									{
+										oldContent = reader.ReadToEnd();
+									}
+								}
+							}
+							string newContent = stringWriter.ToString();
+							if (newContent == oldContent && newContent != "")
+							{
+								Trace.WriteLine("File content has not changed. Existing file will not be overwritten.");
+								return;
+							}
 							using (StreamWriter outputWriter = new StreamWriter(outputPath)) 
 							{
-								outputWriter.Write(stringWriter.ToString());
+								outputWriter.Write(newContent);
 							}
 						}
 					}
