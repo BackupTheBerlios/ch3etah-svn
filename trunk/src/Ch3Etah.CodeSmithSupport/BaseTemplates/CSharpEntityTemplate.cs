@@ -225,10 +225,10 @@ namespace Ch3Etah.CodeSmithSupport.BaseTemplates
 			{
 				if (field.KeyField)
 				{
-					formatIndex += 1;
 					formatString += "{" + formatIndex + "}";
 					formatParams += comma + field.Name;
 					comma = ", ";
+					formatIndex += 1;
 				}
 			}
 			if (formatString == "")
@@ -239,10 +239,10 @@ namespace Ch3Etah.CodeSmithSupport.BaseTemplates
 					{
 						foreach (IndexField field in index.Fields)
 						{
-							formatIndex += 1;
 							formatString += "{" + formatIndex + "}";
 							formatParams += comma + field.Name;
 							comma = ", ";
+							formatIndex += 1;
 						}
 						break;
 					}
