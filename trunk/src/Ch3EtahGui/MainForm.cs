@@ -1470,9 +1470,17 @@ namespace Ch3Etah.Gui {
 				}
 				ShowOutputWindow();
 				command.Execute();
-				MessageBox.Show("Done!");
+				txtOutput.AppendText("\r\n========================================");
+				txtOutput.AppendText("\r\n COMMAND EXECUTED SUCCESFULLY ");
+				txtOutput.AppendText("\r\n========================================\r\n");
 			}
 			catch (Exception ex) {
+				txtOutput.AppendText("\r\n========================================");
+				txtOutput.AppendText("\r\n ERROR RUNNING COMMAND");
+				txtOutput.AppendText("\r\n CurrentDirectory=" + Directory.GetCurrentDirectory());
+				txtOutput.AppendText("\r\n========================================\r\n");
+				txtOutput.AppendText(ex.ToString());
+				txtOutput.AppendText("\r\n========================================\r\n");
 				MessageBox.Show("Error running command: \r\n\r\n" + ex.ToString());
 			}
 		}
