@@ -300,6 +300,11 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			try 
 			{
 				this.Cursor = Cursors.WaitCursor;
+				this.btnAddEntities.Enabled = false;
+				this.btnRefreshEntityList.Enabled = false;
+				this.cmdBuild.Enabled = false;
+				this.cmdTest.Enabled = false;
+				this.tvwEntities.Enabled = false;
 				UpdateProjectEntities();
 			}
 			catch (Exception ex) 
@@ -310,6 +315,11 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			finally
 			{
 				this.Cursor = Cursors.Default;
+				this.btnRefreshEntityList.Enabled = true;
+				this.cmdBuild.Enabled = true;
+				this.cmdTest.Enabled = true;
+				this.tvwEntities.Enabled = true;
+				DoEnableButtons();
 			}
 		}
 
