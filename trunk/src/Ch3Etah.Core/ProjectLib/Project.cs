@@ -25,6 +25,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
 using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 using Ch3Etah.Core.Metadata;
 using Ch3Etah.Metadata.OREntities;
@@ -284,6 +285,14 @@ namespace Ch3Etah.Core.ProjectLib {
 						return project;
 					}
 				}
+				catch (UnrecognizedProjectFileFormatException) 
+				{
+					throw new UnrecognizedProjectFileFormatException(fileName);
+				}
+				catch (IncompatibleProjectVersionException) 
+				{
+					throw new IncompatibleProjectVersionException(fileName);
+				}
 				finally {
 					_isLoading = false;
 				}
@@ -295,23 +304,56 @@ namespace Ch3Etah.Core.ProjectLib {
 		/// </summary>
 		/// <param name="stream"></param>
 		public static Project Load(Stream stream, string originalFileName) {
-			Project project = null;
-			TextReader reader = null;
+			CheckFileVersionCompatibility(stream);
+			stream.Position = 0;
 
-			reader = new StreamReader(stream);
+			TextReader reader = new StreamReader(stream);
 			XmlSerializer ser = new XmlSerializer(typeof (Project));
-			project = (Project) ser.Deserialize(reader);
+			Project project = (Project) ser.Deserialize(reader);
 			
 			project._fileName = originalFileName;
 			
 			project.SetLoadedState();
 			//project.LoadMetadataFiles();
 
-			// Set's Current Project
 			CurrentProject = project;
 			return project;
 		}
+		
+		private static void CheckFileVersionCompatibility(Stream stream)
+		{
+			XmlDocument doc = new XmlDocument();
+			doc.Load(stream);
+			
+			XmlNodeList nodeList = doc.SelectNodes("Ch3EtahProject");
+			XmlNode project = null;
+			if (nodeList.Count > 0)
+			{
+				project = nodeList[0];
+			}
+			else 
+			{
+				throw new UnrecognizedProjectFileFormatException();
+			}
+			
+			int major = 0;
+			int minor = 0;
+			try
+			{
+				major = int.Parse(project.Attributes["FileVersionMajor"].Value);
+				minor = int.Parse(project.Attributes["FileVersionMinor"].Value);
+			}
+			catch
+			{
+				throw new IncompatibleProjectVersionException();
+			}
 
+			if (major > FILE_VERSION_MAJOR
+				|| (major == FILE_VERSION_MAJOR && minor > FILE_VERSION_MINOR))
+			{
+				throw new IncompatibleProjectVersionException();
+			}
+		}
 		#endregion Load
 
 		#region Save
@@ -458,5 +500,31 @@ namespace Ch3Etah.Core.ProjectLib {
 			}
 		}
 		
+	}
+
+	public class UnrecognizedProjectFileFormatException : ApplicationException
+	{
+		public UnrecognizedProjectFileFormatException()
+			: base("The file you are trying to load is not in a recognized project file format. Please make sure the file is not corrupt and that you are using the most recent version of CH3ETAH in order to load this project file.")
+		{
+		}
+
+		public UnrecognizedProjectFileFormatException(string fileName)
+			: base(string.Format("The file '{0}' is not in a recognized project file format. Please make sure the file is not corrupt and that you are using the most recent version of CH3ETAH in order to load this project file.", fileName))
+		{
+		}
+	}
+	
+	public class IncompatibleProjectVersionException : ApplicationException
+	{
+		public IncompatibleProjectVersionException()
+			: base("The project file you are trying to load is not compatible with this version of CH3ETAH. In order to prevent information loss, the project file will not be loaded. Please make sure you are using the most recent version of CH3ETAH in order to load this project file.")
+		{
+		}
+
+		public IncompatibleProjectVersionException(string fileName)
+			: base(string.Format("The file '{0}' is not compatible with this version of CH3ETAH. In order to prevent information loss, the project file will not be loaded. Please make sure you are using the most recent version of CH3ETAH in order to load this project file.", fileName))
+		{
+		}
 	}
 }

@@ -334,23 +334,52 @@ namespace Ch3Etah.Gui {
 		}
 
 		private void OpenProject(string fileName) {
-			if (!CloseDocuments()) {
-				return;
+			try
+			{
+				if (!CloseDocuments()) 
+				{
+					return;
+				}
+				VerifyOpenProject();
+				Project project = Project.Load(fileName);
+				if (!project.IsFileVersionCompatible) 
+				{
+					MessageBox.Show(this,
+						"The file that you are trying to load is not compatible with this version of CH3ETAH. In order to prevent information loss, the project file will not be loaded. Please make sure you are using the most recent version of CH3ETAH in order to load this project file.",
+						"Incompatible file version",
+						MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+					return;
+				}
+				tvwProject.Nodes.Clear();
+				_project = project;
+				Directory.SetCurrentDirectory(Path.GetDirectoryName(fileName));
+				RefreshUI();
+				_mruList.Add(fileName);
 			}
-			VerifyOpenProject();
-			Project project = Project.Load(fileName);
-			if (!project.IsFileVersionCompatible) {
+			catch (IncompatibleProjectVersionException ex)
+			{
 				MessageBox.Show(this,
-				                "The file that you are trying to load is not compatible with this version of CH3ETAH. In order to prevent information loss, the project file will not be loaded. Please make sure you are using the most recent version of CH3ETAH in order to load this project file.",
-				                "Incompatible file version",
-				                MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+					ex.Message,
+					"Incompatible File Version",
+					MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				return;
 			}
-			tvwProject.Nodes.Clear();
-			_project = project;
-			Directory.SetCurrentDirectory(Path.GetDirectoryName(fileName));
-			RefreshUI();
-			_mruList.Add(fileName);
+			catch (UnrecognizedProjectFileFormatException ex)
+			{
+				MessageBox.Show(this,
+					ex.Message,
+					"Unrecognized File Format",
+					MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				return;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(this,
+					"The following error occurred when trying to load the selected file: \r\n\r\n" + ex.ToString(),
+					"File loading error",
+					MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
 		}
 
 		private bool SaveProject() {
