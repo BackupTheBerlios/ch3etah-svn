@@ -701,8 +701,8 @@ namespace Ch3Etah.Gui.DocumentHandling
 		private void btnAutoFillLinks_Click(object sender, EventArgs e)
 		{
 			// Create Objects
-			DataSource ds = Project.CurrentProject.DataSources.Find(this.designView.CurrentEntity.DataSourceName);
-			this.designView.CurrentEntity.RefreshDBLinks(ds);
+			//OleDbDataSource ds = Project.CurrentProject.DataSources.Find(this.designView.CurrentEntity.DataSourceName);
+			//this.designView.CurrentEntity.RefreshDBLinks(ds);
 			
 //			this.designView.CurrentEntity.DataSourceName
 //			Project project = _MetadataFile.Project;
@@ -710,7 +710,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 //			{
 //				return;
 //			}
-//			foreach (DataSource ds in project.DataSources)
+//			foreach (OleDbDataSource ds in project.DataSources)
 //			{
 //				if (ds.Name == _MetadataFile.DataSourceName)
 //				{
@@ -718,10 +718,10 @@ namespace Ch3Etah.Gui.DocumentHandling
 //					return;
 //				}
 //			}
-			this.designView.RefreshLinksList(
-				this.GetSelectedNodeOfType(typeof(LinkCollection)), 
-				this.designView.CurrentEntity, 
-				false);
+			//this.designView.RefreshLinksList(
+			//	this.GetSelectedNodeOfType(typeof(LinkCollection)), 
+			//	this.designView.CurrentEntity, 
+			//	false);
 		}
 
 

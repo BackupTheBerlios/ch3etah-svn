@@ -97,7 +97,9 @@ namespace Ch3Etah.CodeSmithSupport.BaseTemplates
 			{
 				foreach (IMetadataEntity metaentity in file.MetadataEntities)
 				{
-					if (metaentity is Entity && ((Entity)metaentity).Name == name)
+					if (metaentity is Entity 
+						&& ((Entity)metaentity).Name == name
+						&& ( ((Entity)metaentity).Namespace == searchNamespace || searchNamespace == "" ))
 						return (Entity)metaentity;
 				}
 			}

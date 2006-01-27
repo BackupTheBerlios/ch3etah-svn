@@ -940,10 +940,10 @@ namespace Ch3Etah.Gui {
 			if (node.Tag.GetType() == typeof (GeneratorCommandCollection) || node.Tag.GetType() == typeof (Project)) {
 				treeviewContextMenu.Items.Add(cbiAddCodeGenCommand);
 			}
-			if (node.Tag.GetType() == typeof (DataSourceCollection) || node.Tag.GetType() == typeof (Project)) {
+			if (node.Tag is DataSourceCollection || node.Tag is Project) {
 				treeviewContextMenu.Items.Add(cbiAddDataSource);
 			}
-			if (node.Tag.GetType() == typeof (DataSource)) {
+			if (node.Tag is DataSource) {
 				CommandBarItem command = new CommandBarButton(Images.Delete, "&Delete Data Source", new EventHandler(RemoveDataSource_Click));
 				treeviewContextMenu.Items.Add(command);
 				command.Tag = node.Tag;
@@ -1438,7 +1438,7 @@ namespace Ch3Etah.Gui {
 		}
 
 		private void AddDataSource_Click(object sender, EventArgs e) {
-			DataSource ds = new DataSource();
+			OleDbDataSource ds = new OleDbDataSource();
 			_project.DataSources.Add(ds);
 			RefreshUI();
 			TreeNode dsNode = GetContextNode(ds, tvwProject.Nodes);

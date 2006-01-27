@@ -49,7 +49,7 @@ namespace Ch3Etah.Core.ProjectLib {
 		#region Constructors and Member Variables
 
 		private const int FILE_VERSION_MAJOR = 0;
-		private const int FILE_VERSION_MINOR = 50;
+		private const int FILE_VERSION_MINOR = 52;
 		
 		private string _loadedState;
 		private Guid _guid = Guid.NewGuid();
@@ -305,8 +305,8 @@ namespace Ch3Etah.Core.ProjectLib {
 		/// <param name="stream"></param>
 		public static Project Load(Stream stream, string originalFileName) {
 			CheckFileVersionCompatibility(stream);
-			stream.Position = 0;
-
+			stream = UpgradeProjectVersion(stream);
+			
 			TextReader reader = new StreamReader(stream);
 			XmlSerializer ser = new XmlSerializer(typeof (Project));
 			Project project = (Project) ser.Deserialize(reader);
@@ -324,17 +324,9 @@ namespace Ch3Etah.Core.ProjectLib {
 		{
 			XmlDocument doc = new XmlDocument();
 			doc.Load(stream);
+			stream.Position = 0;
 			
-			XmlNodeList nodeList = doc.SelectNodes("Ch3EtahProject");
-			XmlNode project = null;
-			if (nodeList.Count > 0)
-			{
-				project = nodeList[0];
-			}
-			else 
-			{
-				throw new UnrecognizedProjectFileFormatException();
-			}
+			XmlNode project = GetProjectNode(doc);
 			
 			int major = 0;
 			int minor = 0;
@@ -353,6 +345,50 @@ namespace Ch3Etah.Core.ProjectLib {
 			{
 				throw new IncompatibleProjectVersionException();
 			}
+		}
+		
+		private static Stream UpgradeProjectVersion(Stream stream)
+		{
+			XmlDocument doc = new XmlDocument();
+			doc.Load(stream);
+			XmlNode project = GetProjectNode(doc);
+			
+			UpgrateProjectDatasources(project);
+			
+			MemoryStream newStream = new MemoryStream();
+			doc.Save(newStream);
+			newStream.Position = 0;
+			//TextReader r = new StreamReader(newStream);
+			//Debug.WriteLine(r.ReadToEnd());
+			//newStream.Position = 0;
+			return newStream;
+		}
+		
+		private static void UpgrateProjectDatasources(XmlNode projectNode)
+		{
+			XmlNode dataSources = projectNode.SelectSingleNode("DataSources");
+			if (dataSources == null) return;
+
+			foreach (XmlNode datasource in dataSources.SelectNodes("DataSource"))
+			{
+				XmlAttribute xsiType = datasource.Attributes["type", "http://www.w3.org/2001/XMLSchema-instance"];
+				if (xsiType == null) 
+				{
+					xsiType = datasource.OwnerDocument.CreateAttribute("type", "http://www.w3.org/2001/XMLSchema-instance");
+					datasource.Attributes.Append(xsiType);
+					xsiType.Value = "OleDbDataSource";
+				}
+			}
+		}
+
+		private static XmlNode GetProjectNode(XmlDocument doc)
+		{
+			XmlNodeList nodeList = doc.SelectNodes("Ch3EtahProject");
+			if (nodeList.Count <= 0)
+			{
+				throw new UnrecognizedProjectFileFormatException();
+			}
+			return nodeList[0];
 		}
 		#endregion Load
 

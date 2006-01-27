@@ -37,7 +37,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 	
 		//private const string SQL_CONNECTIONSTRING = "Data source={0};Initial Catalog={1};Integrated Security={2};Uid={3};Password={4}";
 		
-		private DataSource _dataSource;
+		private OleDbDataSource _dataSource;
 		private int _errCount;
 
 		#region Windows Form Designer generated code
@@ -72,7 +72,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 		private Button btnAddEntities;
 		private ListBox lstConnectionType;
 
-		public DataSourceEditor(DataSource ds) : this() {
+		public DataSourceEditor(OleDbDataSource ds) : this() {
 			_dataSource = ds;
 		}
 
@@ -440,7 +440,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 				return _dataSource;
 			}
 			set {
-				_dataSource = (DataSource)value;
+				_dataSource = (OleDbDataSource)value;
 				DoBinding();
 			}
 		}
@@ -551,7 +551,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 //			}
 		}
 
-//		private DataSource NewDataSource() {
+//		private OleDbDataSource NewDataSource() {
 //			ShowDialog();
 //			return dataSource;
 //		}
@@ -706,12 +706,12 @@ namespace Ch3Etah.Gui.DocumentHandling {
 
 		private void UpdateProjectEntities() {
 			//loop through selected entities and add / update each one
-			DatabaseSchema db = (DatabaseSchema)tvwEntities.Tag;
-			foreach (TableSchema table in GetSelectedTables()) {
-				Entity entity = GetMetadataEntity(table);
-				entity.RefreshDBInfo(_dataSource, db, table);
-				entity.OwningMetadataFile.Save();
-			}
+//			DatabaseSchema db = (DatabaseSchema)tvwEntities.Tag;
+//			foreach (TableSchema table in GetSelectedTables()) {
+//				Entity entity = GetMetadataEntity(table);
+//				entity.RefreshDBInfo(_dataSource, db, table);
+//				entity.OwningMetadataFile.Save();
+//			}
 			OnSelectedObjectChanged();
 		}
 		

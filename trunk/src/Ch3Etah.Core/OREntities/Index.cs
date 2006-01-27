@@ -200,72 +200,72 @@ namespace Ch3Etah.Metadata.OREntities
 		}
 		#endregion Collection Properties
 
-		public void RefreshDBInfo(OrmConfiguration config, DataRowView schema, EntityField entityField) {
-			IndexField indexField = null;
-			foreach (IndexField f in this.Fields) {
-				if (f.Name == entityField.Name) {
-					indexField = f;
-					break;
-				}
-			}
-			if (indexField == null) {
-				indexField = new IndexField();
-				indexField.Name = entityField.Name;
-				this.Fields.Add(indexField);
-			}
-			this.DBName = (string)schema["INDEX_NAME"];
-			this.PrimaryKey = (bool)schema["PRIMARY_KEY"];
-			//if (this.PrimaryKey) this.Name = "ID";
-			//else this.IsExcluded = true;
-			this.Unique = (bool)schema["UNIQUE"];
-			if (this.Name == string.Empty) {
-				if (this.PrimaryKey) {
-					this.IsExcluded = !config.AutoEnableMappedIndexes && !config.AutoEnablePrimaryIndex;
-					if (config.RenamePrimaryIndex && config.PrimaryIndexName != "") {
-						this.Name = config.PrimaryIndexName;
-					}
-					else {
-						this.Name = this.DBName;
-					}
-					this.DeleteBy = true;
-				}
-				else {
-					this.IsExcluded = !config.AutoEnableMappedIndexes;
-					this.Name = this.DBName;
-				}
-			}
-		}
-		
-		public void RemoveUnusedFields(DataView schema) {
-			for (int i=this.Fields.Count-1; i>=0; i--) {
-				IndexField field = this.Fields[i];
-				if (!SchemaContainsField(schema, field)) {
-					this.Fields.Remove(field);
-				}
-			}
-		}
-		
-		private bool SchemaContainsField(DataView schema, IndexField field) {
-			string dbColumn = string.Empty;
-			foreach (EntityField f in this.Entity.Fields) {
-				if (f.Name == field.Name) {
-					dbColumn = f.DBColumn;
-					break;
-				}
-			}
-			if (dbColumn == string.Empty) {
-				dbColumn = field.Name;
-			}
-			foreach (DataRowView row in schema) {
-				if ((string)row["TABLE_NAME"] == this.Entity.DBEntityName 
-					&& (string)row["INDEX_NAME"] == this.DBName 
-					&& (string)row["COLUMN_NAME"] == dbColumn) {
-					return true;
-				}
-			}
-			return false;
-		}
-
+//		public void RefreshDBInfo(OrmConfiguration config, DataRowView schema, EntityField entityField) {
+//			IndexField indexField = null;
+//			foreach (IndexField f in this.Fields) {
+//				if (f.Name == entityField.Name) {
+//					indexField = f;
+//					break;
+//				}
+//			}
+//			if (indexField == null) {
+//				indexField = new IndexField();
+//				indexField.Name = entityField.Name;
+//				this.Fields.Add(indexField);
+//			}
+//			this.DBName = (string)schema["INDEX_NAME"];
+//			this.PrimaryKey = (bool)schema["PRIMARY_KEY"];
+//			//if (this.PrimaryKey) this.Name = "ID";
+//			//else this.IsExcluded = true;
+//			this.Unique = (bool)schema["UNIQUE"];
+//			if (this.Name == string.Empty) {
+//				if (this.PrimaryKey) {
+//					this.IsExcluded = !config.AutoEnableMappedIndexes && !config.AutoEnablePrimaryIndex;
+//					if (config.RenamePrimaryIndex && config.PrimaryIndexName != "") {
+//						this.Name = config.PrimaryIndexName;
+//					}
+//					else {
+//						this.Name = this.DBName;
+//					}
+//					this.DeleteBy = true;
+//				}
+//				else {
+//					this.IsExcluded = !config.AutoEnableMappedIndexes;
+//					this.Name = this.DBName;
+//				}
+//			}
+//		}
+//		
+//		public void RemoveUnusedFields(DataView schema) {
+//			for (int i=this.Fields.Count-1; i>=0; i--) {
+//				IndexField field = this.Fields[i];
+//				if (!SchemaContainsField(schema, field)) {
+//					this.Fields.Remove(field);
+//				}
+//			}
+//		}
+//		
+//		private bool SchemaContainsField(DataView schema, IndexField field) {
+//			string dbColumn = string.Empty;
+//			foreach (EntityField f in this.Entity.Fields) {
+//				if (f.Name == field.Name) {
+//					dbColumn = f.DBColumn;
+//					break;
+//				}
+//			}
+//			if (dbColumn == string.Empty) {
+//				dbColumn = field.Name;
+//			}
+//			foreach (DataRowView row in schema) {
+//				if ((string)row["TABLE_NAME"] == this.Entity.DBEntityName 
+//					&& (string)row["INDEX_NAME"] == this.DBName 
+//					&& (string)row["COLUMN_NAME"] == dbColumn) {
+//					return true;
+//				}
+//			}
+//			return false;
+//		}
+//
 		public override string ToString() {
 			return this.Name;
 		}

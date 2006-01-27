@@ -50,6 +50,7 @@ namespace Ch3Etah.Metadata.OREntities
 		private string _targetIndexName = "";
 		private bool _isProperty = true;
 		private bool _isCollection = true;
+		private bool _isConstrained = false;
 		private bool _cascadeDelete = false;
 		private bool _cascadeUpdate = false;
 		private bool _hidden = false;
@@ -150,6 +151,14 @@ namespace Ch3Etah.Metadata.OREntities
 //					_inverse = false;
 //				}
 			}
+		}
+		
+		[XmlAttribute("isconstrained")]
+		[Category("Link setup")]
+		public bool IsConstrained 
+		{
+			get { return _isConstrained; }
+			set { _isConstrained = value; }
 		}
 		
 		[Category("Field")]

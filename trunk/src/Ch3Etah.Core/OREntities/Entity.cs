@@ -299,367 +299,235 @@ namespace Ch3Etah.Metadata.OREntities {
 
 		#endregion Misc Properties
 
-		#region RefreshDBInfo
-
-		public void RefreshDBInfo(DataSource dataSource, DatabaseSchema database, TableSchema table) {
-			Debug.WriteLine("Parsing data source information for the table [" + table.Name + "].");
-			Debug.Indent();
-			try
-			{
-				DataSourceName = dataSource.Name;
-				DBName = database.Name;
-				DBEntityName = table.Name;
-				if (Name == string.Empty) 
-				{
-					Name = table.Name.Replace(" ", "");
-				}
-				FillFields(dataSource.OrmConfiguration, table);
-				if (dataSource.OrmConfiguration.AutoMapIndexes)
-				{
-					FillIndexes(dataSource);
-				}
-			}
-			finally
-			{
-				Debug.Unindent();
-			}
-		}
-
-
-		public void RefreshDBLinks(DataSource ds)
-		{
-			FillManyToLinks(ds);
-			FillOneToLinks(ds);
-		}
-		private void FillManyToLinks(DataSource ds)
-		{
-			FillLinks(ds, "FK_", "PK_");
-		}
-
-		private void FillOneToLinks(DataSource ds)
-		{
-			FillLinks(ds, "PK_", "FK_");
-// removed by Jacob Eggleston
-//			// Create Objects
-//			Link oLink;
-//			DataView dbLinkSchemas;
-//			Entity oTargetEntity = null;
-//			Index oTargetIndex = null;
-//			IndexField oTargetIndexField = null;
-//			LinkField oSourceLinkField = null;
-//			Boolean bIndexExists = false;
+//		#region RefreshDBInfo
 //
-//			Trace.Unindent();
-//			Trace.WriteLine(String.Format("Create Links from Entity \"{0}\"", this.Name));
-//			Trace.Indent();
-//
-//			// Get Schemas
-//			dbLinkSchemas = GetDBLinkSchema(ds);
-//
-//			// Lopping on Fields
-//			foreach (EntityField tmpField in this.Fields)
+//		public void RefreshDBInfo(OleDbDataSource dataSource, DatabaseSchema database, TableSchema table) {
+//			Debug.WriteLine("Parsing data source information for the table [" + table.Name + "].");
+//			Debug.Indent();
+//			try
 //			{
-//				// Clear Flag
-//				bIndexExists = false;
-//
-//				if (tmpField.KeyField) // PK
+//				DataSourceName = dataSource.Name;
+//				DBName = database.Name;
+//				DBEntityName = table.Name;
+//				if (Name == string.Empty) 
 //				{
-//					Trace.WriteLine(String.Format("Parsing PK \"{0}\"", tmpField.Name));
-//
-//					// Filter Indexes
-//					dbLinkSchemas.RowFilter = String.Format("PK_COLUMN_NAME = '{0}' AND PK_TABLE_NAME = '{1}'", tmpField.DBColumn, this.DBEntityName);
-//
-//					// Looping on FK's
-//					foreach (DataRowView tmpDataRowView in dbLinkSchemas)
-//					{
-//						Trace.WriteLine(String.Format("Parsing FK \"{0}\"", tmpDataRowView["FK_NAME"]));
-//
-//						// Get Target Entity
-//						oTargetEntity = Project.CurrentProject.GetEntity(tmpDataRowView["FK_TABLE_NAME"].ToString());
-//
-//						if (oTargetEntity == null)
-//						{
-//							Trace.WriteLine(String.Format("Entity for Table \"{0}\" not Found.", tmpDataRowView["FK_TABLE_NAME"]));
-//							continue;
-//						}
-//
-//						// Check if the Link Alread Exists
-//						foreach (Link tmpLink in this.Links)
-//						{
-//							if (tmpLink.Fields.Count.Equals(1) && tmpLink.Fields[0].Name.Equals(tmpDataRowView["FK_COLUMN_NAME"].ToString()))
-//							{
-//								Trace.WriteLine(String.Format("Link por Field \"{0}\" Alread Exists", tmpField.Name));
-//								bIndexExists = true;
-//								break;
-//							}
-//						}
-//
-//						if (bIndexExists) { break; }
-//
-//						// Lopping on TargetEntity to Find the Correct Index
-//						foreach (Index tmpIndex in oTargetEntity.Indexes)
-//						{
-//							if (tmpIndex.Fields.Count.Equals(1) && tmpIndex.Fields[0].Name.EndsWith(tmpDataRowView["FK_COLUMN_NAME"].ToString()))
-//							{
-//								oTargetIndex = tmpIndex;
-//								break;
-//							}
-//						}
-//
-//						// Check if Exists
-//						if (oTargetIndex == null)
-//						{
-//							Trace.WriteLine(String.Format("Creating Target Index for FK \"{0}\"", tmpDataRowView["FK_NAME"]));
-//
-//							// Create Target Index
-//							oTargetIndex = new Index();
-//							oTargetIndex.SelectBy = true;
-//							oTargetIndex.DeleteBy = false;
-//							oTargetIndex.Name = tmpDataRowView["FK_COLUMN_NAME"].ToString();
-//							oTargetIndex.Unique = false;
-//							oTargetIndex.DBName = tmpDataRowView["FK_COLUMN_NAME"].ToString();
-//							oTargetIndex.PrimaryKey = false;
-//
-//							// Create Target Index Field
-//							oTargetIndexField = new IndexField();
-//							oTargetIndexField.Name = tmpDataRowView["FK_COLUMN_NAME"].ToString();
-//							oTargetIndexField.PartialTextMatch = false;
-//
-//							// Add Target Index Field on Target Index
-//							oTargetIndex.Fields.Add(oTargetIndexField);
-//
-//							// Add Target Index on Target Entity
-//							oTargetEntity.Indexes.Add(oTargetIndex);
-//						}
-//
-//						// Create Link
-//						oLink = new Link();
-//						oLink.TargetEntityName = oTargetEntity.Name;
-//						oLink.TargetIndexName = oTargetIndex.Name;
-//						oLink.IsCollection = true;
-//						oLink.IsProperty = true;
-//						oLink.ReadOnly = true;
-//
-//						// Check if the Target Index is Unique
-//						if (oTargetIndex.Unique) // 1-N Relation
-//						{
-//							oLink.Name = oTargetEntity.Name; // N-M Relation
-//						}
-//						else { oLink.Name = oTargetEntity.PluralName; }
-//							
-//						// Check Delete Relation Action
-//						if (tmpDataRowView["DELETE_RULE"].ToString().Equals("NO ACTION"))
-//						{
-//							oLink.CascadeDelete = false;
-//						}
-//						else { oLink.CascadeUpdate = true; }
-//
-//						// Check Update Relation Action
-//						if (tmpDataRowView["UPDATE_RULE"].ToString().Equals("NO ACTION"))
-//						{
-//							oLink.CascadeDelete = false;
-//						}
-//						else { oLink.CascadeUpdate = true; }
-//
-//						// Create Link Field
-//						oSourceLinkField = new LinkField();
-//						oSourceLinkField.SourceFieldName = this.Fields.GetFieldFromDBColumn(tmpDataRowView["PK_COLUMN_NAME"].ToString()).Name;
-//						oSourceLinkField.TargetFieldName = oTargetEntity.Fields.GetFieldFromDBColumn(tmpDataRowView["FK_COLUMN_NAME"].ToString()).Name;
-//
-//						// Add Link Field on Link
-//						oLink.Fields.Add(oSourceLinkField);
-//
-//						// Add Link on Entity
-//						this.Links.Add(oLink);
-//					}
-//
-//					if (bIndexExists) { continue; }
+//					Name = table.Name.Replace(" ", "");
+//				}
+//				FillFields(dataSource.OrmConfiguration, table);
+//				if (dataSource.OrmConfiguration.AutoMapIndexes)
+//				{
+//					FillIndexes(dataSource);
 //				}
 //			}
-		}
-
-		private void FillLinks(DataSource ds, string sourcePrefix, string targetPrefix)
-		{
-			DataView linkSchema = GetDBLinkSchema(ds);
-			linkSchema.RowFilter = string.Format(
-				"{1}TABLE_NAME = '{0}'"
-				, this.DBEntityName
-				, sourcePrefix);
-			linkSchema.Table.Columns.Add("Key", typeof(string));
-			ArrayList keys = new ArrayList();
-			foreach (DataRowView row in linkSchema)
-			{
-				row["Key"] = row[sourcePrefix + "NAME"] + "_" + row[targetPrefix + "NAME"];
-				if (row[sourcePrefix + "NAME"] is string && !keys.Contains(row[sourcePrefix + "NAME"] as string))
-				{
-					keys.Add(row["Key"] as string);
-				}
-			}
-
-			foreach (string key in keys)
-			{
-				linkSchema.RowFilter = string.Format(
-					"{2}TABLE_NAME = '{0}' and Key = '{1}'"
-					, this.DBEntityName
-					, key
-					, sourcePrefix);
-				Entity linkedEntity = FindDBEntity(linkSchema[0][targetPrefix + "TABLE_NAME"] as string);
-				if (linkedEntity == null) continue;
-				Index linkedIndex = linkedEntity.Indexes.FindByDBName(linkSchema[0][targetPrefix + "NAME"] as string);
-				if (linkedIndex == null) continue;
-				Link link = this.Links.FindByDBName(key);
-				bool isCollection = (!linkedIndex.Unique && !linkedIndex.PrimaryKey);
-				if (link == null)
-				{
-					link = new Link();
-					link.IsExcluded = !ds.OrmConfiguration.AutoEnableMappedIndexes;
-					link.DBName = key;
-					link.IsProperty = true;
-					if (isCollection)
-						link.Name = linkedEntity.PluralName;
-					else
-						link.Name = linkedEntity.Name;
-					this.Links.Add(link);
-				}
-				link.IsCollection = isCollection;
-				link.TargetEntityName = linkedEntity.Name;
-				link.TargetIndexName = linkedIndex.Name;
-				link.Fields.Clear();
-				foreach (DataRowView row in linkSchema)
-				{
-					LinkField field = new LinkField();
-					field.SourceFieldName = this.Fields.GetFieldFromDBColumn(row[sourcePrefix + "COLUMN_NAME"] as string).Name;
-					field.TargetFieldName = linkedEntity.Fields.GetFieldFromDBColumn(row[targetPrefix + "COLUMN_NAME"] as string).Name;
-					link.Fields.Add(field);
-				}
-			}
-		}
-		
-		private Entity FindDBEntity(string dbName)
-		{
-			foreach (MetadataFile file in this.OwningMetadataFile.Project.MetadataFiles)
-			{
-				foreach (IMetadataEntity entity in file.MetadataEntities)
-				{
-					if (entity is Entity && ((Entity)entity).DBEntityName == dbName)
-					{
-						return (Entity)entity;
-					}
-				}
-			}
-			return null;
-		}
-
-		private EntityField GetEntityField(ColumnSchema column) 
-		{
-			foreach (EntityField field in Fields) {
-				if (field.DBColumn == column.Name) {
-					return field;
-				}
-			}
-			return new EntityField();
-		}
-
-		private void FillFields(OrmConfiguration config, TableSchema table) {
-			foreach (ColumnSchema column in table.Columns.Values) {
-				EntityField field = GetEntityField(column);
-				field.SetEntity(this);
-				field.RefreshDBInfo(config, column);
-				if (!Fields.Contains(field)) {
-					Fields.Add(field);
-				}
-			}
-		}
-
-		private void FillIndexes(DataSource dataSource) {
-			DataView indexes = GetDBIndexes(dataSource);
-			indexes.RowFilter = "TABLE_NAME = '" + DBEntityName + "'";
-			indexes.Sort = "INDEX_NAME asc, ORDINAL_POSITION asc";
-			foreach (DataRowView row in indexes) {
-				Index index = LoadIndexRow(dataSource.OrmConfiguration, row);
-				if (index != null) {
-					index.RemoveUnusedFields(indexes);
-				}
-			}
-		}
-
-		private Index LoadIndexRow(OrmConfiguration config, DataRowView row) {
-			Debug.WriteLine(row["COLUMN_NAME"]);
-			string fieldName = (String) row["COLUMN_NAME"];
-			EntityField field = null;
-			foreach (EntityField f in Fields) {
-				if (f.DBColumn == fieldName) {
-					field = f;
-					break;
-				}
-			}
-			if (field == null) {
-				return null;
-			}
-			string name = (String) row["INDEX_NAME"];
-			Index index = null;
-			foreach (Index i in Indexes) {
-				if (i.DBName == name) {
-					index = i;
-					break;
-				}
-			}
-			if (index == null) {
-				index = new Index();
-				Indexes.Add(index);
-			}
-			index.RefreshDBInfo(config, row, field);
-			return index;
-		}
-
-		private DataView GetDBIndexes(DataSource dataSource) {
-			using (OleDbConnection cn = new OleDbConnection(dataSource.ConnectionString)) {
-				cn.Open();
-				try {
-					DataTable dbIndexes = cn.GetOleDbSchemaTable(OleDbSchemaGuid.Indexes, null);
-					if (dataSource.OrmConfiguration.AutoMapLinks)
-					{
-						FillFKIndexes(cn, dbIndexes);
-					}
-					return new DataView(dbIndexes);
-				}
-				finally {
-					cn.Close();
-				}
-			}
-		}
-		
-		private void FillFKIndexes(OleDbConnection cn, DataTable dbIndexes)
-		{
-			DataView fks = new DataView(cn.GetOleDbSchemaTable(OleDbSchemaGuid.Foreign_Keys, null));
-			fks.RowFilter = string.Format("FK_TABLE_NAME = '{0}'", this.DBEntityName);
-			foreach (DataRowView fk in fks)
-			{
-				DataRow ix = dbIndexes.NewRow();
-				ix["TABLE_NAME"] = (string)fk["FK_TABLE_NAME"];
-				ix["INDEX_NAME"] = (string)fk["FK_NAME"];
-				ix["COLUMN_NAME"] = (string)fk["FK_COLUMN_NAME"];
-				ix["PRIMARY_KEY"] = false;
-				ix["UNIQUE"] = false;
-				ix["ORDINAL_POSITION"] = (Int64)fk["ORDINAL"];
-				dbIndexes.Rows.Add(ix);
-			}
-		}
-		#endregion RefreshDBInfo
-
-
-		private DataView GetDBLinkSchema(DataSource ds) {
-			using (OleDbConnection cn = new OleDbConnection(ds.ConnectionString)) {
-				cn.Open();
-				try {
-					return new DataView(cn.GetOleDbSchemaTable(OleDbSchemaGuid.Foreign_Keys, null));
-				}
-				finally {
-					cn.Close();
-				}
-			}
-		}
-
+//			finally
+//			{
+//				Debug.Unindent();
+//			}
+//		}
+//
+//
+//		public void RefreshDBLinks(OleDbDataSource ds)
+//		{
+//			FillManyToLinks(ds);
+//			FillOneToLinks(ds);
+//		}
+//		private void FillManyToLinks(OleDbDataSource ds)
+//		{
+//			FillLinks(ds, "FK_", "PK_", ds.OrmConfiguration.ExcludeFKSourceFields);
+//		}
+//
+//		private void FillOneToLinks(OleDbDataSource ds)
+//		{
+//			FillLinks(ds, "PK_", "FK_", false);
+//		}
+//
+//		private void FillLinks(OleDbDataSource ds, string sourcePrefix, string targetPrefix, bool excludeSourceFields)
+//		{
+//			DataView linkSchema = GetDBLinkSchema(ds);
+//			linkSchema.RowFilter = string.Format(
+//				"{1}TABLE_NAME = '{0}'"
+//				, this.DBEntityName
+//				, sourcePrefix);
+//			linkSchema.Table.Columns.Add("Key", typeof(string));
+//			ArrayList keys = new ArrayList();
+//			foreach (DataRowView row in linkSchema)
+//			{
+//				row["Key"] = row[sourcePrefix + "NAME"] + "_" + row[targetPrefix + "NAME"];
+//				if (row[sourcePrefix + "NAME"] is string && !keys.Contains(row[sourcePrefix + "NAME"] as string))
+//				{
+//					keys.Add(row["Key"] as string);
+//				}
+//			}
+//
+//			foreach (string key in keys)
+//			{
+//				linkSchema.RowFilter = string.Format(
+//					"{2}TABLE_NAME = '{0}' and Key = '{1}'"
+//					, this.DBEntityName
+//					, key
+//					, sourcePrefix);
+//				Entity linkedEntity = FindDBEntity(linkSchema[0][targetPrefix + "TABLE_NAME"] as string);
+//				if (linkedEntity == null) continue;
+//				Index linkedIndex = linkedEntity.Indexes.FindByDBName(linkSchema[0][targetPrefix + "NAME"] as string);
+//				if (linkedIndex == null) continue;
+//				Link link = this.Links.FindByDBName(key);
+//				bool isCollection = (!linkedIndex.Unique && !linkedIndex.PrimaryKey);
+//				if (link == null)
+//				{
+//					link = new Link();
+//					link.IsExcluded = !ds.OrmConfiguration.AutoEnableMappedLinks;
+//					link.DBName = key;
+//					link.IsProperty = true;
+//					if (isCollection)
+//						link.Name = linkedEntity.PluralName;
+//					else
+//						link.Name = linkedEntity.Name;
+//					this.Links.Add(link);
+//				}
+//				link.IsCollection = isCollection;
+//				link.TargetEntityName = linkedEntity.Name;
+//				link.TargetIndexName = linkedIndex.Name;
+//				link.Fields.Clear();
+//				foreach (DataRowView row in linkSchema)
+//				{
+//					LinkField field = new LinkField();
+//					field.SourceFieldName = this.Fields.GetFieldFromDBColumn(row[sourcePrefix + "COLUMN_NAME"] as string).Name;
+//					field.TargetFieldName = linkedEntity.Fields.GetFieldFromDBColumn(row[targetPrefix + "COLUMN_NAME"] as string).Name;
+//					link.Fields.Add(field);
+//					if (excludeSourceFields && !link.IsExcluded)
+//					{
+//						this.Fields.GetFieldFromName(field.SourceFieldName)
+//							.IsExcluded = true;
+//					}
+//				}
+//			}
+//		}
+//		
+//		private Entity FindDBEntity(string dbName)
+//		{
+//			foreach (MetadataFile file in this.OwningMetadataFile.Project.MetadataFiles)
+//			{
+//				foreach (IMetadataEntity entity in file.MetadataEntities)
+//				{
+//					if (entity is Entity && ((Entity)entity).DBEntityName == dbName)
+//					{
+//						return (Entity)entity;
+//					}
+//				}
+//			}
+//			return null;
+//		}
+//
+//		private EntityField GetEntityField(ColumnSchema column) 
+//		{
+//			foreach (EntityField field in Fields) {
+//				if (field.DBColumn == column.Name) {
+//					return field;
+//				}
+//			}
+//			return new EntityField();
+//		}
+//
+//		private void FillFields(OrmConfiguration config, TableSchema table) {
+//			foreach (ColumnSchema column in table.Columns.Values) {
+//				EntityField field = GetEntityField(column);
+//				field.SetEntity(this);
+//				field.RefreshDBInfo(config, column);
+//				if (!Fields.Contains(field)) {
+//					Fields.Add(field);
+//				}
+//			}
+//		}
+//
+//		private void FillIndexes(OleDbDataSource dataSource) {
+//			DataView indexes = GetDBIndexes(dataSource);
+//			indexes.RowFilter = "TABLE_NAME = '" + DBEntityName + "'";
+//			indexes.Sort = "INDEX_NAME asc, ORDINAL_POSITION asc";
+//			foreach (DataRowView row in indexes) {
+//				Index index = LoadIndexRow(dataSource.OrmConfiguration, row);
+//				if (index != null) {
+//					index.RemoveUnusedFields(indexes);
+//				}
+//			}
+//		}
+//
+//		private Index LoadIndexRow(OrmConfiguration config, DataRowView row) {
+//			Debug.WriteLine(row["COLUMN_NAME"]);
+//			string fieldName = (String) row["COLUMN_NAME"];
+//			EntityField field = null;
+//			foreach (EntityField f in Fields) {
+//				if (f.DBColumn == fieldName) {
+//					field = f;
+//					break;
+//				}
+//			}
+//			if (field == null) {
+//				return null;
+//			}
+//			string name = (String) row["INDEX_NAME"];
+//			Index index = null;
+//			foreach (Index i in Indexes) {
+//				if (i.DBName == name) {
+//					index = i;
+//					break;
+//				}
+//			}
+//			if (index == null) {
+//				index = new Index();
+//				Indexes.Add(index);
+//			}
+//			index.RefreshDBInfo(config, row, field);
+//			return index;
+//		}
+//
+//		private DataView GetDBIndexes(OleDbDataSource dataSource) {
+//			using (OleDbConnection cn = new OleDbConnection(dataSource.ConnectionString)) {
+//				cn.Open();
+//				try {
+//					DataTable dbIndexes = cn.GetOleDbSchemaTable(OleDbSchemaGuid.Indexes, null);
+//					if (dataSource.OrmConfiguration.AutoMapLinks)
+//					{
+//						FillFKIndexes(cn, dbIndexes);
+//					}
+//					return new DataView(dbIndexes);
+//				}
+//				finally {
+//					cn.Close();
+//				}
+//			}
+//		}
+//		
+//		private void FillFKIndexes(OleDbConnection cn, DataTable dbIndexes)
+//		{
+//			DataView fks = new DataView(cn.GetOleDbSchemaTable(OleDbSchemaGuid.Foreign_Keys, null));
+//			fks.RowFilter = string.Format("FK_TABLE_NAME = '{0}'", this.DBEntityName);
+//			foreach (DataRowView fk in fks)
+//			{
+//				DataRow ix = dbIndexes.NewRow();
+//				ix["TABLE_NAME"] = (string)fk["FK_TABLE_NAME"];
+//				ix["INDEX_NAME"] = (string)fk["FK_NAME"];
+//				ix["COLUMN_NAME"] = (string)fk["FK_COLUMN_NAME"];
+//				ix["PRIMARY_KEY"] = false;
+//				ix["UNIQUE"] = false;
+//				ix["ORDINAL_POSITION"] = (Int64)fk["ORDINAL"];
+//				dbIndexes.Rows.Add(ix);
+//			}
+//		}
+//		#endregion RefreshDBInfo
+//
+//
+//		private DataView GetDBLinkSchema(OleDbDataSource ds) {
+//			using (OleDbConnection cn = new OleDbConnection(ds.ConnectionString)) {
+//				cn.Open();
+//				try {
+//					return new DataView(cn.GetOleDbSchemaTable(OleDbSchemaGuid.Foreign_Keys, null));
+//				}
+//				finally {
+//					cn.Close();
+//				}
+//			}
+//		}
+//
 		public override string ToString() {
 			return Name;
 		}

@@ -6,8 +6,6 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 
-using Adapdev.Data;
-using Adapdev.Data.Schema;
 
 using Ch3Etah.Core.Config;
 using Ch3Etah.Core.Metadata;
@@ -174,13 +172,13 @@ namespace Ch3Etah.Gui.DocumentHandling {
 		private Button cmdTest;
 		private Label label7;
 
-		private DataSource _dataSource;
+		private OleDbDataSource _dataSource;
 
 		#endregion
 
 		#region Constructors
 
-		public OleDbDataSourceEditor(DataSource ds) : this() {
+		public OleDbDataSourceEditor(OleDbDataSource ds) : this() {
 			_dataSource = ds;
 		}
 
@@ -217,7 +215,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 		public object SelectedObject {
 			get { return _dataSource; }
 			set {
-				_dataSource = (DataSource) value;
+				_dataSource = (OleDbDataSource) value;
 				DoBinding();
 			}
 		}
@@ -305,7 +303,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 				this.cmdBuild.Enabled = false;
 				this.cmdTest.Enabled = false;
 				this.tvwEntities.Enabled = false;
-				UpdateProjectEntities();
+				_dataSource.SyncProjectEntities(GetSelectedTables());
 			}
 			catch (Exception ex) 
 			{
@@ -375,35 +373,25 @@ namespace Ch3Etah.Gui.DocumentHandling {
 				this.btnAddEntities.Enabled = false;
 				tvwEntities.Nodes.Clear();
 				tvwEntities.ImageList = Images.GetImageList();
-				TreeNode tables = new TreeNode("Tables", Images.Indexes.FolderClosed, Images.Indexes.FolderOpen);
-				TreeNode views = new TreeNode("Views", Images.Indexes.FolderClosed, Images.Indexes.FolderOpen);
 
-				DatabaseSchema schema = SchemaBuilder.CreateDatabaseSchema(_dataSource.ConnectionString, DbType.SQLSERVER, DbProviderType.OLEDB);
-				tvwEntities.Tag = schema;
-				foreach (TableSchema entity in schema.SortedTables.Values) {
-					if (entity.TableType == TableType.TABLE) {
-						TreeNode node = new TreeNode(entity.Name, Images.Indexes.Details, Images.Indexes.Details);
-						node.Tag = entity;
-						tables.Nodes.Add(node);
+				DataSourceEntityGroup[] groups = _dataSource.ListEntities();
+				foreach (DataSourceEntityGroup group in groups) {//TableSchema entity in schema.SortedTables.Values) {
+					TreeNode groupNode = new TreeNode(group.Name, Images.Indexes.FolderClosed, Images.Indexes.FolderOpen);
+					groupNode.Tag = group;
+					foreach (DataSourceEntity entity in group.Entities) {
+						TreeNode entityNode = new TreeNode(entity.Name, Images.Indexes.Details, Images.Indexes.Details);
+						entityNode.Tag = entity;
+						groupNode.Nodes.Add(entityNode);
 						if (DataSourcedEntityExistsInProject(entity))
 						{
-							node.Checked = true;
+							entityNode.Checked = true;
 						}
 					}
-					else if (entity.TableType == TableType.VIEW) {
-						TreeNode node = new TreeNode(entity.Name, Images.Indexes.Edit, Images.Indexes.Edit);
-						node.Tag = entity;
-						views.Nodes.Add(node);
-					}
+					tvwEntities.Nodes.Add(groupNode);
+					groupNode.Expand();
 				}
-
-				if (tables.Nodes.Count > 0) {
-					tvwEntities.Nodes.Add(tables);
-					tables.Expand();
-					tvwEntities.SelectedNode = tables;
-				}
-				if (views.Nodes.Count > 0) {
-					tvwEntities.Nodes.Add(views);
+				if (tvwEntities.Nodes.Count > 0) {
+					tvwEntities.SelectedNode = tvwEntities.Nodes[0];
 				}
 				DoEnableButtons();
 			}
@@ -418,92 +406,92 @@ namespace Ch3Etah.Gui.DocumentHandling {
 
 		}
 		
-		private bool DataSourcedEntityExistsInProject(TableSchema table)
+		private bool DataSourcedEntityExistsInProject(DataSourceEntity table)
 		{
-			Entity entity = GetMetadataEntity(table, false);
-			if (entity != null && entity.DataSourceName == _dataSource.Name)
-				return true;
-			else
-				return false;
-		}
-
-		private void UpdateProjectEntities() {
-			ArrayList updatedEntities = new ArrayList();
-			//loop through selected entities and add / update each one
-			DatabaseSchema db = (DatabaseSchema) tvwEntities.Tag;
-			foreach (TableSchema table in GetSelectedTables()) {
-				Entity entity = GetMetadataEntity(table, true);
-				entity.RefreshDBInfo(_dataSource, db, table);
-				updatedEntities.Add(entity);
-				if (_dataSource.OrmConfiguration.CustomEntityAttributes.Count > 0)
+			foreach (MetadataFile file in _dataSource.Project.MetadataFiles) 
+			{
+				foreach (IMetadataEntity entity in file.MetadataEntities) 
 				{
-					foreach (NameValuePair att in _dataSource.OrmConfiguration.CustomEntityAttributes)
+					if (entity is Entity &&
+						((Entity) entity).DBEntityName == table.Name &&
+						((Entity) entity).DataSourceName == _dataSource.Name) 
 					{
-						((IMetadataNode)entity).SetAttributeValue(att.Name, att.Value);
-//						XmlAttribute xmlAtt = ((IMetadataNode)entity).LoadedXmlNode.Attributes[att.Name];
-//						if (xmlAtt == null)
-//						{
-//							xmlAtt = ((IMetadataNode)entity).LoadedXmlNode.OwnerDocument.CreateAttribute(att.Name);
-//							((IMetadataNode)entity).LoadedXmlNode.Attributes.Append(xmlAtt);
-//						}
-//						xmlAtt.Value = att.Value;
+						return true;
 					}
 				}
-				entity.OwningMetadataFile.Save();
 			}
-			if (_dataSource.OrmConfiguration.AutoMapLinks)
-			{
-				foreach (Entity entity in updatedEntities)
-				{
-					entity.RefreshDBLinks(_dataSource);
-					entity.OwningMetadataFile.Save();
-				}
-			}
-			OnSelectedObjectChanged();
+			return false;
 		}
 
-		private TableSchemaCollection GetSelectedTables() {
-			TableSchemaCollection tables = new TableSchemaCollection();
+//		private void UpdateProjectEntities() {
+////			ArrayList updatedEntities = new ArrayList();
+////			//loop through selected entities and add / update each one
+////			DatabaseSchema db = (DatabaseSchema) tvwEntities.Tag;
+////			foreach (TableSchema table in GetSelectedTables()) {
+////				Entity entity = GetMetadataEntity(table, true);
+////				entity.RefreshDBInfo(_dataSource, db, table);
+////				updatedEntities.Add(entity);
+////				if (_dataSource.OrmConfiguration.CustomEntityAttributes.Count > 0)
+////				{
+////					foreach (NameValuePair att in _dataSource.OrmConfiguration.CustomEntityAttributes)
+////					{
+////						((IMetadataNode)entity).SetAttributeValue(att.Name, att.Value);
+////					}
+////				}
+////				entity.OwningMetadataFile.Save();
+////			}
+////			if (_dataSource.OrmConfiguration.AutoMapLinks)
+////			{
+////				foreach (Entity entity in updatedEntities)
+////				{
+////					entity.RefreshDBLinks(_dataSource);
+////					entity.OwningMetadataFile.Save();
+////				}
+////			}
+////			OnSelectedObjectChanged();
+//		}
+//
+		private DataSourceEntity[] GetSelectedTables() 
+		{
+			ArrayList tables = new ArrayList();
 			foreach (TreeNode groupNode in tvwEntities.Nodes) {
 				foreach (TreeNode node in groupNode.Nodes) {
-					if (node.Checked || groupNode.Checked) {
-						tables.Add((TableSchema) node.Tag);
+					if (node.Checked) {
+						tables.Add(node.Tag);
 					}
 				}
 			}
-			return tables;
+			return (DataSourceEntity[])tables.ToArray(typeof(DataSourceEntity));
 		}
 
-		private Entity GetMetadataEntity(TableSchema table, bool create) {
-			foreach (MetadataFile file in _dataSource.Project.MetadataFiles) {
-				foreach (IMetadataEntity entity in file.MetadataEntities) {
-					if ((entity as Entity) != null &&
-					    (((Entity) entity).DataSourceName == _dataSource.Name || file.GetFullPath() == GetEntityFileName(table)) &&
-					    ((Entity) entity).DBEntityName == table.Name) {
-						return (Entity) entity;
-					}
-				}
-			}
-			if (create)
-				return CreateMetadataEntity(table);
-			else
-				return null;
-		}
 
-		private Entity CreateMetadataEntity(TableSchema table) {
-			//string fileName = GetEntityFileName(table);
-			MetadataFile file = new MetadataFile(_dataSource.Project);
-			Entity entity = new Entity();
-			file.MetadataEntities.Add(entity);
-			file.Save(GetEntityFileName(table));
-			_dataSource.Project.MetadataFiles.Add(file);
-			return entity;
-		}
-
-		private string GetEntityFileName(TableSchema table) {
-			return Path.Combine(_dataSource.Project.GetFullMetadataPath(), table.Name + ".xml");
-		}
-
+//		private Entity GetMetadataEntity(DataSourceEntity table) {
+//			foreach (MetadataFile file in _dataSource.Project.MetadataFiles) {
+//				foreach (IMetadataEntity entity in file.MetadataEntities) {
+//					if ((entity as Entity) != null &&
+//					    (((Entity) entity).DataSourceName == _dataSource.Name || file.GetFullPath() == GetEntityFileName(table)) &&
+//					    ((Entity) entity).DBEntityName == table.Name) {
+//						return (Entity) entity;
+//					}
+//				}
+//			}
+//			return null;
+//		}
+//
+//		private Entity CreateMetadataEntity(DataSourceEntity table) {
+//			//string fileName = GetEntityFileName(table);
+//			MetadataFile file = new MetadataFile(_dataSource.Project);
+//			Entity entity = new Entity();
+//			file.MetadataEntities.Add(entity);
+//			file.Save(GetEntityFileName(table));
+//			_dataSource.Project.MetadataFiles.Add(file);
+//			return entity;
+//		}
+//
+//		private string GetEntityFileName(DataSourceEntity table) {
+//			return Path.Combine(_dataSource.Project.GetFullMetadataPath(), table.Name + ".xml");
+//		}
+//
 		#endregion Private methods
 
 		private void tvwEntities_AfterCheck(object sender, TreeViewEventArgs e) {

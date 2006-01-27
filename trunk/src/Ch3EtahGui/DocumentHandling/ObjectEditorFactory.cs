@@ -49,7 +49,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 			}
 			
 			IObjectEditor editor = null;
-			if (contextObject.GetType() == typeof(DataSource)) {
+			if (contextObject is OleDbDataSource) {
 //				editor = new DataSourceEditor();
 				editor = new OleDbDataSourceEditor();
 			}

@@ -21,13 +21,13 @@
 using System;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Data.OleDb;
 using System.Diagnostics;
-using System.Drawing.Design;
-using System.Windows.Forms;
+using System.IO;
 using System.Xml.Serialization;
 
 using Ch3Etah.Core.Config;
+using Ch3Etah.Core.Metadata;
+using Ch3Etah.Metadata.OREntities;
 
 namespace Ch3Etah.Core.ProjectLib {
 	
@@ -49,9 +49,10 @@ namespace Ch3Etah.Core.ProjectLib {
 	#endregion DataSourceNameChangedEvent
 
 	[Serializable()]
+	[XmlInclude(typeof(OleDbDataSource))]
 	[Designer("Ch3Etah.Design.Designers.DataSourceDesigner,Ch3Etah.Design", typeof(IDesigner))]
-	public class DataSource {
-		
+	public abstract class DataSource : IDataSource
+	{
 		#region DataSourceNameChangedEvent
 		public static event DataSourceNameChangedEventHandler NameChanged;
 
@@ -69,29 +70,9 @@ namespace Ch3Etah.Core.ProjectLib {
 		#endregion DataSourceNameChangedEvent
 
 		#region Fields
-
 		private Guid _guid = Guid.NewGuid();
 		private string _name = string.Empty;
-		private string _server = string.Empty;
-		private string _database = string.Empty;
-		private string _user = string.Empty;
-		private string _password = string.Empty;
-		private ConnectionType _connectionType;
-		private string _connectionTypeName = string.Empty;
-		private string _connectionString = string.Empty;
-		private OrmConfiguration _ormConfiguration = Ch3EtahConfig.OrmConfiguration.Clone();
 		private Project _project;
-		#endregion
-
-		#region Constructors
-
-		public DataSource() {}
-
-		public DataSource(string name, string connectionString) : this() {
-			this._name = name;
-			this._connectionString = connectionString;
-		}
-
 		#endregion
 
 		#region Project
@@ -141,114 +122,52 @@ namespace Ch3Etah.Core.ProjectLib {
 			}
 		}
 
-		[Browsable(false)]
-		public string Server {
-			get { return _server; }
-			set { _server = value; }
-		}
+		#endregion
 
-		[Browsable(false)]
-		public string Database {
-			get { return _database; }
-			set { _database = value; }
-		}
+		public abstract void TestConnection();
+		public abstract bool IsConnectionValid();
+		public abstract DataSourceEntityGroup[] ListEntities();
+		public abstract void SyncProjectEntities();
+		public abstract void SyncProjectEntities(DataSourceEntity[] entities);
 
-		[Browsable(false)]
-		public string User {
-			get { return _user; }
-			set { _user = value; }
-		}
-
-		[Browsable(false)]
-		public string Password {
-			get { return _password; }
-			set { _password = value; }
-		}
-
-		[Browsable(false), XmlIgnore()]
-		public ConnectionType ConnectionType {
-			get { return _connectionType; }
-			set {
-				_connectionType = value;
-				_connectionTypeName = _connectionType.Name;
-			}
-		}
-
-		[Browsable(false)]
-		[XmlElement("ConnectionType")]
-		public string ConnectionTypeName {
-			get {
-				if (_connectionType != null) {
-					return _connectionType.Name;
-				}
-				else {
-					return _connectionTypeName;
-				}
-			}
-			set {
-				if (_connectionType == null) {
-					_connectionTypeName = value;
-					_connectionType = ConnectionTypeFactory.GetConnectionType(value, false);
-				}
-				else {
-					_connectionType = ConnectionTypeFactory.GetConnectionType(value);
-					_connectionTypeName = _connectionType.Name;
-				}
-			}
-		}
-
-		[Browsable(true)]
-		[Editor("Ch3Etah.Design.CustomUI.OleDbConnectionStringDialog", typeof(UITypeEditor))]
-		public string ConnectionString {
-			get {
-				if (_connectionType != null && _connectionType.ConnectionStringTemplate != string.Empty) {
-					_connectionString = BuildConnectionString(_connectionType.ConnectionStringTemplate);
-				}
-				return _connectionString;
-			}
-			set { _connectionString = value; }
-		}
-
-		[TypeConverter(typeof (ExpandableObjectConverter))]
-		public OrmConfiguration OrmConfiguration
+		protected Entity GetMetadataEntity(DataSourceEntity table, bool create) 
 		{
-			get { return _ormConfiguration; }
-			set { _ormConfiguration = value; }
+			foreach (MetadataFile file in this.Project.MetadataFiles) 
+			{
+				foreach (IMetadataEntity entity in file.MetadataEntities) 
+				{
+					if (entity is Entity &&
+						((Entity) entity).DBEntityName == table.Name &&
+						(((Entity) entity).DataSourceName == this.Name 
+						 || file.GetFullPath() == GetEntityFileName(table))) 
+					{
+						return (Entity) entity;
+					}
+				}
+			}
+			if (create)
+				return CreateMetadataFile(table);
+			else
+				return null;
 		}
-		#endregion
 
-		#region TestConnection
-
-		public void TestConnection() 
+		private Entity CreateMetadataFile(DataSourceEntity entity) 
 		{
-			OleDbConnection cn = new OleDbConnection(ConnectionString);
-			cn.Open();
-			cn.Close();
+			MetadataFile file = new MetadataFile(this.Project);
+			Entity orEntity = new Entity();
+			file.MetadataEntities.Add(orEntity);
+			file.Save(GetEntityFileName(entity));
+			this.Project.MetadataFiles.Add(file);
+			return orEntity;
 		}
 
-		public bool IsConnectionValid() {
-			try {
-				TestConnection();
-				return true;
-			}
-			catch {
-				return false;
-			}
+		protected string GetEntityFileName(DataSourceEntity entity) 
+		{
+			string filepart = entity.Namespace == "" ? 
+				entity.Name : entity.Namespace + "_" + entity.Name;
+			return Path.Combine(this.Project.GetFullMetadataPath(), filepart + ".xml");
 		}
 
-		#endregion
 
-		#region Private methods
-
-		public string BuildConnectionString(string connectionStringTemplate) {
-			string cn = connectionStringTemplate;
-			cn = cn.Replace(ConnectionType.SERVER_PLACEHOLDER, this.Server);
-			cn = cn.Replace(ConnectionType.DATABASE_PLACEHOLDER, this.Database);
-			cn = cn.Replace(ConnectionType.USER_PLACEHOLDER, this.User);
-			cn = cn.Replace(ConnectionType.PASSWORD_PLACEHOLDER, this.Password);
-			return cn;
-		}
-
-		#endregion
 	}
 }

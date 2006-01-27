@@ -272,87 +272,87 @@ namespace Ch3Etah.Metadata.OREntities {
 
 		#endregion Database Field Properties
 
-		#region RefreshDBInfo
-
-		public void RefreshDBInfo(OrmConfiguration config, ColumnSchema column) {
-			if (Name == string.Empty) {
-				Name = column.Name.Replace(" ", "");
-				ReadOnly = column.IsReadOnly;
-				AllowNull = column.AllowNulls;
-			}
-			Debug.WriteLine(
-				column.Name + " " + column.DataTypeId + " " + column.DataType + " " + column.NetType + " " + column.Length + " " +
-				column.DefaultValue + " " + column.DefaultTestValue);
-			DBColumn = column.Name;
-			KeyField = column.IsPrimaryKey;
-			if (KeyField && config.RenameSurrogateKeys && config.SurrogateKeyName != "") this.Name = config.SurrogateKeyName;
-			DBIdentity = column.IsAutoIncrement;
-			DBReadOnly = column.IsReadOnly;
-			DBType = GetDbType(column.DataTypeId);
-			Type = column.NetType.Replace("System.", "");
-			//this.VBType
-			DBSize = column.Length;
-			DBPrecision = 8;
-		}
-
-		// HACK
-		private string GetDbType(int typeID) {
-			switch (typeID) {
-				case 2:
-					return "smallint";
-				case 3:
-					return "int";
-				case 4:
-					return "real";
-				case 5:
-					return "float";
-				case 6:
-					return "money"; //smallmoney
-				case 11:
-					return "bit";
-				case 17:
-					return "tinyint";
-				case 20:
-					return "bigint";
-				case 72:
-					return "uniqueidentifier";
-				case 128:
-					return "binary";
-				case 129:
-					return "char";
-				case 130:
-					return "nchar";
-				case 131:
-					return "decimal"; //numeric
-				case 135:
-					return "datetime"; //smalldatetime
-				case 200:
-					return "varchar";
-				case 201:
-					return "text";
-				case 202:
-					return "nvarchar";
-				case 203:
-					return "ntext";
-				case 204:
-					return "varbinary";
-				case 205:
-					return "image";
-				default:
-					throw new InvalidOperationException("Type ID '" + typeID.ToString() + "' is not a recognized type code. (" + this.GetFullyQualifiedName() + ")");
-			}
-		}
-		
-		private string GetFullyQualifiedName() {
-			string nm = "";
-			if (_entity != null) {
-				nm = "Entity=" + _entity.ToString() + ":";
-			}
-			nm += "Field=" + this.ToString();
-			return nm;
-		}
-
-		#endregion RefreshDBInfo
+//		#region RefreshDBInfo
+//
+//		public void RefreshDBInfo(OrmConfiguration config, ColumnSchema column) {
+//			if (Name == string.Empty) {
+//				Name = column.Name.Replace(" ", "");
+//				ReadOnly = column.IsReadOnly;
+//				AllowNull = column.AllowNulls;
+//			}
+//			Debug.WriteLine(
+//				column.Name + " " + column.DataTypeId + " " + column.DataType + " " + column.NetType + " " + column.Length + " " +
+//				column.DefaultValue + " " + column.DefaultTestValue);
+//			DBColumn = column.Name;
+//			KeyField = column.IsPrimaryKey;
+//			if (KeyField && config.RenameSurrogateKeys && config.SurrogateKeyName != "") this.Name = config.SurrogateKeyName;
+//			DBIdentity = column.IsAutoIncrement;
+//			DBReadOnly = column.IsReadOnly;
+//			DBType = GetDbType(column.DataTypeId);
+//			Type = column.NetType.Replace("System.", "");
+//			//this.VBType
+//			DBSize = column.Length;
+//			DBPrecision = 8;
+//		}
+//
+//		// HACK
+//		private string GetDbType(int typeID) {
+//			switch (typeID) {
+//				case 2:
+//					return "smallint";
+//				case 3:
+//					return "int";
+//				case 4:
+//					return "real";
+//				case 5:
+//					return "float";
+//				case 6:
+//					return "money"; //smallmoney
+//				case 11:
+//					return "bit";
+//				case 17:
+//					return "tinyint";
+//				case 20:
+//					return "bigint";
+//				case 72:
+//					return "uniqueidentifier";
+//				case 128:
+//					return "binary";
+//				case 129:
+//					return "char";
+//				case 130:
+//					return "nchar";
+//				case 131:
+//					return "decimal"; //numeric
+//				case 135:
+//					return "datetime"; //smalldatetime
+//				case 200:
+//					return "varchar";
+//				case 201:
+//					return "text";
+//				case 202:
+//					return "nvarchar";
+//				case 203:
+//					return "ntext";
+//				case 204:
+//					return "varbinary";
+//				case 205:
+//					return "image";
+//				default:
+//					throw new InvalidOperationException("Type ID '" + typeID.ToString() + "' is not a recognized type code. (" + this.GetFullyQualifiedName() + ")");
+//			}
+//		}
+//		
+//		private string GetFullyQualifiedName() {
+//			string nm = "";
+//			if (_entity != null) {
+//				nm = "Entity=" + _entity.ToString() + ":";
+//			}
+//			nm += "Field=" + this.ToString();
+//			return nm;
+//		}
+//
+//		#endregion RefreshDBInfo
 
 		public override string ToString() {
 			return Name;

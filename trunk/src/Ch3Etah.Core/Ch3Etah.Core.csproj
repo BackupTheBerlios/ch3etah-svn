@@ -590,6 +590,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ProjectLib\IDataSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ProjectLib\IMetadataFileObserver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -616,6 +621,11 @@
                 />
                 <File
                     RelPath = "ProjectLib\MetadataFileObserverCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ProjectLib\OleDbDataSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

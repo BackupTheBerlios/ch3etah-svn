@@ -27,6 +27,7 @@ namespace Ch3Etah.Core.Config
 		
 		private bool _autoFillLinks = false;
 		private bool _enableMappedLinks = true;
+		private bool _excludeFKSourceFields = false;
 		private bool _renameSurrogateKeys = false;
 		private string _surrogateKeyName = "ID";
 		private bool _renamePrimaryIndex = true;
@@ -52,6 +53,15 @@ namespace Ch3Etah.Core.Config
 		{
 			get { return _enableMappedLinks; }
 			set { _enableMappedLinks = value; }
+		}
+
+		[Category("Links")]
+		[Description("If true, fields on the source side of foreign key links will be excluded from the mapped entity. For example, if Person contains a FK link to PersonType, then PersonTypeID would not be mapped in person. This is usefull for O/R mappers like NHibernate which would automatically insert the correct value in PersonTypeID on the Person table based on the PersonType link.")]
+		[XmlAttribute()]
+		public bool ExcludeFKSourceFields
+		{
+			get { return _excludeFKSourceFields; }
+			set { _excludeFKSourceFields = value; }
 		}
 
 		[Category("Fields")]
