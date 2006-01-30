@@ -322,6 +322,7 @@ namespace Ch3Etah.Core.ProjectLib {
 		
 		private static void CheckFileVersionCompatibility(Stream stream)
 		{
+			Debug.WriteLine("Checking project file version compatibility.");
 			XmlDocument doc = new XmlDocument();
 			doc.Load(stream);
 			stream.Position = 0;
@@ -372,8 +373,10 @@ namespace Ch3Etah.Core.ProjectLib {
 			foreach (XmlNode datasource in dataSources.SelectNodes("DataSource"))
 			{
 				XmlAttribute xsiType = datasource.Attributes["type", "http://www.w3.org/2001/XMLSchema-instance"];
-				if (xsiType == null) 
+				XmlNode dsName = datasource.SelectSingleNode("Name");
+				if (xsiType == null && dsName != null) 
 				{
+					Debug.WriteLine("Adding xsi:type attribute to " + dsName.Value + " data source.");
 					xsiType = datasource.OwnerDocument.CreateAttribute("type", "http://www.w3.org/2001/XMLSchema-instance");
 					datasource.Attributes.Append(xsiType);
 					xsiType.Value = "OleDbDataSource";
