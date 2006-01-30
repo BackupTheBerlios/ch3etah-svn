@@ -9,7 +9,9 @@
 
 
 !define PRODUCT_NAME "CH3ETAH"
-!define PRODUCT_VERSION "0.5.2"
+!ifndef PRODUCT_VERSION
+  !define PRODUCT_VERSION "0.0.0"
+!endif
 !define PRODUCT_PUBLISHER "Jacob Eggleston"
 !define PRODUCT_WEB_SITE "http://ch3etah.sourceforge.net"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Ch3EtahGui.exe"
