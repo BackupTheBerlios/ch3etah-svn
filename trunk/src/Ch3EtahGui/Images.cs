@@ -21,6 +21,7 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 
@@ -30,6 +31,7 @@ namespace Ch3Etah.Gui {
 				// ImageList.Images[int index] does not preserve alpha channel.
 		private static Image[] images = null;
 		private static ImageList imageList = null;
+		private static int _count = 0;
 
 		static Images() {
 			LoadImages();
@@ -45,13 +47,15 @@ namespace Ch3Etah.Gui {
 			Bitmap bitmap = new Bitmap(bitmapStream);
 			int count = bitmap.Width/bitmap.Height;
 			imageList = null;
-			images = new Image[count];
+			images = new Image[count * 2];
 			Rectangle rectangle = new Rectangle(0, 0, bitmap.Height, bitmap.Height);
 			for (int i = 0; i < count; i++) {
 				images[i] = bitmap.Clone(rectangle, bitmap.PixelFormat);
+				images[count + i] = GetFadedIcon(images[i]);
 				rectangle.X += bitmap.Height;
 			}
 			bitmapStream.Close();
+			_count = count;
 		}
 
 		public static ImageList GetImageList() {
@@ -69,6 +73,35 @@ namespace Ch3Etah.Gui {
 
 		public static Image ByIndex(int i) {
 			return images[i];
+		}
+
+		
+		private static Image GetFadedIcon(Image icon)
+		{
+			ColorMatrix cm = new ColorMatrix();
+			cm.Matrix00 = cm.Matrix11 = cm.Matrix22 = 1.0f;
+			cm.Matrix33 = 0.15f;
+
+			System.Drawing.Imaging.ImageAttributes attr = new System.Drawing.Imaging.ImageAttributes();
+			attr.SetColorMatrix(cm);
+
+			Bitmap fadedbmp = new Bitmap(icon.Width, icon.Height);
+			Graphics g = Graphics.FromImage(fadedbmp);
+			Brush br = new SolidBrush(Color.FromArgb(255, 255, 255));
+			g.FillRectangle(br, 0, 0, fadedbmp.Width, fadedbmp.Height);
+			g.DrawImage(
+				icon
+				, new Rectangle(0, 0, icon.Width, icon.Height)
+				, 0, 0, icon.Width, icon.Height
+				, GraphicsUnit.Pixel
+				, attr);
+			return fadedbmp;
+		}
+
+
+		public static int Count
+		{
+			get { return _count; }
 		}
 
 		#region Indexes

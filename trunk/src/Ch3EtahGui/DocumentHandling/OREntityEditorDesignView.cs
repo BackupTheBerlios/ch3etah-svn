@@ -302,7 +302,11 @@ namespace Ch3Etah.Gui.DocumentHandling
 			// Add Fields
 			foreach (EntityField field in entity.Fields)
 			{
-				TreeNode oNode = new TreeNode(field.Name, Images.Indexes.EntityField, Images.Indexes.EntityField);
+				TreeNode oNode = null;
+				if (field.IsExcluded)
+					oNode = new TreeNode(field.Name, Images.Indexes.EntityField + Images.Count, Images.Indexes.EntityField + Images.Count);
+				else
+					oNode = new TreeNode(field.Name, Images.Indexes.EntityField, Images.Indexes.EntityField);
 				oNode.Tag = field;
 				fieldsNode.Nodes.Add(oNode);
 
@@ -345,7 +349,11 @@ namespace Ch3Etah.Gui.DocumentHandling
 			// Add Indexes
 			foreach (Index index in entity.Indexes)
 			{
-				TreeNode oNode = new TreeNode(index.Name, Images.Indexes.EntityField, Images.Indexes.EntityField);
+				TreeNode oNode = null;
+				if (index.IsExcluded)
+					oNode = new TreeNode(index.Name, Images.Indexes.EntityField + Images.Count, Images.Indexes.EntityField + Images.Count);
+				else
+					oNode = new TreeNode(index.Name, Images.Indexes.EntityField, Images.Indexes.EntityField);
 				oNode.Tag = index;
 				IndexesNode.Nodes.Add(oNode);
 
@@ -381,7 +389,11 @@ namespace Ch3Etah.Gui.DocumentHandling
 			// Add Links
 			foreach (Link link in entity.Links)
 			{
-				TreeNode oNode = new TreeNode(link.Name, Images.Indexes.EntityField, Images.Indexes.EntityField);
+				TreeNode oNode = null;
+				if (link.IsExcluded)
+					oNode = new TreeNode(link.Name, Images.Indexes.EntityField + Images.Count, Images.Indexes.EntityField + Images.Count);
+				else
+					oNode = new TreeNode(link.Name, Images.Indexes.EntityField, Images.Indexes.EntityField);
 				oNode.Tag = link;
 				LinksNode.Nodes.Add(oNode);
 

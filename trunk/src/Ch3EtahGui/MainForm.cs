@@ -634,8 +634,8 @@ namespace Ch3Etah.Gui {
 				foreach (string file in files) {
 					if (!_project.MetadataFiles.Contains(file)) {
 						TreeNode node = metadataFilesNode.Nodes.Add(Path.GetFileName(file));
-						node.ImageIndex = Images.Indexes.New;
-						node.SelectedImageIndex = Images.Indexes.New;
+						node.ImageIndex = Images.Indexes.DocumentText + Images.Count;
+						node.SelectedImageIndex = Images.Indexes.DocumentText + Images.Count;
 						node.Tag = new MetadataFilePlaceholder(file);
 					}
 				}
@@ -703,8 +703,16 @@ namespace Ch3Etah.Gui {
 				}
 				node.Text = command.Name;
 				//TreeNode node = generatorCommandsNode.Nodes.Add(command.Name);
-				node.ImageIndex = Images.Indexes.DocumentArrowGreen;
-				node.SelectedImageIndex = Images.Indexes.DocumentArrowGreen;
+				if (command.Enabled)
+				{
+					node.ImageIndex = Images.Indexes.DocumentArrowGreen;
+					node.SelectedImageIndex = Images.Indexes.DocumentArrowGreen;
+				}
+				else
+				{
+					node.ImageIndex = Images.Indexes.DocumentArrowGreen + Images.Count;
+					node.SelectedImageIndex = Images.Indexes.DocumentArrowGreen + Images.Count;
+				}
 				node.Tag = command;
 			}
 			foreach (TreeNode node in generatorCommandsNode.Nodes) {
