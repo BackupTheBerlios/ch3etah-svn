@@ -12,6 +12,9 @@
 !ifndef PRODUCT_VERSION
   !define PRODUCT_VERSION "0.0.0"
 !endif
+!ifndef RELEASE_MODE
+  !define RELEASE_MODE "Debug"
+!endif
 !define PRODUCT_PUBLISHER "Jacob Eggleston"
 !define PRODUCT_WEB_SITE "http://ch3etah.sourceforge.net"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Ch3EtahGui.exe"
@@ -74,7 +77,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "Setup.exe"
+OutFile "${RELEASE_MODE}\CH3ETAH-Install.exe"
 InstallDir "$PROGRAMFILES\CH3ETAH"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
