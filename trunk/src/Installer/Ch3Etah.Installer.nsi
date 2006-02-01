@@ -140,7 +140,9 @@ Section -AdditionalIcons
 SectionEnd
 
 Section -Post
+  DetailPrint "Creating uninstaller..."
   WriteUninstaller "$INSTDIR\uninst.exe"
+  DetailPrint "Adding application to Add/Remove Programs list..."
   WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\Ch3EtahGui.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
@@ -149,9 +151,18 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
 
+  DetailPrint "Creating file type associations..."
   !insertmacro APP_ASSOCIATE "ch3" "Ch3etah.ProjectFile" "CH3ETAH Project File" "$INSTDIR\Project.ico" "Open" "$\"$INSTDIR\Ch3EtahGui.exe$\" $\"%1$\""
   ;!insertmacro APP_ASSOCIATE_ADDVERB "Ch3etah.ProjectFile" "generate" "Generate Code" "$\"$INSTDIR\Ch3EtahGui.exe$\" $\"%1$\" /run"
+  DetailPrint ""
+  DetailPrint "    Updating explorer icons..."
+  DetailPrint "    (THIS MAY TAKE A FEW MOMENTS, PLEASE BE PATIENT)"
+  DetailPrint ""
   !insertmacro UPDATEFILEASSOC
+
+  DetailPrint ""
+  DetailPrint "Installation complete!"
+  DetailPrint ""
 SectionEnd
 
 
