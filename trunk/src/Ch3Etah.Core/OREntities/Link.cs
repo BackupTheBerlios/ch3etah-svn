@@ -155,6 +155,7 @@ namespace Ch3Etah.Metadata.OREntities
 		
 		[XmlAttribute("isconstrained")]
 		[Category("Link setup")]
+		[Description("Allows you to specify if the link represents a foreign key.")]
 		public bool IsConstrained 
 		{
 			get { return _isConstrained; }

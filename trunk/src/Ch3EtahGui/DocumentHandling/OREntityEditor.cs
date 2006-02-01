@@ -19,10 +19,12 @@
  */
 
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml;
+using Ch3Etah.Core.Metadata;
 using Ch3Etah.Core.ProjectLib;
 using Ch3Etah.Metadata.OREntities;
 using Reflector.UserInterface;
@@ -171,6 +173,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 			this.designView.AfterItemLabelEdit += new System.EventHandler(this.designView_AfterItemLabelEdit);
 			this.designView.OnEdit += new System.EventHandler(this.designView_OnEdit);
 			this.designView.OnDelete += new System.EventHandler(this.designView_OnDelete);
+			this.designView.OnExclude += new System.EventHandler(this.designView_OnExclude);
 			this.designView.OnInsert += new System.EventHandler(this.designView_OnInsert);
 			this.designView.OnTreeViewSelectItem += new System.EventHandler(this.designView_OnTreeViewSelectItem);
 			this.designView.OnRename += new System.EventHandler(this.designView_OnRename);
@@ -625,35 +628,42 @@ namespace Ch3Etah.Gui.DocumentHandling
 
 		private void designView_OnInsert(object sender, EventArgs e)
 		{
-			if (this.designView.CurrentSelectedNode != null)
+			if (this.designView.CurrentSelectedNode == null) return;
+
+			TreeNode collectionNode = this.designView.CurrentSelectedNode;
+			if ( !(collectionNode.Tag is IList)
+				&& this.designView.CurrentSelectedNode.Parent != null
+				&& this.designView.CurrentSelectedNode.Parent.Tag is IList)
 			{
-				if (this.designView.CurrentSelectedNode.Tag is EntityFieldCollection)
-				{
-					EntityField oEntity = new EntityField();
-					oEntity.Name = Const_DefaultNewFieldText;
+				collectionNode = this.designView.CurrentSelectedNode.Parent;
+			}
 
-					((EntityFieldCollection) this.designView.CurrentSelectedNode.Tag).Add(oEntity);
+			if (collectionNode.Tag is EntityFieldCollection)
+			{
+				EntityField oEntity = new EntityField();
+				oEntity.Name = Const_DefaultNewFieldText;
 
-					this.designView.RefreshFieldsList(this.designView.CurrentSelectedNode, this.designView.CurrentEntity, true);
-				}
-				else if (this.designView.CurrentSelectedNode.Tag is IndexCollection)
-				{
-					Index oIndex = new Index();
-					oIndex.Name = Const_DefaultNewIndexText;
+				((EntityFieldCollection) collectionNode.Tag).Add(oEntity);
 
-					((IndexCollection) this.designView.CurrentSelectedNode.Tag).Add(oIndex);
+				this.designView.RefreshFieldsList(collectionNode, this.designView.CurrentEntity, true);
+			}
+			else if (collectionNode.Tag is IndexCollection)
+			{
+				Index oIndex = new Index();
+				oIndex.Name = Const_DefaultNewIndexText;
 
-					this.designView.RefreshIndexesList(this.designView.CurrentSelectedNode, this.designView.CurrentEntity, true);
-				}
-				else if (this.designView.CurrentSelectedNode.Tag is LinkCollection)
-				{
-					Link oLink = new Link();
-					oLink.Name = Const_DefaultNewLinkText;
+				((IndexCollection) collectionNode.Tag).Add(oIndex);
 
-					((LinkCollection) this.designView.CurrentSelectedNode.Tag).Add(oLink);
+				this.designView.RefreshIndexesList(collectionNode, this.designView.CurrentEntity, true);
+			}
+			else if (collectionNode.Tag is LinkCollection)
+			{
+				Link oLink = new Link();
+				oLink.Name = Const_DefaultNewLinkText;
 
-					this.designView.RefreshLinksList(this.designView.CurrentSelectedNode, this.designView.CurrentEntity, true);
-				}
+				((LinkCollection) collectionNode.Tag).Add(oLink);
+
+				this.designView.RefreshLinksList(collectionNode, this.designView.CurrentEntity, true);
 			}
 		}
 
@@ -680,21 +690,56 @@ namespace Ch3Etah.Gui.DocumentHandling
 		{
 			if (this.designView.CurrentSelectedNode != null)
 			{
-				if (this.designView.CurrentSelectedNode.Tag is EntityField)
+				if (this.designView.CurrentSelectedNode.Parent == null 
+					|| !(this.designView.CurrentSelectedNode.Parent.Tag is IList))
 				{
-					this.btnRemoveField_Click(null, null);
+					return;
 				}
-				else if (this.designView.CurrentSelectedNode.Tag is Index)
-				{
-					this.btnRemoveIndex_Click(null, null);
-				}
-				else if (this.designView.CurrentSelectedNode.Tag is Link)
-				{
-					this.btnRemoveLink_Click(null, null);
-				}
+				
+				int itemImageIndex = this.designView.CurrentSelectedNode.ImageIndex;
+				int itemSelectedImageIndex = this.designView.CurrentSelectedNode.SelectedImageIndex;
+				if (itemImageIndex > Images.Count) itemImageIndex -= Images.Count;
+				if (itemSelectedImageIndex > Images.Count) itemSelectedImageIndex -= Images.Count;
+
+				IList list = (IList)this.designView.CurrentSelectedNode.Parent.Tag;
+				list.Remove(this.designView.CurrentSelectedNode.Tag);
+
+				this.designView.RefreshCollectionList(this.designView.CurrentSelectedNode.Parent, itemImageIndex, itemSelectedImageIndex);
+				return;
+//				if (this.designView.CurrentSelectedNode.Tag is EntityField)
+//				{
+//					this.btnRemoveField_Click(null, null);
+//				}
+//				else if (this.designView.CurrentSelectedNode.Tag is Index)
+//				{
+//					this.btnRemoveIndex_Click(null, null);
+//				}
+//				else if (this.designView.CurrentSelectedNode.Tag is Link)
+//				{
+//					this.btnRemoveLink_Click(null, null);
+//				}
 			}
 		}
 
+		private void designView_OnExclude(object sender, EventArgs e)
+		{
+			if (this.designView.CurrentSelectedNode != null 
+				&& this.designView.CurrentSelectedNode.Tag is IMetadataNode
+				&& this.designView.CurrentSelectedNode.Parent != null
+				&& this.designView.CurrentSelectedNode.Parent.Tag is IList)
+			{
+				((IMetadataNode)this.designView.CurrentSelectedNode.Tag).IsExcluded
+					= !((IMetadataNode)this.designView.CurrentSelectedNode.Tag).IsExcluded;
+				
+				int itemImageIndex = this.designView.CurrentSelectedNode.ImageIndex;
+				int itemSelectedImageIndex = this.designView.CurrentSelectedNode.SelectedImageIndex;
+				if (itemImageIndex > Images.Count) itemImageIndex -= Images.Count;
+				if (itemSelectedImageIndex > Images.Count) itemSelectedImageIndex -= Images.Count;
+				
+				this.designView.RefreshCollectionList(this.designView.CurrentSelectedNode.Parent, itemImageIndex, itemSelectedImageIndex);
+				this.designView.RefreshPropertyGrid();
+			}
+		}
 
 		#endregion
 

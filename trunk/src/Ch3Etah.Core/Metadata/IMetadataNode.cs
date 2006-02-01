@@ -71,6 +71,7 @@ namespace Ch3Etah.Core.Metadata
 		
 		XmlNode LoadedXmlNode { get; }
 		bool IsDirty { get; }
+		bool IsExcluded { get; set; }
 		void LoadXml(XmlNode node);
 		void PersistChanges(XmlNode node);
 		void SetAttributeValue(string attributeName, string value);

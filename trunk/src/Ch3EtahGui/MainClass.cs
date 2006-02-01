@@ -39,6 +39,9 @@ namespace Ch3Etah.Gui {
 		[STAThread]
 		private static int Main(string[] args) {
 			
+//			Application.EnableVisualStyles();
+//			Application.DoEvents();
+			
 			SplashScreen.Show();
 
 			ExceptionReporter.Register();

@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Windows.Forms;
+using Ch3Etah.Core.Metadata;
 using Ch3Etah.Metadata.OREntities;
 
 namespace Ch3Etah.Gui.DocumentHandling
@@ -81,6 +83,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 			this.treeViewFIL.Size = new System.Drawing.Size(176, 400);
 			this.treeViewFIL.TabIndex = 27;
 			this.treeViewFIL.KeyUp += new System.Windows.Forms.KeyEventHandler(this.treeViewFIL_KeyUp);
+			this.treeViewFIL.DoubleClick += new System.EventHandler(this.treeViewFIL_DoubleClick);
 			this.treeViewFIL.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView_AfterSelect);
 			this.treeViewFIL.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeViewFIL_AfterLabelEdit);
 			// 
@@ -142,6 +145,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 		#region Fields
 
 		public event System.EventHandler OnInsert;
+		public event System.EventHandler OnExclude;
 		public event System.EventHandler OnDelete;
 		public event System.EventHandler OnEdit;
 		public event System.EventHandler OnRename;
@@ -409,7 +413,58 @@ namespace Ch3Etah.Gui.DocumentHandling
 			}
 		}
 
-
+		internal void RefreshCollectionList(TreeNode collectionNode, int itemImageIndex, int itemSelectedImageIndex)
+		{
+			if ( !(collectionNode.Tag is IList) ) throw new ApplicationException("Node tag does not implement IList.");
+			
+			IList list = (IList)collectionNode.Tag;
+			foreach (TreeNode node in collectionNode.Nodes)
+			{
+				if (node.Tag == null || !list.Contains(node.Tag))
+				{
+					node.Remove();
+				}
+			}
+			foreach (object item in list)
+			{
+				TreeNode node = FindContextNode(item, collectionNode.Nodes);
+				if (node == null)
+				{
+					node = new TreeNode(item.ToString());
+					node.Tag = item;
+					collectionNode.Nodes.Insert(list.IndexOf(item), node);
+				}
+				
+				if (item is IMetadataNode && ((IMetadataNode)item).IsExcluded)
+				{
+					node.ImageIndex = itemImageIndex + Images.Count;
+					node.SelectedImageIndex = itemSelectedImageIndex + Images.Count;
+				}
+				else
+				{
+					node.ImageIndex = itemImageIndex;
+					node.SelectedImageIndex = itemSelectedImageIndex;
+				}
+			}
+		}
+		
+		private TreeNode FindContextNode(object contextItem, TreeNodeCollection nodes)
+		{
+			foreach (TreeNode node in nodes) 
+			{
+				if (node.Tag == contextItem) 
+				{
+					return node;
+				}
+				TreeNode subNode = FindContextNode(contextItem, node.Nodes);
+				if (subNode != null) 
+				{
+					return subNode;
+				}
+			}
+			return null;
+		}
+		
 		#endregion
 
 		internal void RefreshPropertyGrid()
@@ -431,11 +486,11 @@ namespace Ch3Etah.Gui.DocumentHandling
 			// Simple Select
 			if (_OldNode != null && _OldNode.Parent != null && e.Node.Nodes.Count > 0)
 			{
-				_OldNode.Collapse();
+				//_OldNode.Collapse();
 			}
 			if (e.Node.Nodes.Count > 0)
 			{
-				e.Node.Expand();
+				//e.Node.Expand();
 			}
 
 			// End Simple Select
@@ -459,6 +514,10 @@ namespace Ch3Etah.Gui.DocumentHandling
 			}
 			else if (e.KeyData == Keys.Delete) // Remove
 			{
+				if (this.OnExclude != null) { this.OnExclude(null, null); }
+			}
+			else if (e.KeyData == (Keys.Shift | Keys.Delete)) // Remove
+			{
 				if (this.OnDelete != null) { this.OnDelete(null, null); }
 			}
 			else if (e.KeyData == Keys.Enter || e.KeyData == Keys.Return) // Edit (Enter or KeyPad Enter)
@@ -472,6 +531,11 @@ namespace Ch3Etah.Gui.DocumentHandling
 
 			// Clear Edit Control
 			this._EditControl = false;
+		}
+
+		private void treeViewFIL_DoubleClick(object sender, System.EventArgs e)
+		{
+		
 		}
 
 
