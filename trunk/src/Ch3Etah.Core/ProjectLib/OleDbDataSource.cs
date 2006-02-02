@@ -280,10 +280,13 @@ namespace Ch3Etah.Core.ProjectLib
 		#endregion RefreshDBInfo
 
 		#region FillFields
+		private ArrayList _dbfields;
 		private void FillFields(TableSchema table, Entity entity) 
 		{
+			_dbfields = new ArrayList();
 			foreach (ColumnSchema column in table.Columns.Values) 
 			{
+				_dbfields.Add(column.Name);
 				EntityField field = GetEntityField(column, entity);
 				field.SetEntity(entity);
 				this.RefreshFieldDBInfo(column, field);
@@ -395,16 +398,29 @@ namespace Ch3Etah.Core.ProjectLib
 			return nm;
 		}
 
+		private void RemoveStaleDBFields(Entity entity)
+		{
+			foreach (EntityField field in entity.Fields)
+			{
+				if (!_dbfields.Contains(field.DBColumn))
+				{
+					field.IsExcluded = true;
+				}
+			}
+		}
 		#endregion FillFields
 
 		#region FillIndexes
+		private ArrayList _dbindexes;
 		private void FillIndexes(Entity entity) 
 		{
+			_dbindexes = new ArrayList();
 			DataView indexes = GetDBIndexes(entity);
 			indexes.RowFilter = "TABLE_NAME = '" + entity.DBEntityName + "'";
 			indexes.Sort = "INDEX_NAME asc, ORDINAL_POSITION asc";
 			foreach (DataRowView row in indexes) 
 			{
+				_dbindexes.Add(row["INDEX_NAME"] as string);
 				Index index = LoadIndexRow(row, entity);
 				if (index != null) 
 				{
@@ -568,13 +584,26 @@ namespace Ch3Etah.Core.ProjectLib
 			}
 			return false;
 		}
+		private void RemoveStaleDBIndexes(Entity entity)
+		{
+			foreach (Index index in entity.Indexes)
+			{
+				if (!_dbindexes.Contains(index.DBName))
+				{
+					index.IsExcluded = true;
+				}
+			}
+		}
 		#endregion FillIndexes
 
 		#region RefreshDBLinks
+		private ArrayList _dblinks;
 		private void RefreshDBLinks(Entity entity)
 		{
+			_dblinks = new ArrayList();
 			FillManyToLinks(entity);
 			FillOneToLinks(entity);
+			RemoveStaleDBLinks(entity);
 		}
 		private void FillManyToLinks(Entity entity)
 		{
@@ -590,9 +619,9 @@ namespace Ch3Etah.Core.ProjectLib
 		{
 			DataView linkSchema = GetDBLinkSchema(entity);
 			linkSchema.RowFilter = string.Format(
-				"{1}TABLE_NAME = '{0}'"
-				, entity.DBEntityName
-				, sourcePrefix);
+				"{0}TABLE_NAME = '{1}'"
+				, sourcePrefix
+				, entity.DBEntityName);
 			linkSchema.Table.Columns.Add("Key", typeof(string));
 			ArrayList keys = new ArrayList();
 			foreach (DataRowView row in linkSchema)
@@ -606,6 +635,7 @@ namespace Ch3Etah.Core.ProjectLib
 
 			foreach (string key in keys)
 			{
+				_dblinks.Add(key);
 				linkSchema.RowFilter = string.Format(
 					"{2}TABLE_NAME = '{0}' and Key = '{1}'"
 					, entity.DBEntityName
@@ -665,6 +695,16 @@ namespace Ch3Etah.Core.ProjectLib
 			}
 		}
 
+		private void RemoveStaleDBLinks(Entity entity)
+		{
+			foreach (Link link in entity.Links)
+			{
+				if (!_dblinks.Contains(link.DBName))
+				{
+					link.IsExcluded = true;
+				}
+			}
+		}
 		#endregion RefreshDBLinks
 
 	}

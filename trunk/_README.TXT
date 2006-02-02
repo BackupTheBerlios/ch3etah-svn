@@ -9,11 +9,14 @@ Compilation and Installation
 
     CH3ETAH currently requires .NET Framework version 1.1 to run.
     
-    To compile for the first time, run the _BUILD_ALL.BAT file in the .\src directory. This will make sure the library asseblies referenced by CH3ETAH are built, then build CH3ETAH itself. Subsequent builds can be done by simply running _BUILD.BAT.
+    To compile for the first time, run the _BUILD_ALL.BAT file in the .\src directory. This will make sure the library asseblies referenced by CH3ETAH are built, then build CH3ETAH itself. Subsequent builds can be done by simply running _BUILD.BAT or _BUILD_CODESMITH_SUPPORT.BAT (see the note on CodeSmith support below).
     
-    This version includes support for CodeSmith templates. However, due to licence restrictions, we cannot redistribute the CodeSmith engine with this application. Because of this, the code necessary for CodeSmith support has not been included in the build files mentioned above. In order to compile CH3ETAH with CodeSmith support, you will need to do the following:
+note on CodeSmith Support
+-------------------------
+    This version includes support for CodeSmith templates. However, due to licence restrictions, we cannot redistribute the CodeSmith engine with this application. Because of this, the code necessary for CodeSmith support has not been included in the normal build files. In order to compile CH3ETAH with CodeSmith support, you will need to do the following:
     
     1. Run the previously mentioned _BUILD_ALL.BAT file.
     2. Download CodeSmith (http://www.codesmithtools.com/)
     3. Copy CodeSmith.Engine.dll to the .\src\Libraries\bin directory.
-    4. Compile/run using the Ch3Etah.CodeSmithSupport.sln solution in the .\src directory.
+    4. Run _BUILD_CODESMITH_SUPPORT.BAT to create an installer for CH3ETAH with support for CodeSmith.
+       4a. Alternately you can build/run using the Ch3Etah.CodeSmithSupport.sln solution in the .\src directory.

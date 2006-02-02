@@ -82,7 +82,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 			this.treeViewFIL.ShowRootLines = false;
 			this.treeViewFIL.Size = new System.Drawing.Size(176, 400);
 			this.treeViewFIL.TabIndex = 27;
-			this.treeViewFIL.KeyUp += new System.Windows.Forms.KeyEventHandler(this.treeViewFIL_KeyUp);
+			this.treeViewFIL.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treeViewFIL_KeyDown);
 			this.treeViewFIL.DoubleClick += new System.EventHandler(this.treeViewFIL_DoubleClick);
 			this.treeViewFIL.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView_AfterSelect);
 			this.treeViewFIL.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeViewFIL_AfterLabelEdit);
@@ -112,6 +112,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 			this.propertyGrid1.ToolbarVisible = false;
 			this.propertyGrid1.ViewBackColor = System.Drawing.SystemColors.Window;
 			this.propertyGrid1.ViewForeColor = System.Drawing.SystemColors.WindowText;
+			this.propertyGrid1.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid1_PropertyValueChanged);
 			// 
 			// OREntityEditorDesignView
 			// 
@@ -504,7 +505,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 		}
 
 
-		private void treeViewFIL_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
+		private void treeViewFIL_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
 		{
 			if (this.TreeView.SelectedNode != null && this.TreeView.SelectedNode.IsEditing) { return; }
 
@@ -522,7 +523,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 			}
 			else if (e.KeyData == Keys.Enter || e.KeyData == Keys.Return) // Edit (Enter or KeyPad Enter)
 			{
-				if (this.OnEdit != null && ! this._EditControl) { this.OnEdit(null, null); }
+				if (this.OnEdit != null && !this._EditControl) { this.OnEdit(null, null); }
 			}
 			else if (e.KeyData == Keys.F2) // Rename
 			{
@@ -535,10 +536,28 @@ namespace Ch3Etah.Gui.DocumentHandling
 
 		private void treeViewFIL_DoubleClick(object sender, System.EventArgs e)
 		{
-		
+			if (this.OnEdit != null && !this._EditControl) { this.OnEdit(null, null); }
 		}
 
+		private void propertyGrid1_PropertyValueChanged(object s, System.Windows.Forms.PropertyValueChangedEventArgs e)
+		{
+			UpdateCurrentNodeContext();
+		}
 
+		internal void UpdateCurrentNodeContext()
+		{
+			if (this.CurrentSelectedNode != null
+				&& this.CurrentSelectedNode.Parent != null
+				&& this.CurrentSelectedNode.Parent.Tag is IList)
+			{
+				int itemImageIndex = this.CurrentSelectedNode.ImageIndex;
+				int itemSelectedImageIndex = this.CurrentSelectedNode.SelectedImageIndex;
+				if (itemImageIndex > Images.Count) itemImageIndex -= Images.Count;
+				if (itemSelectedImageIndex > Images.Count) itemSelectedImageIndex -= Images.Count;
+				
+				this.RefreshCollectionList(this.CurrentSelectedNode.Parent, itemImageIndex, itemSelectedImageIndex);
+			}
+		}
 
 	}
 }

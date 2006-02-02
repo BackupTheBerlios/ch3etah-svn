@@ -203,7 +203,7 @@ namespace Ch3Etah.Gui
 				Clipboard.SetDataObject(
 					new DataObject(DataFormats.Text, txtError.Text), 
 					true);
-				Utility.OpenUrl(@"http://sourceforge.net/forum/forum.php?forum_id=403406");
+				Utility.OpenUrl(@"http://sourceforge.net/tracker/?func=add&group_id=118003&atid=679758");
 				this.Close();
 			}
 			catch (Exception ex)

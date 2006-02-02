@@ -731,13 +731,8 @@ namespace Ch3Etah.Gui.DocumentHandling
 				((IMetadataNode)this.designView.CurrentSelectedNode.Tag).IsExcluded
 					= !((IMetadataNode)this.designView.CurrentSelectedNode.Tag).IsExcluded;
 				
-				int itemImageIndex = this.designView.CurrentSelectedNode.ImageIndex;
-				int itemSelectedImageIndex = this.designView.CurrentSelectedNode.SelectedImageIndex;
-				if (itemImageIndex > Images.Count) itemImageIndex -= Images.Count;
-				if (itemSelectedImageIndex > Images.Count) itemSelectedImageIndex -= Images.Count;
-				
-				this.designView.RefreshCollectionList(this.designView.CurrentSelectedNode.Parent, itemImageIndex, itemSelectedImageIndex);
 				this.designView.RefreshPropertyGrid();
+				this.designView.UpdateCurrentNodeContext();
 			}
 		}
 
