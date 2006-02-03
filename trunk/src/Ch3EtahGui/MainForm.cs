@@ -1093,7 +1093,16 @@ namespace Ch3Etah.Gui {
 		}
 
 		private void ViewProperties_Click(object sender, EventArgs e) {
-			propertiesWindow.Show();
+			if (propertiesWindow == null)
+			{
+				propertiesWindow = new PropertiesWindow();
+				propertiesWindow.Show(projectExplorer.Pane, DockAlignment.Bottom | DockAlignment.Left, .7);
+				HookDockContents();
+			}
+			else 
+			{
+				propertiesWindow.Show();
+			}
 		}
 
 		private void ViewProjectExplorer_Click(object sender, EventArgs e) {
