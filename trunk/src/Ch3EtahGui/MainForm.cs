@@ -145,8 +145,6 @@ namespace Ch3Etah.Gui {
 		private CommandBarItem cbiExit;
 
 		private CommandBarItem cbiWebSite;
-		private CommandBarItem cbiRunTests;
-		private CommandBarItem cbiFixFileAssociations;
 		private DockPanel dockPanel1;
 		private CommandBarItem cbiAbout;
 		private TreeView tvwProject;
@@ -468,7 +466,21 @@ namespace Ch3Etah.Gui {
 		#endregion Project operations
 
 		#region UI code
-
+		private PropertyGrid PropertyGrid
+		{
+			get
+			{
+				if (propertyGrid == null)
+				{
+					return new PropertyGrid();
+				}
+				else
+				{
+					return propertyGrid;
+				}
+			}
+			set { propertyGrid = value; }
+		}
 		private void RefreshUI() {
 			RefreshTitleBar();
 			EnableCommandBarButtons();
@@ -593,7 +605,6 @@ namespace Ch3Etah.Gui {
 					node.Text = file.Name;
 					node.ImageIndex = Images.Indexes.DocumentText;
 					node.SelectedImageIndex = Images.Indexes.DocumentText;
-					SetupMetadataFileNode(node);
 					sortedItems.Add(file.Name, node);
 				}
 				catch
@@ -641,49 +652,6 @@ namespace Ch3Etah.Gui {
 				}
 			}
 			return metadataFilesNode;
-		}
-
-		private void SetupMetadataFileNode(TreeNode node) {
-			if (node.Nodes.Count > 0) {
-//				foreach(TreeNode entityNode in node.Nodes) {
-//					Entity entity = (Entity) entityNode.Tag;
-//				}
-				node.Nodes.Clear();
-			}
-
-//			foreach (Entity entity in ((MetadataFile) node.Tag).MetadataEntities) {
-//				TreeNode entityNode = node.Nodes.Add(entity.Name);
-//				entityNode.ImageIndex = Images.Indexes.Entity;
-//				entityNode.SelectedImageIndex = Images.Indexes.Entity;
-//				entityNode.Tag = entity;
-//
-//				TreeNode fieldsNode = entityNode.Nodes.Add("Fields");
-//				fieldsNode.ImageIndex = Images.Indexes.FolderOpen;
-//				fieldsNode.SelectedImageIndex = Images.Indexes.FolderOpen;
-//				fieldsNode.Tag = entity.Fields;
-//				SetupMetadataCollectionNode(fieldsNode, entity.Fields, Images.Indexes.EntityField);
-//
-//				TreeNode indexesNode = entityNode.Nodes.Add("Indexes");
-//				indexesNode.ImageIndex = Images.Indexes.FolderOpen;
-//				indexesNode.SelectedImageIndex = Images.Indexes.FolderOpen;
-//				indexesNode.Tag = entity.Indexes;
-//				SetupMetadataCollectionNode(indexesNode, entity.Indexes, Images.Indexes.EntityIndex);
-//
-//				TreeNode linksNode = entityNode.Nodes.Add("Links");
-//				linksNode.ImageIndex = Images.Indexes.FolderOpen;
-//				linksNode.SelectedImageIndex = Images.Indexes.FolderOpen;
-//				linksNode.Tag = entity.Links;
-//				SetupMetadataCollectionNode(linksNode, entity.Links, Images.Indexes.Properties);
-//			}
-		}
-
-		private void SetupMetadataCollectionNode(TreeNode node, ICollection items, int image) {
-			foreach (object item in items) {
-				TreeNode itemNode = node.Nodes.Add(((MetadataNodeBase) item).Name);
-				itemNode.ImageIndex = image;
-				itemNode.SelectedImageIndex = image;
-				itemNode.Tag = item;
-			}
 		}
 
 		private TreeNode SetupGeneratorCommandsNode(TreeNode projectNode) {
@@ -1109,9 +1077,6 @@ namespace Ch3Etah.Gui {
 				new CommandBarButton("&Application Settings", new EventHandler(ViewApplicationSettings_Click));
 
 			cbiWebSite = new CommandBarButton(Images.Home, "CH3ETAH &Web Site", new EventHandler(WebSite_Click));
-			cbiRunTests = new CommandBarButton(Images.Properties, "&Run Tests", new EventHandler(RunTests_Click));
-			cbiFixFileAssociations =
-				new CommandBarButton(Images.Tools, "Fi&x file associations", new EventHandler(FixFileAssociations_Click));
 			cbiAbout = new CommandBarButton(Images.Help, "&About", new EventHandler(About_Click));
 
 			cbiExit = new CommandBarButton("E&xit", new EventHandler(Exit_Click));
@@ -1560,21 +1525,21 @@ namespace Ch3Etah.Gui {
 			if (e.Node != null) {
 				object nodeData = e.Node.Tag;
 				if (nodeData is MetadataNodeBase) {
-					propertyGrid.Enabled = false;
+					PropertyGrid.Enabled = false;
 				}
 				else {
-					propertyGrid.Enabled = true;
+					PropertyGrid.Enabled = true;
 				}
-				propertyGrid.SelectedObject = nodeData;
+				PropertyGrid.SelectedObject = nodeData;
 			}
 		}
 
 		private void propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e) {
-			RefreshTreeview();
+			FillTreeview();
 		}
 		private void propertyGrid_Validated(object sender, EventArgs e)
 		{
-			RefreshTreeview();
+			FillTreeview();
 		}
 		private void Form_Closing(object sender, CancelEventArgs e) 
 		{
@@ -1595,21 +1560,6 @@ namespace Ch3Etah.Gui {
 			txtOutput.AppendText(indent + args.TraceText);
 			//statusBar.Text = args.TraceText.Trim();//txtOutput.Text.Length.ToString();
 			Application.DoEvents();
-		}
-
-		private void FixFileAssociations_Click(object sender, EventArgs e) {
-			try {
-				if (
-					MessageBox.Show("Are you sure you want to fix the shell file associations?", "Question", MessageBoxButtons.YesNo,
-					                MessageBoxIcon.Question) == DialogResult.Yes) {
-					(new ShellInstaller()).Install(new Hashtable());
-					MessageBox.Show("File associations successfully fixed", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				}
-			}
-			catch {
-				MessageBox.Show("There was an error while fixing file associations", "Error", MessageBoxButtons.OK,
-				                MessageBoxIcon.Warning);
-			}
 		}
 
 		private void RunTests_Click(object sender, EventArgs e) {
@@ -1683,7 +1633,7 @@ namespace Ch3Etah.Gui {
 		}
 
 		private void IObjectEditor_SelectedObjectChanged(object sender, EventArgs e) {
-			RefreshTreeview();
+			FillTreeview();
 		}
 
 
@@ -1765,9 +1715,9 @@ namespace Ch3Etah.Gui {
 				}
 				else if (content is PropertiesWindow) {
 					propertiesWindow = (PropertiesWindow) content;
-					propertyGrid = propertiesWindow.propertyGrid;
-					propertyGrid.PropertyValueChanged += new PropertyValueChangedEventHandler(propertyGrid_PropertyValueChanged);
-					propertyGrid.Validated += new EventHandler(propertyGrid_Validated);
+					PropertyGrid = propertiesWindow.propertyGrid;
+					PropertyGrid.PropertyValueChanged += new PropertyValueChangedEventHandler(propertyGrid_PropertyValueChanged);
+					PropertyGrid.Validated += new EventHandler(propertyGrid_Validated);
 				}
 				else if (content is OutputWindow) {
 					outputWindow = (OutputWindow) content;
