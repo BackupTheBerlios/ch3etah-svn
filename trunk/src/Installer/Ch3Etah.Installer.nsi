@@ -58,6 +58,7 @@ var ICONS_GROUP
 !define MUI_CUSTOMFUNCTION_GUIINIT onGuiInit
 !insertmacro MUI_PAGE_STARTMENU Application $ICONS_GROUP
 ; Instfiles page
+!define MUI_PAGE_CUSTOMFUNCTION_LEAVE "onLeaveFinishPage"
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
 ;!define MUI_FINISHPAGE_RUN "$INSTDIR\Ch3EtahGui.exe"
@@ -65,6 +66,7 @@ var ICONS_GROUP
 
 ; Uninstaller pages
 !insertmacro MUI_UNPAGE_CONFIRM
+!define MUI_PAGE_CUSTOMFUNCTION_LEAVE "un.onLeaveFinishPage"
 !insertmacro MUI_UNPAGE_INSTFILES
 ; !insertmacro MUI_UNPAGE_FINISH
 
@@ -77,7 +79,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "${RELEASE_MODE}\CH3ETAH-Install.exe"
+OutFile "${RELEASE_MODE}\${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES\CH3ETAH"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -100,6 +102,15 @@ Function onGUIInit
   Push "{2F9CFD10-78F1-4253-A2CD-05EC7EB771D7}" ; CH3ETAH PRODUCT CODE USED IN PREVIOUS MSI INSTALLERS
   Call UninstallPreviousMSI
 FunctionEnd
+
+Function onLeaveFinishPage
+  !insertmacro UPDATEFILEASSOC
+FunctionEnd
+
+Function un.onLeaveFinishPage
+  !insertmacro UPDATEFILEASSOC
+FunctionEnd
+
 
 Section "Program Files" SEC01
   Call IsDotNetInstalled
@@ -158,7 +169,7 @@ Section -Post
   DetailPrint "    Updating explorer icons..."
   DetailPrint "    (THIS MAY TAKE A FEW MOMENTS, PLEASE BE PATIENT)"
   DetailPrint ""
-  !insertmacro UPDATEFILEASSOC
+  ;!insertmacro UPDATEFILEASSOC
 
   DetailPrint ""
   DetailPrint "Installation complete!"
@@ -200,7 +211,12 @@ Section Uninstall
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
   !insertmacro APP_UNASSOCIATE "ch3" "Ch3etah.ProjectFile"
-  !insertmacro UPDATEFILEASSOC
+  DetailPrint ""
+  DetailPrint "    Updating explorer icons..."
+  DetailPrint "    THIS MAY TAKE A FEW MOMENTS, PLEASE BE PATIENT."
+  DetailPrint "    THE UNINSTALLER WILL CLOSE AUTOMATICALLY WHEN FINISHED."
+  DetailPrint ""
+  ;!insertmacro UPDATEFILEASSOC
   SetAutoClose true
 SectionEnd
 
