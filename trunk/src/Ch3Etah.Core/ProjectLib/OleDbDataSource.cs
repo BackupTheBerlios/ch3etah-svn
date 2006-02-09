@@ -295,6 +295,7 @@ namespace Ch3Etah.Core.ProjectLib
 					entity.Fields.Add(field);
 				}
 			}
+			RemoveStaleDBFields(entity);
 		}
 
 		private EntityField GetEntityField(ColumnSchema column, Entity entity) 
@@ -402,7 +403,7 @@ namespace Ch3Etah.Core.ProjectLib
 		{
 			foreach (EntityField field in entity.Fields)
 			{
-				if (!_dbfields.Contains(field.DBColumn))
+				if (field.DBColumn != "" && !_dbfields.Contains(field.DBColumn))
 				{
 					field.IsExcluded = true;
 				}
@@ -424,9 +425,10 @@ namespace Ch3Etah.Core.ProjectLib
 				Index index = LoadIndexRow(row, entity);
 				if (index != null) 
 				{
-					this.RemoveUnusedIndexFields(indexes, index);
+					RemoveUnusedIndexFields(indexes, index);
 				}
 			}
+			RemoveStaleDBIndexes(entity);
 		}
 
 		private DataView GetDBIndexes(Entity entity) 
@@ -499,27 +501,27 @@ namespace Ch3Etah.Core.ProjectLib
 				index = new Index();
 				entity.Indexes.Add(index);
 			}
-			this.RefreshIndexDBInfo(row, index);
+			this.RefreshIndexDBInfo(row, index, field);
 			return index;
 		}
 
-		private void RefreshIndexDBInfo(DataRowView schema, Index index) 
+		private void RefreshIndexDBInfo(DataRowView schema, Index index, EntityField field) 
 		{
-//			IndexField indexField = null;
-//			foreach (IndexField f in index.Fields) 
-//			{
-//				if (f.Name == indexField.Name) 
-//				{
-//					indexField = f;
-//					break;
-//				}
-//			}
-//			if (indexField == null) 
-//			{
-//				indexField = new IndexField();
-//				indexField.Name = indexField.Name;
-//				index.Fields.Add(indexField);
-//			}
+			IndexField indexField = null;
+			foreach (IndexField f in index.Fields) 
+			{
+				if (f.Name == field.Name) 
+				{
+					indexField = f;
+					break;
+				}
+			}
+			if (indexField == null) 
+			{
+				indexField = new IndexField();
+				indexField.Name = field.Name;
+				index.Fields.Add(indexField);
+			}
 			index.DBName = (string)schema["INDEX_NAME"];
 			index.PrimaryKey = (bool)schema["PRIMARY_KEY"];
 			index.Unique = (bool)schema["UNIQUE"];
@@ -588,7 +590,7 @@ namespace Ch3Etah.Core.ProjectLib
 		{
 			foreach (Index index in entity.Indexes)
 			{
-				if (!_dbindexes.Contains(index.DBName))
+				if (index.DBName != "" && !_dbindexes.Contains(index.DBName))
 				{
 					index.IsExcluded = true;
 				}
@@ -699,7 +701,7 @@ namespace Ch3Etah.Core.ProjectLib
 		{
 			foreach (Link link in entity.Links)
 			{
-				if (!_dblinks.Contains(link.DBName))
+				if (link.DBName != "" && !_dblinks.Contains(link.DBName))
 				{
 					link.IsExcluded = true;
 				}
