@@ -458,17 +458,42 @@ namespace Ch3Etah.Core.ProjectLib
 			fks.RowFilter = string.Format("FK_TABLE_NAME = '{0}'", entity.DBEntityName);
 			foreach (DataRowView fk in fks)
 			{
-				DataRow ix = dbIndexes.NewRow();
-				ix["TABLE_NAME"] = (string)fk["FK_TABLE_NAME"];
-				ix["INDEX_NAME"] = (string)fk["FK_NAME"];
-				ix["COLUMN_NAME"] = (string)fk["FK_COLUMN_NAME"];
-				ix["PRIMARY_KEY"] = false;
-				ix["UNIQUE"] = false;
-				ix["ORDINAL_POSITION"] = (Int64)fk["ORDINAL"];
-				dbIndexes.Rows.Add(ix);
+				DataRow idx = dbIndexes.NewRow();
+				idx["TABLE_NAME"] = (string)fk["FK_TABLE_NAME"];
+				idx["INDEX_NAME"] = (string)fk["FK_NAME"];
+				idx["COLUMN_NAME"] = (string)fk["FK_COLUMN_NAME"];
+				idx["PRIMARY_KEY"] = false;
+				idx["UNIQUE"] = IsFkIndexUnique(fk, fks.Table, dbIndexes);
+				idx["ORDINAL_POSITION"] = (Int64)fk["ORDINAL"];
+				dbIndexes.Rows.Add(idx);
 			}
 		}
-
+		
+		private bool IsFkIndexUnique(DataRowView fk, DataTable fks, DataTable dbIndexes)
+		{
+			DataView filteredFks = new DataView(fks);
+			filteredFks.RowFilter = "FK_NAME = '" + fk["FK_NAME"] + "'";
+			DataView uniqueIdxs = new DataView(dbIndexes);
+			uniqueIdxs.RowFilter = "TABLE_NAME = '" + fk["FK_TABLE_NAME"] 
+				+ "' AND (PRIMARY_KEY = true OR UNIQUE = true)";
+			foreach (DataRowView idx in uniqueIdxs)
+			{
+				DataView idxFields = new DataView(dbIndexes);
+				idxFields.RowFilter = "INDEX_NAME = '" + idx["INDEX_NAME"] + "'";
+				if (filteredFks.Count != idxFields.Count) { continue; }
+				bool isPK = true;
+				foreach (DataRowView idxField in idxFields)
+				{
+					DataView fkField = new DataView(fks);
+					fkField.RowFilter = "FK_NAME = '" + fk["FK_NAME"] 
+						+ "' AND FK_COLUMN_NAME = '" + idxField["COLUMN_NAME"] + "'";
+					isPK &= (fkField.Count > 0);
+				}
+				if (isPK) { return true; }
+			}
+			return false;
+		}
+		
 		private Index LoadIndexRow(DataRowView row, Entity entity) 
 		{
 			Debug.WriteLine(row["COLUMN_NAME"]);
@@ -524,6 +549,7 @@ namespace Ch3Etah.Core.ProjectLib
 			}
 			index.DBName = (string)schema["INDEX_NAME"];
 			index.PrimaryKey = (bool)schema["PRIMARY_KEY"];
+			index.ForeignKey = (((string)schema["INDEX_NAME"]).Substring(0, 3) == "FK_");
 			index.Unique = (bool)schema["UNIQUE"];
 			if (index.Name == string.Empty) 
 			{
@@ -655,7 +681,6 @@ namespace Ch3Etah.Core.ProjectLib
 					link.IsExcluded = !this.OrmConfiguration.AutoEnableMappedLinks;
 					link.DBName = key;
 					link.IsProperty = true;
-					link.IsConstrained = (sourcePrefix == "FK_");
 					if (isCollection)
 						link.Name = linkedEntity.PluralName;
 					else
@@ -663,6 +688,7 @@ namespace Ch3Etah.Core.ProjectLib
 					entity.Links.Add(link);
 				}
 				link.IsCollection = isCollection;
+				link.IsConstrained = (sourcePrefix == "FK_");
 				link.TargetEntityName = linkedEntity.Name;
 				link.TargetIndexName = linkedIndex.Name;
 				link.Fields.Clear();

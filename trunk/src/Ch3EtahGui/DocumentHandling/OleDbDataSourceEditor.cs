@@ -1,16 +1,15 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
-using System.Xml;
 
 
-using Ch3Etah.Core.Config;
 using Ch3Etah.Core.Metadata;
 using Ch3Etah.Core.ProjectLib;
 using Ch3Etah.Design.CustomUI;
+using Ch3Etah.Gui.DocumentHandling.MdiStrategy;
 using Ch3Etah.Metadata.OREntities;
 
 namespace Ch3Etah.Gui.DocumentHandling {
@@ -318,6 +317,14 @@ namespace Ch3Etah.Gui.DocumentHandling {
 				this.cmdTest.Enabled = true;
 				this.tvwEntities.Enabled = true;
 				DoEnableButtons();
+			}
+			try
+			{
+				((ObjectEditorForm)this.ParentForm).MainForm.RefreshUI();
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("OleDbDataSourceEditor.btnAddEntities_Click<RefreshUI()>:\r\n" + ex.ToString());
 			}
 		}
 
