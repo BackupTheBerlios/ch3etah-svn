@@ -80,6 +80,7 @@ namespace Ch3Etah.Metadata.OREntities
 		private string _dbName = string.Empty;
 		private string _name = string.Empty;
 		private bool _primaryKey = false;
+		private bool _isForeignKey = false;
 		private bool _unique = false;
 		private bool _selectBy = true;
 		private bool _deleteBy = false;
@@ -138,6 +139,14 @@ namespace Ch3Etah.Metadata.OREntities
 			set { _primaryKey = value; }
 		}
 		
+		[XmlAttribute("foreignkey"),
+		Category("Database field")]
+		public bool ForeignKey
+		{
+			get { return _isForeignKey; }
+			set { _isForeignKey = value; }
+		}
+
 		[XmlAttribute("unique"),
 		Category("Index setup")]
 		public bool Unique {
