@@ -470,18 +470,15 @@ namespace Ch3Etah.Gui {
 		{
 			get
 			{
-				if (propertyGrid == null)
+				if (propertyGrid != null && propertyGrid.IsDisposed)
 				{
-					return new PropertyGrid();
+					return null;
 				}
-				else
-				{
-					return propertyGrid;
-				}
+				return propertyGrid;
 			}
 			set { propertyGrid = value; }
 		}
-		private void RefreshUI() {
+		public void RefreshUI() {
 			RefreshTitleBar();
 			EnableCommandBarButtons();
 			FillTreeview();
@@ -512,7 +509,7 @@ namespace Ch3Etah.Gui {
 			cbiNewProject.IsEnabled = (!_running);
 		}
 
-		private void FillTreeview() {
+		public void FillTreeview() {
 			if (_project == null) {
 				tvwProject.Nodes.Clear();
 				tvwProject.Nodes.Add("No projet loaded");
@@ -1531,7 +1528,7 @@ namespace Ch3Etah.Gui {
 		}
 
 		private void tvwProject_AfterSelect(object sender, TreeViewEventArgs e) {
-			if (e.Node != null) {
+			if (e.Node != null && PropertyGrid != null) {
 				object nodeData = e.Node.Tag;
 				if (nodeData is MetadataNodeBase) {
 					PropertyGrid.Enabled = false;

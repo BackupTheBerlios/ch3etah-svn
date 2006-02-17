@@ -320,7 +320,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			}
 			try
 			{
-				((ObjectEditorForm)this.ParentForm).MainForm.RefreshUI();
+				((ObjectEditorForm)this.ParentForm).MainForm.FillTreeview();
 			}
 			catch (Exception ex)
 			{
