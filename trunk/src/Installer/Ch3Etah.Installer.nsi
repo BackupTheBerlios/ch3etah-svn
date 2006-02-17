@@ -22,6 +22,9 @@
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 !define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
 !define PRODUCT_SOURCE_PATH "..\Ch3EtahGui\bin\Debug\"
+!ifndef INSTALLER_PATH
+  !define INSTALLER_PATH "${RELEASE_MODE}\${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
+!endif
 
 SetCompressor lzma
 
@@ -79,7 +82,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "${RELEASE_MODE}\${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
+OutFile "${INSTALLER_PATH}"
 InstallDir "$PROGRAMFILES\CH3ETAH"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -170,10 +173,6 @@ Section -Post
   DetailPrint "    (THIS MAY TAKE A FEW MOMENTS, PLEASE BE PATIENT)"
   DetailPrint ""
   ;!insertmacro UPDATEFILEASSOC
-
-  DetailPrint ""
-  DetailPrint "Installation complete!"
-  DetailPrint ""
 SectionEnd
 
 

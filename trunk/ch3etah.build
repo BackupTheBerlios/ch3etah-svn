@@ -1,17 +1,250 @@
 <?xml version="1.0" ?>
-<project name="Simple" default="uploadweb" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd" >
-    <property name="debug" value="true"/>
+<project name="ch3etah" default="deploy-local" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd" >
+	<!--
 	
-	<target name="uploadweb">
-		<scp file="test.txt" server="scp.sourceforge.net" verbose="true" />
+	* This is a NAnt build file. In order to run it, or one of the BAT files that call it, you
+	will need to have NAnt (http://nant.sf.net) installed on your machine and the NAnt install
+	directory in your system Path.
+	
+	* In order to build the installer, or run any of the targets that depend on or call it, you
+	will need to install NSIS (http://nsis.sf.net) and place a reference to the NSIS install
+	directory in your system Path.
+	
+	* In order to run any of the targets which upload/download content to/from the SourceForge
+	website, you will need to install PuTTY (http://www.chiark.greenend.org.uk/~sgtatham/putty/) 
+	and place a reference to the PuTTY install directory in your system Path. You may also need
+	to create a SourceForge login to be able to download, and obviously uploading content requires 
+	that you have Admin privileges on the CH3ETAH project space ;).
+	
+	-->
+	<property name="flags.codesmith.build" value="true" unless="${property::exists('flags.deploy.codesmith')}" />
+	<property name="flags.codesmith.deploy" value="false" unless="${property::exists('flags.deploy.codesmith')}" />
+	<property name="source.dir" value="${directory::get-current-directory()}" />
+	<property name="build.dir" value="${source.dir}" />
+	
+	<property name="version.major" value="0" readonly="true" />
+	<property name="version.minor" value="5" readonly="true" />
+	<property name="version.build" value="3" readonly="true" />
+	<property name="version.revision" value="0" readonly="true" unless="${property::exists('version.revision')}" />
+	<property name="version.norevision" value="${version.major}.${version.minor}.${version.build}.*" readonly="true" />
+	<property name="version.full" value="${version.major}.${version.minor}.${version.build}.${version.revision}" readonly="true" />
+	
+	<property name="project.config" value="debug" /> <!-- debug|release -->
+	<property name="project.version" value="0.85" unless="${property::exists('project.version')}" />
+	<property name="build.number" value="${math::abs(math::floor(timespan::get-total-days(datetime::now() - datetime::parse('01/01/2000'))))}" />
+	<property name="project.release.type" value="dev" unless="${property::exists('project.release.type')}" /> <!-- nightly / dev / alpha / beta# / rc# / release -->
+	<if test="${project.release.type == 'nightly'}">
+		<property name="project.version.full" value="${project.version + '-nightly-' + build.date}" />
+	</if>
+	<if test="${project.release.type != 'nightly'}">
+		<property name="project.version.full" value="${project.version + if(project.release.type == 'release', '', '-' + project.release.type)}" dynamic="true" />	
+	</if>
+	
+	<property name="local.web.path" value="${build.dir}\web\content" />
+	<property name="remote.ssh.server" value="ch3etah.sourceforge.net" />
+	<property name="remote.ssh.user" value="${environment::get-user-name()}" unless="${property::exists('remote.ssh.user')}" />
+	<property name="remote.ssh.pwd" value="" unless="${property::exists('remote.ssh.pwd')}" />
+	<property name="remote.web.path" value="/home/groups/c/ch/ch3etah/htdocs" />
+	<property name="remote.web.serverpart" value="${remote.ssh.user + '@' + remote.ssh.server + ':' + remote.web.path}" />
+	
+	<property name="scp.program" value="pscp" />
+	<target name="prepare-ssh-args">
+		<if test="${remote.ssh.pwd == ''}">
+			<fail message="You must specify the property 'remote.ssh.pwd' to execute this command. Use the syntax 'nant -D:property.name=property.value' to define required parameters." />
+		</if>
+		<property name="scp.program.args" value="-batch -q -C -v -r -pw ${remote.ssh.pwd}" />
 	</target>
-    
-	<target name="cleansvn" description="remove subversion files and directories before packaging">
-		<delete verbose="false">
-			<fileset defaultexcludes="false" >
-				<include name="**/.svn/**" />
+	
+	<target name="deploy-local" depends="prepare-build-dir, package, build, build-installer">
+		<move file="${zipfile.path}" todir="${source.dir}\deploy\${zipfile.name}" overwrite="true" />
+		<property name="${zipfile.path}" value="${source.dir}\deploy\${zipfile.name}" overwrite="true" />
+		<move file="${installer.path}" todir="${source.dir}\deploy\${installer.name}" />
+		<property name="${installer.path}" value="${source.dir}\deploy\${installer.name}" />
+		<call target="cleanup" />
+	</target>
+	
+	<target name="deploy-web" depends="prepare-ssh-args" >
+		<exec program="${scp.program}" verbose="false" timeout="300000" >
+			<arg line="${scp.program.args}" />
+			<arg value="${local.web.path}\*" />
+			<arg line="${remote.web.serverpart}" />
+		</exec>
+		<echo message="Copied website content to ${local.web.path}" />
+	</target>
+	
+	<target name="web-get-local" depends="prepare-ssh-args" description="gets a local copy of the website content from sourceforge">
+		<!-- cleanup any existing files and make sure the directory tree exists -->
+		<delete dir="${local.web.path}" failonerror="false" />
+		<mkdir dir="${local.web.path}" />
+		<!-- copy images and html files for website to sourceforge (using compression) -->
+		<exec program="${scp.program}" verbose="false" timeout="300000" >
+			<arg line="${scp.program.args}" />
+			<arg line="${remote.web.serverpart}/*" />
+			<arg value="${local.web.path}" />
+		</exec>
+		<echo message="Copied website content to ${local.web.path}" />
+	</target>
+	
+	<target name="build" >
+		<property name="param.solution.file" value="${build.dir}\src\Ch3Etah.sln" />
+		<if test="${flags.codesmith.build == 'true'}">
+			<property name="param.solution.file" value="${build.dir}\src\Ch3Etah.CodeSmithSupport.sln" />
+		</if>
+		<updateversion filename="${build.dir}\src\CommonAssemblyInfo.cs" version="${version.full}" />
+		<call target="compile-vs7" />
+	</target>
+	
+	<target name="build-installer">
+		<fail if="${flags.deploy.codesmith == ''}" 
+			message="Need to exclude codesmith files from installer." />
+		<if test="${flags.deploy.codesmith != 'true'}">
+			<delete failonerror="false">
+				<fileset basedir="${build.dir}\src\Ch3EtahGui\bin\Debug\">
+					<include name="CodeSmith.*" />
+				</fileset>
+			</delete>
+		</if>
+		<property name="installer.name" value="CH3ETAH-${version.full}.exe" />
+		<property name="installer.path" value="${build.dir}\src\Installer\Debug\${installer.name}" />
+		<exec program="makensis.exe" verbose="true">
+			<arg line="/DPRODUCT_VERSION=${version.full}" />
+			<arg line="/DINSTALLER_PATH=Debug\${installer.name}" />
+			<arg value="${build.dir}\src\Installer\Ch3Etah.Installer.nsi" />
+		</exec>
+	</target>
+	
+	<target name="package">
+		<property name="zipfile.name" value="CH3ETAH-${version.full}-src.zip" />
+		<property name="zipfile.path" value="${build.dir}\${zipfile.name}" />
+		<delete failonerror="false">
+			<fileset>
+				<include name="${zipfile.path}" />
+			</fileset>
+		</delete>
+		<updateversion filename="${build.dir}\src\CommonAssemblyInfo.cs" version="${version.norevision}" />
+		<zip zipfile="${zipfile.path}" includeemptydirs="false">
+			<fileset basedir="${build.dir}">
+				<include name="src\**" />
+				<include name="*" />
+				<exclude name="**\CodeSmith.*" />
+				<exclude name="web\**" />
+				<exclude name="**/bin/**" />
+				<exclude name="**/obj/**" />
+				<exclude name="src\Installer\Debug\**" />
+				<exclude name="src\Installer\Release\**" />
+				<exclude name="src\Installer\**\*.exe" />
+				<exclude name="**/*resharper*/**" />
+				<exclude name="**/*ch3etah*.zip/**" />
+				<exclude name="**/log4net.xml" />
+			</fileset>
+		</zip>
+	</target>
+	
+	<target name="prepare-build-dir" description="Prepares a clean working copy of the source tree to use for creating a releasable build.">
+		<property name="build.dir" value="${directory::get-current-directory()}/../_build_" />
+		<call target="clean-build-dir" />
+		<echo message="Preparing build folder..." />
+		<mkdir dir="${build.dir}" />
+		<echo message="Copying files to build folder from '${source.dir}'..." />
+		<copy todir="${build.dir}" includeemptydirs="false">
+			<fileset basedir="${source.dir}">
+				<include name="src\**" />
+				<include name="web\**" />
+				<include name="*" />
+				<exclude name="**/.svn/**" />
+				<exclude name="**/obj/**" />
+				<exclude name="src\Installer\Debug\**" />
+				<exclude name="src\Installer\Release\**" />
+				<exclude name="src\Installer\**\*.exe" />
+				<exclude name="**/*resharper*/**" />
+				<exclude name="**/*ch3etah*.zip/**" />
+				<exclude name="**/*ch3etah*.exe/**" />
+				<exclude name="**/*ch3etah*.msi/**" />
+				<exclude name="**/*setup*.exe/**" />
+				<exclude name="**/log4net.xml" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="cleanup">
+		<delete failonerror="false">
+			<fileset>
+				<include name="${build.dir}\**" />
 			</fileset>
 		</delete>
 	</target>
-    
+	
+	<target name="clean-build-dir" if="${source.dir != build.dir}">
+		<delete failonerror="false">
+			<fileset>
+				<include name="${build.dir}\**" />
+			</fileset>
+		</delete>
+	</target>
+	
+	<target name="compile-vs7">
+		<if test="${not file::exists(param.solution.file)}">
+			<fail message="Could not find the solution file '${param.solution.file}'." />
+		</if>
+		<echo message="Preparing to build solution '${param.solution.file}'..." />
+		<delete file="${build.dir}\src\ch3etah.build.log" failonerror="false" />
+		<readregistry property="vs7.dir" key="SOFTWARE\Microsoft\VisualStudio\7.1\InstallDir" hive="LocalMachine" />
+		<exec program="${vs7.dir}\DevEnv.com" verbose="true">
+			<arg value="${param.solution.file}" />
+			<arg line="/rebuild Debug /nologo /out " />
+			<arg value="${build.dir}\src\ch3etah.build.log" />
+		</exec>
+	</target>
+	
+	<script language="C#">
+		<code><![CDATA[
+		//
+		// Custom NAnt task to update the assembly version in
+		// an AssemblyInfo.cs file.
+		//
+		[TaskName("updateversion")]
+		public class UpdateAssemblyVersionTask : Task 
+		{
+			private string _filename;
+			[TaskAttribute("filename", Required=true)]
+			public string FileName 
+			{
+				get { return _filename; }
+				set { _filename = value; }
+			}
+				
+			private string _version;
+			[TaskAttribute("version", Required=true)]
+			public string Version 
+			{
+				get { return _version; }
+				set { _version = value; }
+			}
+				
+			protected override void ExecuteTask() 
+			{
+				Log(Level.Info, "Updating assembly version to '{1}' in file '{0}'.", Version, FileName);
+				string input = "";
+				using (FileStream stream = new FileStream(FileName, FileMode.Open, FileAccess.Read, FileShare.Read)) 
+				{
+					using (StreamReader reader = new StreamReader(stream)) 
+					{
+						input = reader.ReadToEnd();
+					}
+				}
+				
+				string regexPattern = @"AssemblyVersion\s*\(\s*""(\*|[0-9]+.\*|[0-9]+.[0-9]+.\*|[0-9]+.[0-9]+.[0-9]+.\*|[0-9]+.[0-9]+.[0-9]+.[0-9]+)""\s*\)\s*";
+				string replacement = @"AssemblyVersion(""" + this.Version + @""")";
+				Regex expr = new Regex(regexPattern, RegexOptions.Compiled);
+				Match newRegionMatch = expr.Match(replacement);
+				
+				using (StreamWriter outputWriter = new StreamWriter(FileName)) 
+				{
+					outputWriter.Write(expr.Replace(input, newRegionMatch.Value));
+				}
+			}
+		}
+		]]>
+		</code>
+	</script>
 </project>
