@@ -306,9 +306,11 @@ namespace Ch3Etah.Core.Metadata
 					MetadataNodeCollectionAttribute attr = (MetadataNodeCollectionAttribute)collectionAttributes[0];
 					IList list = (IList)memberValue;
 					RemoveDeletedNodes(memberNode, list, attr.ItemName);
+					XmlNode previousNode = null;
 					foreach (IMetadataNode item in list) {
-						XmlNode itemNode = GetOrCreateItemNode(memberNode, item, attr.ItemName);
+						XmlNode itemNode = GetOrCreateItemNode(memberNode, item, attr.ItemName, previousNode);
 						item.PersistChanges(itemNode);
+						previousNode = itemNode;
 					}
 				}
 			}
@@ -358,9 +360,14 @@ namespace Ch3Etah.Core.Metadata
 			throw new ArgumentException("The parameter memberValue is not a recognized type.");
 		}
 
-		private XmlNode GetOrCreateItemNode (XmlNode listNode, IMetadataNode item, string itemElementName) {
+		private XmlNode GetOrCreateItemNode (XmlNode listNode, IMetadataNode item, string itemElementName, XmlNode insertAfter) {
 			foreach (XmlNode itemNode in listNode.SelectNodes(itemElementName)) {
 				if (item.LoadedXmlNode == itemNode) {
+					if (insertAfter != null)
+					{
+						listNode.RemoveChild(itemNode);
+						listNode.InsertAfter(itemNode, insertAfter);
+					}
 					return itemNode;
 				}
 			}
@@ -373,7 +380,14 @@ namespace Ch3Etah.Core.Metadata
 				}
 				node.InnerXml = item.LoadedXmlNode.InnerXml;
 			}
-			listNode.AppendChild(node);
+			if (insertAfter != null)
+			{
+				listNode.InsertAfter(node, insertAfter);
+			}
+			else
+			{
+				listNode.AppendChild(node);
+			}
 			return node;
 		}
 

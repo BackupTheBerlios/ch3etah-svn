@@ -500,16 +500,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "OREntities\OREntityUpdater.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "OREntities\ORMetadataEntitiy.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "OREntities\Generated\EntityFieldCollection.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -571,6 +561,11 @@
                 />
                 <File
                     RelPath = "ProjectLib\DataSourceCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ProjectLib\DotNetAssemblyDataSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

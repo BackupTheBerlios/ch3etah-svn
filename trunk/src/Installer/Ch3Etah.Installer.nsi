@@ -98,6 +98,12 @@ Function onGUIInit
     MessageBox MB_OK|MB_ICONEXCLAMATION "The installer is already running."
     Abort
 
+; DOESN'T WORK. NEED TO MAKE THIS WORK WITH PARTIAL TEXT MATCHES.
+;  FindWindow $0 "" "CH3ETAH"
+;  StrCmp $0 0 +3
+;    MessageBox MB_ICONSTOP|MB_OK "The CH3ETAH application appears to be running. Please make sure all applications are closed before running the installer."
+;    Abort
+
   ; check to make sure the .NET Framework is installed.
   Call IsDotNetInstalled
   

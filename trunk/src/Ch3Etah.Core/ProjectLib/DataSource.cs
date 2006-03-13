@@ -25,7 +25,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml.Serialization;
 
-using Ch3Etah.Core.Config;
 using Ch3Etah.Core.Metadata;
 using Ch3Etah.Metadata.OREntities;
 
@@ -48,9 +47,10 @@ namespace Ch3Etah.Core.ProjectLib {
 	}
 	#endregion DataSourceNameChangedEvent
 
-	[Serializable()]
-	[XmlInclude(typeof(OleDbDataSource))]
-	[Designer("Ch3Etah.Design.Designers.DataSourceDesigner,Ch3Etah.Design", typeof(IDesigner))]
+	[Serializable()
+	, XmlInclude(typeof(OleDbDataSource))
+	, XmlInclude(typeof(DotNetAssemblyDataSource))
+	, Designer("Ch3Etah.Design.Designers.DataSourceDesigner,Ch3Etah.Design", typeof(IDesigner))]
 	public abstract class DataSource : IDataSource
 	{
 		#region DataSourceNameChangedEvent
@@ -125,7 +125,18 @@ namespace Ch3Etah.Core.ProjectLib {
 		#endregion
 
 		public abstract void TestConnection();
-		public abstract bool IsConnectionValid();
+		public virtual bool IsConnectionValid() 
+		{
+			try 
+			{
+				TestConnection();
+				return true;
+			}
+			catch 
+			{
+				return false;
+			}
+		}
 		public abstract DataSourceEntityGroup[] ListEntities();
 		public abstract void SyncProjectEntities();
 		public abstract void SyncProjectEntities(DataSourceEntity[] entities);
@@ -163,8 +174,10 @@ namespace Ch3Etah.Core.ProjectLib {
 
 		protected string GetEntityFileName(DataSourceEntity entity) 
 		{
-			string filepart = entity.Namespace == "" ? 
-				entity.Name : entity.Namespace + "_" + entity.Name;
+			string filepart = 
+				entity.Namespace.Trim() == "" ? 
+				entity.Name : 
+				entity.Namespace + "." + entity.Name;
 			return Path.Combine(this.Project.GetFullMetadataPath(), filepart + ".xml");
 		}
 

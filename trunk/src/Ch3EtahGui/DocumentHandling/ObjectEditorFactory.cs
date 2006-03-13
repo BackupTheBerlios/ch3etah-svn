@@ -50,10 +50,14 @@ namespace Ch3Etah.Gui.DocumentHandling
 			
 			IObjectEditor editor = null;
 			if (contextObject is OleDbDataSource) {
-//				editor = new DataSourceEditor();
 				editor = new OleDbDataSourceEditor();
 			}
-			if (contextObject.GetType() == typeof(MetadataFile)) {
+			else if (contextObject is DataSource) 
+			{
+				editor = new DataSourceEditor();
+			}
+			if (contextObject.GetType() == typeof(MetadataFile)) 
+			{
 				editor = new OREntityEditor();
 			}
 			if (contextObject.GetType() == typeof(CodeGeneratorCommand)) {

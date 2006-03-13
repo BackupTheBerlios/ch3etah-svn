@@ -8,13 +8,18 @@ Version 0.5.3 Summary of Changes:
 * Code generation engines are now configurable at run time.
 * Added support for CodeSmith templates.
 * Up to 80% improvement in performance on large projects.
-* Many improvements in syncronization of entities with the database (notably the handling of relationships).
+* Many improvements in syncronization of entities with the database (most notably the handling of relationships).
 * Numerous UI/visual feedback improvements and usability improvements (see log for full list).
 * Friendlier reporting of unhandled exceptions, with ability to file a bug report from the error dialog.
 * Application Settings dialog.
-* Several bug fixes.
+* Bug fixes.
 
 Version 0.5.3 Change Log:
+FIX: Entity fields are now ordered the same as the corresponding table columns when synchronizing from OleDbDataSource.
+ADD: The full paths of metadata files are now viewable in the property grid.
+ADD: Added a generic DataSource editor to the UI.
+ADD: Added basic support (no UI support yet) for a data source that parses entity metadata from a .NET assembly.
+CHG: Metadata Files node in project explorer is now ordered correctly. Performance was also dramatically improved.
 FIX: Fixed a bug in the OleDbDataSource that was preventing the correct fields from being added to indexes that were refreshed from the database.
 FIX: Fixed various errors that would occur if the properties toolbox was closed.
 ADD: Updating entities from the database will exclude any mapped fields, indexes, or links that are no longer valid.

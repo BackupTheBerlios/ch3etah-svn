@@ -145,6 +145,12 @@ namespace Ch3Etah.Core.ProjectLib
 			}
 		}
 		
+		[Category("File Info")]
+		public string FullPath
+		{
+			get { return GetFullPath(); }
+		}
+		
 		[XmlIgnore()]
 		[Browsable(false)]
 		public MetadataEntityCollection MetadataEntities {
@@ -236,8 +242,10 @@ namespace Ch3Etah.Core.ProjectLib
 			
 			XmlDocument document = new XmlDocument();
 			document.LoadXml(SaveXml());
-			document.Save(GetFullPath(fileName));
-			
+			using (TextWriter wr = new StreamWriter(GetFullPath(fileName), false, System.Text.Encoding.UTF8))
+			{
+				document.Save(wr);
+			}
 			FileName = fileName;
 		}
 		

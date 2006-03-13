@@ -588,66 +588,92 @@ namespace Ch3Etah.Gui {
 			metadataFilesNode.ImageIndex = Images.Indexes.FolderOpen;
 			metadataFilesNode.SelectedImageIndex = Images.Indexes.FolderOpen;
 			metadataFilesNode.Tag = _project.MetadataFiles;
-			metadataFilesNode.Nodes.Clear();
+			//metadataFilesNode.Nodes.Clear();
 			
 			foreach (MetadataFile file in _project.MetadataFiles) {
 				TreeNode node = GetContextNode(file, metadataFilesNode.Nodes);
 				if (node == null && !sortedItems.ContainsKey(file.Name)) {
 					node = new TreeNode(file.Name);
 				}
-				try 
-				{
+//				try 
+//				{
 					node.Tag = file;
-					file.Load();
-					node.Text = file.Name;
-					node.ImageIndex = Images.Indexes.DocumentText;
-					node.SelectedImageIndex = Images.Indexes.DocumentText;
-					sortedItems.Add(file.Name, node);
-				}
-				catch
-				{
-					if (node == null)
-						node = new TreeNode(file.Name);
-					node.Text = file.Name + ERROR_MESSAGE_1;
-					int i = 1;
-					while (sortedItems.ContainsKey(node.Text))
+					//file.Load();
+					if (File.Exists(file.FullPath))
 					{
-						node.Text = file.Name + string.Format(" ({0})", i++) + ERROR_MESSAGE_1;
+						node.Text = file.Name;
+						sortedItems.Add(file.Name, node);
+						node.ImageIndex = Images.Indexes.DocumentText;
+						node.SelectedImageIndex = Images.Indexes.DocumentText;
 					}
-					sortedItems.Add(node.Text, node);
-					node.ImageIndex = Images.Indexes.Delete;
-					node.SelectedImageIndex = Images.Indexes.Delete;
-				}
+					else
+					{
+						node.Text = file.Name + ERROR_MESSAGE_1;
+//						int i = 1;
+//						while (sortedItems.ContainsKey(node.Text))
+//						{
+//							node.Text = file.Name + string.Format(" ({0})", i++) + ERROR_MESSAGE_1;
+//						}
+						sortedItems.Add(node.Text, node);
+						node.ImageIndex = Images.Indexes.Delete;
+						node.SelectedImageIndex = Images.Indexes.Delete;
+					}
+//				}
+//				catch
+//				{
+//					if (node == null)
+//						node = new TreeNode(file.Name);
+//				}
 			}
-			
-			foreach (TreeNode node in metadataFilesNode.Nodes) 
+			if (Directory.Exists(_project.GetFullMetadataPath())) 
 			{
-				if (
-					node.Tag != null && node.Tag is MetadataFile &&
-					!_project.MetadataFiles.Contains((MetadataFile) node.Tag)) 
+				string[] files = Directory.GetFiles(_project.GetFullMetadataPath(), "*.xml");
+				foreach (string file in files) 
 				{
-					node.Remove();
+					if (!_project.MetadataFiles.Contains(file)) 
+					{
+						TreeNode node = new TreeNode(Path.GetFileName(file));
+						node.ImageIndex = Images.Indexes.DocumentText + Images.Count;
+						node.SelectedImageIndex = Images.Indexes.DocumentText + Images.Count;
+						node.Tag = new MetadataFilePlaceholder(Path.GetFileName(file), file);
+						sortedItems.Add(Path.GetFileName(file), node);
+					}
 				}
 			}
+			for (int i = metadataFilesNode.Nodes.Count - 1; i >= 0; i--)
+			{
+				TreeNode node = metadataFilesNode.Nodes[i];
+				if (sortedItems.IndexOfValue(node) < 0)
+				{
+					metadataFilesNode.Nodes.Remove(node);
+				}
+			}
+//			foreach (TreeNode node in metadataFilesNode.Nodes)
+//			{
+//				if (
+//					node.Tag != null && node.Tag is MetadataFile &&
+//					!_project.MetadataFiles.Contains((MetadataFile) node.Tag)) 
+//				{
+//					node.Remove();
+//				}
+//			}
 			foreach (DictionaryEntry entry in sortedItems)
 			{
 				TreeNode node = (TreeNode)entry.Value;
-				metadataFilesNode.Nodes.Add(node);
+				int index = metadataFilesNode.Nodes.IndexOf(node);
+				if (index >= 0 && index != sortedItems.IndexOfValue(node))
+				{
+					metadataFilesNode.Nodes.Remove(node);
+				}
+				TreeNode contextNode = GetContextNode(node.Tag, metadataFilesNode.Nodes);
+				if (contextNode == null)
+				{
+					metadataFilesNode.Nodes.Insert(sortedItems.IndexOfValue(node), node);
+				}
 				if (node.Text.IndexOf("ERROR LOADING FILE") > 0)
 					node.Parent.Expand();	
 			}
 			
-			if (Directory.Exists(_project.GetFullMetadataPath())) {
-				string[] files = Directory.GetFiles(_project.GetFullMetadataPath(), "*.xml");
-				foreach (string file in files) {
-					if (!_project.MetadataFiles.Contains(file)) {
-						TreeNode node = metadataFilesNode.Nodes.Add(Path.GetFileName(file));
-						node.ImageIndex = Images.Indexes.DocumentText + Images.Count;
-						node.SelectedImageIndex = Images.Indexes.DocumentText + Images.Count;
-						node.Tag = new MetadataFilePlaceholder(file);
-					}
-				}
-			}
 			return metadataFilesNode;
 		}
 

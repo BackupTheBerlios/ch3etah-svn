@@ -18,16 +18,15 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Data;
 using System.Data.OleDb;
 using System.Diagnostics;
 using System.Drawing.Design;
-using System.Windows.Forms;
 using System.Xml.Serialization;
 
 using Adapdev.Data;
 using Adapdev.Data.Schema;
+using DbType = Adapdev.Data.DbType;
 
 using Ch3Etah.Core.Config;
 using Ch3Etah.Core.Metadata;
@@ -151,22 +150,9 @@ namespace Ch3Etah.Core.ProjectLib
 			cn.Close();
 		}
 
-		public override bool IsConnectionValid() 
-		{
-			try 
-			{
-				TestConnection();
-				return true;
-			}
-			catch 
-			{
-				return false;
-			}
-		}
-
 		public override DataSourceEntityGroup[] ListEntities()
 		{
-			_dbschema = SchemaBuilder.CreateDatabaseSchema(this.ConnectionString, Adapdev.Data.DbType.SQLSERVER, Adapdev.Data.DbProviderType.OLEDB);
+			_dbschema = SchemaBuilder.CreateDatabaseSchema(this.ConnectionString, DbType.SQLSERVER, DbProviderType.OLEDB);
 			DataSourceEntityGroup tables = new DataSourceEntityGroup("Tables");
 			DataSourceEntityGroup views = new DataSourceEntityGroup("Views");
 			foreach (TableSchema entity in _dbschema.SortedTables.Values) 
@@ -201,7 +187,7 @@ namespace Ch3Etah.Core.ProjectLib
 				{
 					foreach (NameValuePair att in this.OrmConfiguration.CustomEntityAttributes)
 					{
-						((IMetadataNode)orEntity).SetAttributeValue(att.Name, att.Value);
+						orEntity.SetAttributeValue(att.Name, att.Value);
 					}
 				}
 				orEntity.OwningMetadataFile.Save();
@@ -284,16 +270,23 @@ namespace Ch3Etah.Core.ProjectLib
 		private void FillFields(TableSchema table, Entity entity) 
 		{
 			_dbfields = new ArrayList();
-			foreach (ColumnSchema column in table.Columns.Values) 
+			EntityField previousField = null;
+			foreach (ColumnSchema column in table.OrdinalColumns.Values) 
 			{
 				_dbfields.Add(column.Name);
 				EntityField field = GetEntityField(column, entity);
 				field.SetEntity(entity);
 				this.RefreshFieldDBInfo(column, field);
-				if (!entity.Fields.Contains(field)) 
-				{
-					entity.Fields.Add(field);
-				}
+//				if (entity.Fields.Contains(field))
+//				{
+//					entity.Fields.Add(field);
+//				}
+//				else
+//				{
+//					entity.Fields.Insert(entity.Fields.IndexOf(previousField), field);
+//				}
+				entity.Fields.Insert(entity.Fields.IndexOf(previousField)+1, field);
+				previousField = field;
 			}
 			RemoveStaleDBFields(entity);
 		}

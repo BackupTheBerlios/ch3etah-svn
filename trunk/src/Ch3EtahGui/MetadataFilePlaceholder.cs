@@ -28,10 +28,21 @@ namespace Ch3Etah.Gui
 	/// </summary>
 	public class MetadataFilePlaceholder
 	{
-		public readonly string FileName;
+		private string _fileName;
+		public string FileName
+		{
+			get { return _fileName; }
+		}
 		
-		public MetadataFilePlaceholder(string fileName){
-			FileName = fileName;
+		private string _fullPath;
+		public string FullPath
+		{
+			get { return _fullPath; }
+		}
+
+		public MetadataFilePlaceholder(string fileName, string fullPath){
+			_fileName = fileName;
+			_fullPath = fullPath;
 		}
 	}
 }

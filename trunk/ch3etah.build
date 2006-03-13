@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="ch3etah" default="deploy-local" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd" >
+<project name="ch3etah" default="help" xmlns="http://nant.sf.net/release/0.85-rc3/nant.xsd" >
 	<!--
 	
 	* This is a NAnt build file. In order to run it, or one of the BAT files that call it, you
@@ -17,8 +17,8 @@
 	that you have Admin privileges on the CH3ETAH project space ;).
 	
 	-->
-	<property name="flags.codesmith.build" value="true" unless="${property::exists('flags.deploy.codesmith')}" />
-	<property name="flags.codesmith.deploy" value="false" unless="${property::exists('flags.deploy.codesmith')}" />
+	<property name="flags.codesmith.build" value="true" unless="${property::exists('flags.codesmith.build')}" />
+	<property name="flags.codesmith.deploy" value="false" unless="${property::exists('flags.codesmith.deploy')}" />
 	<property name="source.dir" value="${directory::get-current-directory()}" />
 	<property name="build.dir" value="${source.dir}" />
 	
@@ -50,16 +50,44 @@
 	<property name="scp.program" value="pscp" />
 	<target name="prepare-ssh-args">
 		<if test="${remote.ssh.pwd == ''}">
-			<fail message="You must specify the property 'remote.ssh.pwd' to execute this command. Use the syntax 'nant -D:property.name=property.value' to define required parameters." />
+			<fail message="You must specify the property 'remote.ssh.pwd' to execute this command. Use the syntax 'nant -D:remote.ssh.pwd=yourpassword targetname' to define required parameter." />
 		</if>
 		<property name="scp.program.args" value="-batch -q -C -v -r -pw ${remote.ssh.pwd}" />
 	</target>
 	
+	<target name="help">
+		<echo message="" />
+		<echo message="" />
+		<echo message="" />
+		<echo message="This is the NAnt build file for the CH3ETAH project." />
+		<echo message="Following are some of the most common targets:" />
+		<echo message="  deploy-local (Compile and copy src/bin to local deploy folder)" />
+		<echo message="  deploy-web (Copy web content to SourceForge servers - admin only)" />
+		<echo message="  web-get-local (Get a local copy of web content from SourceForge)" />
+		<echo message="" />
+		<echo message="" />
+		<echo message="Supported parameters:" />
+		<echo message="  -D:flags.codesmith.build=true|false" />
+		<echo message="  -D:flags.codesmith.deploy=true|false" />
+		<echo message="  -D:version.revision=nnn" />
+		<echo message="  -D:remote.ssh.user=yourusername" />
+		<echo message="  -D:remote.ssh.pwd=yourpassword" />
+		<echo message="" />
+		<echo message="" />
+		<echo message="Some command line examples:" />
+		<echo message="nant -D:version.revision=0 -D:flags.codesmith.build=true -D:flags.codesmith.deploy=true deploy-local" />
+		<echo message="nant -D:remote.ssh.user=yourusername -D:remote.ssh.pwd=yourpassword deploy-web" />
+		<echo message="nant -D:remote.ssh.user=yourusername -D:remote.ssh.pwd=yourpassword web-get-local" />
+		<echo message="" />
+		<echo message="" />
+		<echo message="" />
+	</target>
+	
 	<target name="deploy-local" depends="prepare-build-dir, package, build, build-installer">
-		<move file="${zipfile.path}" todir="${source.dir}\deploy\${zipfile.name}" overwrite="true" />
-		<property name="${zipfile.path}" value="${source.dir}\deploy\${zipfile.name}" overwrite="true" />
-		<move file="${installer.path}" todir="${source.dir}\deploy\${installer.name}" />
-		<property name="${installer.path}" value="${source.dir}\deploy\${installer.name}" />
+		<move file="${zipfile.path}" todir="${source.dir}\deploy\" overwrite="true" />
+		<property name="zipfile.path" value="${source.dir}\deploy\${zipfile.name}" />
+		<move file="${installer.path}" todir="${source.dir}\deploy\" overwrite="true" />
+		<property name="installer.path" value="${source.dir}\deploy\${installer.name}" />
 		<call target="cleanup" />
 	</target>
 	
@@ -95,9 +123,7 @@
 	</target>
 	
 	<target name="build-installer">
-		<fail if="${flags.deploy.codesmith == ''}" 
-			message="Need to exclude codesmith files from installer." />
-		<if test="${flags.deploy.codesmith != 'true'}">
+		<if test="${flags.codesmith.deploy != 'true'}">
 			<delete failonerror="false">
 				<fileset basedir="${build.dir}\src\Ch3EtahGui\bin\Debug\">
 					<include name="CodeSmith.*" />
@@ -126,6 +152,7 @@
 			<fileset basedir="${build.dir}">
 				<include name="src\**" />
 				<include name="*" />
+				<exclude name="roadmap.txt" />
 				<exclude name="**\CodeSmith.*" />
 				<exclude name="web\**" />
 				<exclude name="**/bin/**" />

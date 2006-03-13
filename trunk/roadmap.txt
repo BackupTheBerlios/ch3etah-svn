@@ -1,8 +1,48 @@
 * Region support with hash code generation and checking
-* CodeSmith support
 * SimpleEngine
 * Assembly analyzer for reverse engeneering
 * AppDomain isolation of template engines
 
+- BUG: Adding link when another link is selected in treeview messes up tree
+- BUG: Object editor captions not being shown on tabs
+- BUG: There is no UI feedback when adding multiple tables from datasource
+- BUG: Merge support is not working correctly - it just overwrites the existing file w/o merging
+- BUG: If you add a new, non-OREntity-related, node to the entity in xml mode, it always thinks the entity is dirty.
+- BUG: Turn off recording of temp xml files during generation
+- BUG: Entities are not being selected automatically in generator commands - need to change package structure
+- BUG: Object isn't highlighted in treeview anymore when you switch object editor windows
+- BUG: Include text editor mode files in post build event
+- BUG: Data source guid is null
+- BUG: Entity fields should be added in DB order, not alphabetical
+* BUG: When you delete a node from the project tree (data source, command, metadata file) the deleted object's content editor window is not closed
+* BUG: Entity name doesn't update in treeview when changed in property grid
+* BUG: 
 
+- FEAT: Check to see if file has changed before overwriting
+- FEAT: Have better handling (like VS.NET) when metadata files aren't found (change icon and allow removal/renaming)
+- FEAT: Update any associated entities when the datasource name is changed
+- FEAT: Add command to remove datasource
+- FEAT: Add global error handling
+- FEAT: Excluded metadata nodes need to have their icon be visibly different.
+- FEAT: Delete to exclude, Insert to include, and shift + delete to remove fields, indexes and links
+- FEAT: Change "Remove Metadata File" to "Exclude From Project" and add "Delete Metadata File"
+- FEAT: Keyboard support (enter, delete, etc) in project and entity trees
+* FEAT: Add a "Rename" command to metadata file right click menu [possibly implement an INamedObject with SupportsRename() and Rename(string newName)]
+* FEAT: Enable visual styles
+* FEAT: In ORM settings, add list of field names to exclude automatically, like SiteID, ReplicationID, etc.
+* FEAT: Remove/Exclude deleted fields, indexes and links when entity is refreshed from db (or mark IsExcluded=true), and advise user (have option in settings)
+* FEAT: Add ability to include/exclude nodes in entity editor tree via right-click
+* FEAT: Parameterize naming of metadata files created from datasource
+* FEAT: Put property browser below and put object editor forms to the side in MetadataFileEditor
+* FEAT: Issue with toolbar buttons on entity editor screen
+* FEAT: Add changed events to properties in project and metadata
+* FEAT: A saída do Velocity está sendo feita em UTF-8. Até aí, nada de mais, uma vez que temos usado apenas ASCII. Porém, peguei um sistema legado que tem nomes de campos acentuados. Adivinha o que acontece com o script SQL quando ele pega um arquivo UTF-8... Precisa mudar a saída prá ANSI ou ISO-8859-1. [Add 'Encoding' option to code generator command]
+* FEAT: Installer needs to make sure program isn't running
+http://nsis.sourceforge.net/Check_whether_your_application_is_running_during_uninstallation
+http://nsis.sourceforge.net/Detect_if_a_window_is_open_and_close_it.
+* FEAT: 
+
+* WISH: Manage multiple files in project structure (i.e. select several metadata files and remove them)
+* WISH: Allow organizing of metadata files into sub directories
+* WISH: 
 

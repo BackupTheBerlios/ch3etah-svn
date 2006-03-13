@@ -59,8 +59,10 @@ namespace Ch3Etah.Metadata.OREntities {
 			if (_entity != null)
 				val.SetEntity(_entity);
 			if (Contains(val))
-				Remove(val);
-			Insert(index, val);
+				base.Remove(val);
+			if (index < 0) index = 0;
+			if (index > List.Count) index = List.Count - 1;
+			base.Insert(index, val);
 		}
 
 		new public EntityFieldCollectionEnumerator GetEnumerator() {

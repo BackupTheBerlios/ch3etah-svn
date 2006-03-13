@@ -17,8 +17,6 @@
 
 using System;
 using System.Collections;
-using System.Xml.Serialization;
-using Ch3Etah.Metadata.OREntities;
 
 namespace Ch3Etah.Core.ProjectLib
 {
@@ -43,32 +41,36 @@ namespace Ch3Etah.Core.ProjectLib
 	{
 		internal DataSourceEntity(string nameSpace, string name)
 		{
-			Namespace = nameSpace;
-			Name = name;
+			if (nameSpace != null) Namespace = nameSpace.Trim('.');
+			if (name != null) Name = name.Trim('.');
 		}
 		
-		public readonly string Namespace;
-		public readonly string Name;
+		
+		public readonly string Namespace = string.Empty;
+		public readonly string Name = string.Empty;
+		
+		public override string ToString()
+		{
+			if (Namespace != "")
+				return Namespace + "." + Name;
+			else
+				return Name;
+		}
+
 	}
 
 	public class DataSourceEntityGroup
 	{
+		private string _name;
 		private ArrayList _entities = new ArrayList();
+		private ArrayList _subGroups = new ArrayList();
 
 		internal DataSourceEntityGroup(string name)
 		{
-			Name = name;
+			_name = name;
 		}
 		
-		public readonly string Name;
-		public DataSourceEntity[] Entities
-		{
-			get
-			{
-				return (DataSourceEntity[])_entities.ToArray(typeof(DataSourceEntity));
-			}
-		}
-
+		
 		internal void AddEntity(string name)
 		{
 			_entities.Add(new DataSourceEntity("", name));
@@ -82,6 +84,68 @@ namespace Ch3Etah.Core.ProjectLib
 		internal void AddEntity(DataSourceEntity entity)
 		{
 			_entities.Add(entity);
+		}
+
+		internal void AddSubGroup(string name)
+		{
+			_entities.Add(new DataSourceEntityGroup(name));
+		}
+
+		internal void AddSubGroup(DataSourceEntityGroup group)
+		{
+			_entities.Add(group);
+		}
+		
+		
+		public string Name
+		{
+			get { return _name; }
+		}
+		public DataSourceEntity[] Entities
+		{
+			get
+			{
+				return (DataSourceEntity[])_entities.ToArray(typeof(DataSourceEntity));
+			}
+		}
+
+		public DataSourceEntityGroup[] SubGroups
+		{
+			get
+			{
+				return (DataSourceEntityGroup[])_entities.ToArray(typeof(DataSourceEntityGroup));
+			}
+		}
+
+		
+		public DataSourceEntity FindEntity(string name)
+		{
+			return FindEntity(name, "");
+		}
+		
+		public DataSourceEntity FindEntity(string name, string nameSpace)
+		{
+			foreach (DataSourceEntity e in _entities)
+			{
+				if (e.Name == name 
+					&& (e.Namespace == nameSpace || nameSpace == ""))
+				{
+					return e;
+				}
+			}
+			return null;
+		}
+
+		public DataSourceEntityGroup FindSubGroup(string name)
+		{
+			foreach (DataSourceEntityGroup g in _subGroups)
+			{
+				if (g.Name == name)
+				{
+					return g;
+				}
+			}
+			return null;
 		}
 	}
 }
