@@ -45,11 +45,17 @@ namespace Ch3Etah.Core.ProjectLib {
 		//		http://www.codeproject.com/cs/miscctrl/canvas.asp
 		// PropertyBrowser stuff:
 		//		http://www.codeproject.com/cs/miscctrl/bending_property.asp
+		//
+		// Detecting the edge of a shape in Piccolo
+		//	    http://mailman.cs.umd.edu/pipermail/piccolo-chat/2005/000399.html
+		//      the title of the thread is "Adding a head and tail to a line"
+		//      also see www.cytoscape.org
+		//      but probably better (and faster) to use simpler method on rectangle shapes
 
 		#region Constructors and Member Variables
 
 		private const int FILE_VERSION_MAJOR = 0;
-		private const int FILE_VERSION_MINOR = 52;
+		private const int FILE_VERSION_MINOR = 53;
 		
 		private string _loadedState;
 		private Guid _guid = Guid.NewGuid();

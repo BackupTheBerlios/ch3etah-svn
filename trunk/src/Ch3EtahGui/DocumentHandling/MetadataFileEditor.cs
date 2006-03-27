@@ -21,6 +21,7 @@
 
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using Ch3Etah.Core.ProjectLib;
@@ -90,9 +91,13 @@ namespace Ch3Etah.Gui.DocumentHandling {
 		public override object SelectedObject {
 			get { return _metadataFile; }
 			set {
-				_metadataFile = (MetadataFile) value;
-				FileName = _metadataFile.GetFullPath();
+				_metadataFile = value as MetadataFile;
 				if (_metadataFile != null) {
+					if (!File.Exists(_metadataFile.FullPath))
+					{
+						throw new FileNotFoundException("Could not find all or part of the path '" + _metadataFile.FullPath + "'.", _metadataFile.FullPath);
+					}
+					FileName = _metadataFile.GetFullPath();
 					txtDocument.Enabled = true;
 				}
 				else {

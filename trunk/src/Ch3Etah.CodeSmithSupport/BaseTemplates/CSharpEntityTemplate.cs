@@ -169,12 +169,12 @@ namespace Ch3Etah.CodeSmithSupport.BaseTemplates
 		
 		protected virtual string GetPropertyGetterText(IMetadataNode member)
 		{
-			return GetPropertyAccessorText(member, "Get", "return ${field);");
+			return GetPropertyAccessorText(member, "Get", "return ${field};");
 		}
 
 		protected virtual string GetPropertySetterText(IMetadataNode member)
 		{
-			return GetPropertyAccessorText(member, "Set", "${field) = value;");
+			return GetPropertyAccessorText(member, "Set", "${field} = value;");
 		}
 		
 		private string GetPropertyAccessorText(IMetadataNode member, string nodeName, string defaultCode)
@@ -195,7 +195,7 @@ namespace Ch3Etah.CodeSmithSupport.BaseTemplates
 			if (accessorText.IndexOf("\r\n") > 0)
 				accessorText = "\r\n" + StringHelper.IndentBlock(accessorText) + "\r\n";
 
-			return accessorText.Replace("${field)", FormatFieldName(GetMemberName(member)));
+			return accessorText.Replace("${field}", FormatFieldName(GetMemberName(member)));
 		}
 
 		protected virtual string GetMemberName(IMetadataNode member)

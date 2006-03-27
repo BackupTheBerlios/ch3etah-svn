@@ -33,6 +33,124 @@ namespace Ch3Etah.Gui.DocumentHandling
 {
 	public class OREntityEditor : UserControl, IObjectEditor
 	{
+
+		#region CurrentEditMode
+		private enum MetadataEditMode
+		{
+			Design,
+			Xml
+		}
+
+		private MetadataEditMode _currentEditMode;
+		private MetadataEditMode CurrentEditMode
+		{
+			get { return _currentEditMode; }
+		}
+		
+
+// Don't want to allow public access for now, but if we do
+// sometime in the future, this is how it would probably look...
+//		public void SetCurrentEditMode(MetadataEditMode newEditMode)
+//		{
+//			if (newEditMode == MetadataEditMode.Xml)
+//			{
+//				tbiXML.Pushed = true;
+//			}
+//			else
+//			{
+//				tbiEditor.Pushed = true;
+//			}
+//		}
+
+		private void SetCurrentEditMode(MetadataEditMode newEditMode, out bool canceled)
+		{
+			try
+			{
+				if (!VerifySave())
+				{
+					// user canceled or something is wrong
+					canceled = true;
+					return;
+				}
+			
+				if (newEditMode == MetadataEditMode.Xml)
+				{
+					SwitchToXML();
+				}
+				else
+				{
+					SwitchToDesign();
+				}
+				_currentEditMode = newEditMode;
+				canceled = false;
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				MessageBox.Show(ex.Message);
+				canceled = true;
+				return;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.ToString());
+				canceled = true;
+				return;
+			}
+		}
+
+		private void SwitchToDesign()
+		{
+			pnlXmlEditor.Visible = false;
+			designView.Dock = DockStyle.Fill;
+			designView.Visible = true;
+			tbiXML.Pushed = false;
+			this.ResumeLayout();
+			this.SuspendLayout();
+			ReloadEntity();
+		}
+
+		private void SwitchToXML()
+		{
+			designView.Visible = false;
+			pnlXmlEditor.Dock = DockStyle.Fill;
+			pnlXmlEditor.Visible = true;
+			tbiEditor.Pushed = false;
+			this.ResumeLayout();
+			this.SuspendLayout();
+			ReloadXML();
+		}
+
+		private bool VerifySave()
+		{
+			if (this.IsDirty)
+			{
+				DialogResult result =
+					MessageBox.Show("Do you want to save your changes?", "Confirmation", MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+				if (result == DialogResult.Yes)
+				{
+					this.CommitChanges();
+				}
+				if (result == DialogResult.Cancel)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private void ReloadEntity()
+		{
+			_MetadataFile.Load();
+			CreateInitialTreeData();
+		}
+
+		private void ReloadXML()
+		{
+			textFileEditor1.SelectedObject = _MetadataFile.GetFullPath();
+		}
+		#endregion CurrentEditMode
+
 		#region Windows Form Designer generated code
 
 		private CommandBarManager commandBarManagerLink = new CommandBarManager();
@@ -277,6 +395,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 				this.designView.RefreshLinksList(rootNode, entity, false);
 
 				// Expand Root Node
+				designView.TreeView.SelectedNode = rootNode;
 				rootNode.ExpandAll();
 			}
 		}
@@ -301,7 +420,17 @@ namespace Ch3Etah.Gui.DocumentHandling
 
 		public bool IsDirty
 		{
-			get { return _MetadataFile.IsDirty; }
+			get
+			{
+				if (CurrentEditMode == MetadataEditMode.Xml)
+				{
+					return textFileEditor1.IsDirty;
+				}
+				else
+				{
+					return _MetadataFile.IsDirty;
+				}
+			}
 		}
 
 		#endregion IsDirty
@@ -328,7 +457,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 
 		public bool CommitChanges()
 		{
-			if (tbiXML.Pushed)
+			if (CurrentEditMode == MetadataEditMode.Xml)
 			{
 				XmlDocument doc = new XmlDocument();
 				doc.LoadXml(textFileEditor1.GetText());
@@ -398,10 +527,6 @@ namespace Ch3Etah.Gui.DocumentHandling
 
 		#endregion IObjectEditor implementation
 
-		#region Refresh Grids
-
-		#endregion Refresh Grids
-
 		#region Events
 
 		private void OREntityEditor_Load(object sender, EventArgs e)
@@ -434,14 +559,20 @@ namespace Ch3Etah.Gui.DocumentHandling
 		{
 			if (e.Button.Pushed)
 			{
+				bool canceled = false;
 				this.SuspendLayout();
 				if (e.Button == tbiXML)
 				{
-					SwitchToXML();
+					SetCurrentEditMode(MetadataEditMode.Xml, out canceled);
 				}
 				else
 				{
-					SwitchToDesign();
+					SetCurrentEditMode(MetadataEditMode.Design, out canceled);
+				}
+
+				if (canceled)
+				{
+					e.Button.Pushed = false;
 				}
 				this.ResumeLayout();
 			}
@@ -765,6 +896,61 @@ namespace Ch3Etah.Gui.DocumentHandling
 		}
 
 
+		private void designView_OnRename(object sender, EventArgs e)
+		{
+			if (this.designView.CurrentSelectedNode != null)
+			{
+				if (this.designView.CurrentSelectedNode.Tag is EntityField)
+				{
+					this.designView.CurrentSelectedNode.BeginEdit();
+				}
+				else if (this.designView.CurrentSelectedNode.Tag is Index)
+				{
+					this.designView.CurrentSelectedNode.BeginEdit();
+				}
+				else if (this.designView.CurrentSelectedNode.Tag is Link)
+				{
+					this.designView.CurrentSelectedNode.BeginEdit();
+				}
+			}
+		}
+
+		private void designView_AfterItemLabelEdit(object sender, EventArgs e)
+		{
+			if (this.designView.CurrentSelectedNode != null)
+			{
+				this.designView.CurrentSelectedNode.EndEdit(false);
+
+				if (this.designView.CurrentSelectedNode.Tag is EntityField)
+				{
+					((EntityField) this.designView.CurrentSelectedNode.Tag).Name = sender.ToString();
+				}
+				else if (this.designView.CurrentSelectedNode.Tag is Index)
+				{
+					((Index) this.designView.CurrentSelectedNode.Tag).Name = sender.ToString();
+				}
+				else if (this.designView.CurrentSelectedNode.Tag is Link)
+				{
+					((Link) this.designView.CurrentSelectedNode.Tag).Name = sender.ToString();
+				}
+
+				this.designView.RefreshPropertyGrid();
+			}
+		}
+
+		private void textFileEditor1_IsDirtyChanged(object sender, System.EventArgs e) 
+		{
+			string text;
+			if (textFileEditor1.IsDirty) 
+			{
+				text = _MetadataFile.Name + " *";
+			}
+			else 
+			{
+				text = _MetadataFile.Name;
+			}
+			if (Text != text) Text = text;
+		}
 		#endregion Events
 
 		#region Methods
@@ -793,28 +979,6 @@ namespace Ch3Etah.Gui.DocumentHandling
 			else {
 				return null;
 			}
-		}
-
-		private void SwitchToDesign()
-		{
-			pnlXmlEditor.Visible = false;
-			designView.Dock = DockStyle.Fill;
-			designView.Visible = true;
-			tbiXML.Pushed = false;
-			this.ResumeLayout();
-			this.SuspendLayout();
-			ReloadEntity();
-		}
-
-		private void SwitchToXML()
-		{
-			designView.Visible = false;
-			pnlXmlEditor.Dock = DockStyle.Fill;
-			pnlXmlEditor.Visible = true;
-			tbiEditor.Pushed = false;
-			this.ResumeLayout();
-			this.SuspendLayout();
-			ReloadXML();
 		}
 
 		public void SetupToolBar()
@@ -932,80 +1096,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 		}
 
 
-		private void ReloadEntity()
-		{
-			if (textFileEditor1.IsDirty)
-			{
-				textFileEditor1.CommitChanges();
-				_MetadataFile.Load();
-			}
-			CreateInitialTreeData();
-		}
-
-	
-		private void ReloadXML()
-		{
-			if (!loading && _MetadataFile.IsDirty)
-			{
-				_MetadataFile.Save();
-			}
-			textFileEditor1.SelectedObject = _MetadataFile.GetFullPath();
-		}
-
-		
 		#endregion
 
-		private void designView_OnRename(object sender, EventArgs e)
-		{
-			if (this.designView.CurrentSelectedNode != null)
-			{
-				if (this.designView.CurrentSelectedNode.Tag is EntityField)
-				{
-					this.designView.CurrentSelectedNode.BeginEdit();
-				}
-				else if (this.designView.CurrentSelectedNode.Tag is Index)
-				{
-					this.designView.CurrentSelectedNode.BeginEdit();
-				}
-				else if (this.designView.CurrentSelectedNode.Tag is Link)
-				{
-					this.designView.CurrentSelectedNode.BeginEdit();
-				}
-			}
-		}
-
-		private void designView_AfterItemLabelEdit(object sender, EventArgs e)
-		{
-			if (this.designView.CurrentSelectedNode != null)
-			{
-				this.designView.CurrentSelectedNode.EndEdit(false);
-
-				if (this.designView.CurrentSelectedNode.Tag is EntityField)
-				{
-					((EntityField) this.designView.CurrentSelectedNode.Tag).Name = sender.ToString();
-				}
-				else if (this.designView.CurrentSelectedNode.Tag is Index)
-				{
-					((Index) this.designView.CurrentSelectedNode.Tag).Name = sender.ToString();
-				}
-				else if (this.designView.CurrentSelectedNode.Tag is Link)
-				{
-					((Link) this.designView.CurrentSelectedNode.Tag).Name = sender.ToString();
-				}
-
-				this.designView.RefreshPropertyGrid();
-			}
-		}
-
-		private void textFileEditor1_IsDirtyChanged(object sender, System.EventArgs e) {
-			string text;
-			if (textFileEditor1.IsDirty) {
-				text = _MetadataFile.Name + " *";
-			}
-			else {
-				text = _MetadataFile.Name;
-			}
-			if (Text != text) Text = text;
-		}
 	}
 }

@@ -1,10 +1,10 @@
 ---------------------------------------------------------------------------
 - Version 0.5.3
 ---------------------------------------------------------------------------
-Version 0.5.3 Breaking Changes:
-* Support was added for DataSources of different types. Due to the way XML serialization of inheritance trees is done in .NET, projects saved with this version will not be backward-compatible. In other words, opening projects created with version 0.5.3+ in older versions of CH3ETAH will throw a nasty exception. (But projects saved in previous versions can be opened in CH3ETAH 0.5.3 with no problems)
+Breaking Changes:
+* Support was added for DataSources of different types. Due to the way XML serialization of inheritance trees is done in .NET, projects saved with this version will not be backward-compatible. In other words, opening projects created with version 0.5.3+ in older versions of CH3ETAH will throw a nasty exception. (But projects saved in previous versions can still be opened in CH3ETAH 0.5.3 with no problems)
 
-Version 0.5.3 Summary of Changes:
+Summary of Changes:
 * Code generation engines are now configurable at run time.
 * Added support for CodeSmith templates.
 * Up to 80% improvement in performance on large projects.
@@ -14,7 +14,11 @@ Version 0.5.3 Summary of Changes:
 * Application Settings dialog.
 * Bug fixes.
 
-Version 0.5.3 Change Log:
+Change Log:
+FIX: Adding a new, empty metadata file to a project throws a file not found exception.
+FIX: Making changes in XML view (metadata editor) does not prompt user to save changes when closing the document.
+FIX: Switching from XML to Design view (or vice-versa) in metadata editor when the file is read only causes changes to be lost.
+FIX: Fixed a typo in the CodeSmith base template.
 FIX: Entity fields are now ordered the same as the corresponding table columns when synchronizing from OleDbDataSource.
 ADD: The full paths of metadata files are now viewable in the property grid.
 ADD: Added a generic DataSource editor to the UI.

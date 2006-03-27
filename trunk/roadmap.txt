@@ -3,30 +3,29 @@
 * Assembly analyzer for reverse engeneering
 * AppDomain isolation of template engines
 
-- BUG: Adding link when another link is selected in treeview messes up tree
-- BUG: Object editor captions not being shown on tabs
-- BUG: There is no UI feedback when adding multiple tables from datasource
-- BUG: Merge support is not working correctly - it just overwrites the existing file w/o merging
-- BUG: If you add a new, non-OREntity-related, node to the entity in xml mode, it always thinks the entity is dirty.
-- BUG: Turn off recording of temp xml files during generation
-- BUG: Entities are not being selected automatically in generator commands - need to change package structure
-- BUG: Object isn't highlighted in treeview anymore when you switch object editor windows
-- BUG: Include text editor mode files in post build event
-- BUG: Data source guid is null
-- BUG: Entity fields should be added in DB order, not alphabetical
-* BUG: When you delete a node from the project tree (data source, command, metadata file) the deleted object's content editor window is not closed
-* BUG: Entity name doesn't update in treeview when changed in property grid
-* BUG: 
+BUG: If you call MetadataFile.Save() and it throws (like UnauthorizedAccessException) then MetadataFile.IsDirty no longer returns true, even though it was not saved successfully.
+BUG: Adding xml comments (<!-- -->) just under Metadata tag (i.e. same level as entity tag will throw an exeption "The '#' character, hexadecimal value 0x23, cannot begin with a name." It apears that the comment node is being added to the grouped metadata with a key of "#" by the method GroupMetadataEntities in CodeGeneratorCommand.cs.
+BUG: Xml comments are not ignored by XmlContext in the NVelocity engine.
+BUG: Trace window output for single-output commands should indicate they are single-output.
+BUG: Old ch3etah web generation project was loaded and Page command was converted to single-output when it should have been multiple-output.
+BUG: In ch3etah web project, xml editor *always* asks you to save changes
+BUG: When you delete a node from the project tree (data source, command, metadata file) the deleted object's content editor window is not closed
+BUG: Exception thrown when all output path contains ${...} is uninteligible for single-outout commands - i.e. it says "couldn't evaluate... for metadata file 'NULL'."
+BUG: Some newly added entities (see EmailConfiguration) always ask to save changes, even when none were made.
+BUG: Entity name doesn't update in treeview when changed in property grid
+BUG: There is way too much coupling between the OREntityEditor and it's children (like accessing the TreeView on the Design editor). This really needs to be refactored.
+POSSIBLE BUG: It seems that App settings may not be preserved when upgrading an installation (need to verify)
 
-- FEAT: Check to see if file has changed before overwriting
-- FEAT: Have better handling (like VS.NET) when metadata files aren't found (change icon and allow removal/renaming)
-- FEAT: Update any associated entities when the datasource name is changed
-- FEAT: Add command to remove datasource
-- FEAT: Add global error handling
-- FEAT: Excluded metadata nodes need to have their icon be visibly different.
-- FEAT: Delete to exclude, Insert to include, and shift + delete to remove fields, indexes and links
-- FEAT: Change "Remove Metadata File" to "Exclude From Project" and add "Delete Metadata File"
-- FEAT: Keyboard support (enter, delete, etc) in project and entity trees
+* FEAT: Nant script needs to copy changelog.txt to web directory
+* FEAT: Need to add search dialog to text editor.
+* FEAT: It really needs to be easier to create/edit packages with their included templates and sample projets
+* FEAT: Add project-level parameters and project, metadata file, command, and template stencils to packages
+* FEAT: Add data source CustomEntityAttributes to Package (and add a description to attributes)
+* FEAT: Possibly add Description property to all key-value pairs
+* FEAT: Rename Core.CodeGen.PackageLib.InputParameter to TemplateParameter and add a description
+* FEAT: TemplateParameter needs to be able to accept typed values so that values other than string can be added to the generation context (similar to CodeSmith)
+* FEAT: Need to implement configurable template loaders so that different engines can have specific features/functionality associated with their templates (like allowing CodeSmith templates to be parsed to find the required parameters)
+* FEAT: Add evaluation syntax to allow metadata entities to be passed to generation context parameters as strongly typed objects rather than just XML ( ex: ${CurrentMetadataFile::Entity[0]} )
 * FEAT: Add a "Rename" command to metadata file right click menu [possibly implement an INamedObject with SupportsRename() and Rename(string newName)]
 * FEAT: Enable visual styles
 * FEAT: In ORM settings, add list of field names to exclude automatically, like SiteID, ReplicationID, etc.
@@ -36,13 +35,33 @@
 * FEAT: Put property browser below and put object editor forms to the side in MetadataFileEditor
 * FEAT: Issue with toolbar buttons on entity editor screen
 * FEAT: Add changed events to properties in project and metadata
-* FEAT: A saída do Velocity está sendo feita em UTF-8. Até aí, nada de mais, uma vez que temos usado apenas ASCII. Porém, peguei um sistema legado que tem nomes de campos acentuados. Adivinha o que acontece com o script SQL quando ele pega um arquivo UTF-8... Precisa mudar a saída prá ANSI ou ISO-8859-1. [Add 'Encoding' option to code generator command]
+* FEAT: Add 'Text Encoding' option to code generator command (A saída do Velocity está sendo feita em UTF-8. Até aí, nada de mais, uma vez que temos usado apenas ASCII. Porém, peguei um sistema legado que tem nomes de campos acentuados. Adivinha o que acontece com o script SQL quando ele pega um arquivo UTF-8... Precisa mudar a saída prá ANSI ou ISO-8859-1.)
 * FEAT: Installer needs to make sure program isn't running
 http://nsis.sourceforge.net/Check_whether_your_application_is_running_during_uninstallation
 http://nsis.sourceforge.net/Detect_if_a_window_is_open_and_close_it.
-* FEAT: 
+* FEAT: We should look at migrating WeifenLuo docking suit to 1.0+, though not for this release. http://sourceforge.net/users/weifenluo/
 
 * WISH: Manage multiple files in project structure (i.e. select several metadata files and remove them)
 * WISH: Allow organizing of metadata files into sub directories
-* WISH: 
+* WISH: We would like to have a simple Entity object and extend it with functionality and attributes such as O/R mapping, GUI-specific, framework-specific, etc. One possible way of acheiving this could be to use the decorator pattern or similar. We would need to figure out how the decorations would show up on editing screens, in property grid, etc. It would also be nice to have it configurable at runtime to make it easier to create/configure/discover/experiement with extending entities without having to create a VS.NET project for the extension and compile it.
+
+============================================
+Documentation Points (possibly use a WIKI)
+============================================
+SEE: http://moinmoin.wikiwikiweb.de/SourceForge?highlight=%28SourceForge%29
+- Getting started
+  - Creating your first project (using one of the included sample packages)
+  - Editing metadata files
+  - Adjusting application and project-level settings
+  - Adjusting data source settings
+  - Adding a generator command to your project
+- Authoring your own packages and templates 
+  - Starting from one of the samples
+  - Starting from scratch
+- Authoring metadata types
+  - Adhoc
+  - Strongly typed
+  - Creating editors
+- Authoring data sources
+
 

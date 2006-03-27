@@ -27,6 +27,8 @@ using System.Drawing;
 using System.IO;
 using System.Resources;
 using System.Windows.Forms;
+using System.Xml;
+
 using Ch3Etah.Core;
 using Ch3Etah.Core.Config;
 using Ch3Etah.Core.CodeGen.PackageLib;
@@ -969,11 +971,29 @@ namespace Ch3Etah.Gui {
 			return null;
 		}
 
+		private void OpenObjectEditor(object contextObject)
+		{
+			TreeNode node = GetContextNode(contextObject, tvwProject.Nodes);
+			if (node != null)
+			{
+				node.EnsureVisible();
+				tvwProject.SelectedNode = node;
+			}
+
+			IObjectEditor editor = ObjectEditorFactory.CreateObjectEditor(contextObject);
+			if (editor != null) 
+			{
+				editor.SelectedObjectChanged += new EventHandler(IObjectEditor_SelectedObjectChanged);
+				ObjectEditorManager.OpenObjectEditor(editor);
+			}
+		}
+
 		#endregion UI code
 
 		#region CommandBar code
 
-		protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData) 
+		{
 			// Handle keyboard shortcuts
 			if (commandBarManager.PreProcessMessage(ref msg)) {
 				return true;
@@ -1370,23 +1390,27 @@ namespace Ch3Etah.Gui {
 		}
 
 		private void EditProjectParameters_Click(object sender, EventArgs e) {
-			IObjectEditor editor = new InputParameterCollectionEditor(_project.InputParameters);
-			ObjectEditorManager.OpenObjectEditor(editor);
+			OpenObjectEditor(_project.InputParameters);
 		}
 
 		private void AddNewMetadataFile_Click(object sender, EventArgs e) {
-			// TODO: Add metadata file to appropriate generator commands
-			MetadataFile file = new MetadataFile(_project);
-			_project.MetadataFiles.Add(file);
-			RefreshUI();
-			IObjectEditor editor = new MetadataFileEditor();
-			editor.SelectedObject = file;
-			editor.SelectedObjectChanged += new EventHandler(IObjectEditor_SelectedObjectChanged);
-			ObjectEditorManager.OpenObjectEditor(editor);
+			SaveFileDialog dlg = new SaveFileDialog();
+			dlg.InitialDirectory = _project.GetFullMetadataPath();
+			dlg.Filter = "XML Files (.XML)|*.xml|All Files (*.*)|*.*";
+			if (dlg.ShowDialog(this) == DialogResult.OK)
+			{
+				MetadataFile file = new MetadataFile(_project);
+				XmlDocument doc = new XmlDocument();
+				doc.LoadXml("<Metadata></Metadata>");
+				file.LoadXml(doc);
+				file.Save(dlg.FileName);
+				_project.MetadataFiles.Add(file);
+				RefreshUI();
+				OpenObjectEditor(file);
+			}
 		}
 
 		private void AddExistingMetadataFile_Click(object sender, EventArgs e) {
-			// TODO: Add metadata file to appropriate generator commands
 			OpenFileDialog dlg = new OpenFileDialog();
 			dlg.InitialDirectory = _project.GetFullMetadataPath();
 			dlg.Filter = "XML Files (.XML)|*.xml|All Files (*.*)|*.*";
@@ -1437,21 +1461,14 @@ namespace Ch3Etah.Gui {
 			CodeGeneratorCommand command = new CodeGeneratorCommand();
 			_project.GeneratorCommands.Add(command);
 			RefreshUI();
-			IObjectEditor editor = new CodeGeneratorCommandEditor(command);
-			editor.SelectedObjectChanged += new EventHandler(IObjectEditor_SelectedObjectChanged);
-			ObjectEditorManager.OpenObjectEditor(editor);
+			OpenObjectEditor(command);
 		}
 
 		private void AddDataSource_Click(object sender, EventArgs e) {
 			OleDbDataSource ds = new OleDbDataSource();
 			_project.DataSources.Add(ds);
 			RefreshUI();
-			TreeNode dsNode = GetContextNode(ds, tvwProject.Nodes);
-			dsNode.EnsureVisible();
-			tvwProject.SelectedNode = dsNode;
-			IObjectEditor editor = new OleDbDataSourceEditor(ds);
-			editor.SelectedObjectChanged += new EventHandler(IObjectEditor_SelectedObjectChanged);
-			ObjectEditorManager.OpenObjectEditor(editor);
+			OpenObjectEditor(ds);
 		}
 
 		private void RemoveDataSource_Click(object sender, EventArgs e) 
@@ -1474,14 +1491,12 @@ namespace Ch3Etah.Gui {
 				                MessageBoxIcon.Exclamation);
 				return;
 			}
-			CodeGenerationTemplateEditor editor = new CodeGenerationTemplateEditor(command);
-			ObjectEditorManager.OpenObjectEditor(editor);
+			OpenObjectEditor(command);
 		}
 
 		private void EditOREntity_Click(object sender, EventArgs e) {
 			MetadataFile file = tvwProject.SelectedNode.Tag as MetadataFile;
-			OREntityEditor editor = new OREntityEditor(file);
-			ObjectEditorManager.OpenObjectEditor(editor);
+			OpenObjectEditor(file);
 		}
 
 		private void RunCommand_Click(object sender, EventArgs e) {
@@ -1649,14 +1664,7 @@ namespace Ch3Etah.Gui {
 				{
 					return;
 				}
-
-				IObjectEditor editor = ObjectEditorFactory.CreateObjectEditor(node.Tag);
-
-				if (editor != null) 
-				{
-					editor.SelectedObjectChanged += new EventHandler(IObjectEditor_SelectedObjectChanged);
-					ObjectEditorManager.OpenObjectEditor(editor);
-				}
+				OpenObjectEditor(node.Tag);
 			}
 			catch (Exception ex)
 			{
