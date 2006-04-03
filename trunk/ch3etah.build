@@ -41,7 +41,7 @@
 	</if>
 	
 	<property name="local.web.path" value="${build.dir}\web\content" />
-	<property name="remote.ssh.server" value="ch3etah.sourceforge.net" />
+	<property name="remote.ssh.server" value="shell.sourceforge.net" />
 	<property name="remote.ssh.user" value="${environment::get-user-name()}" unless="${property::exists('remote.ssh.user')}" />
 	<property name="remote.ssh.pwd" value="" unless="${property::exists('remote.ssh.pwd')}" />
 	<property name="remote.web.path" value="/home/groups/c/ch/ch3etah/htdocs" />
@@ -52,7 +52,8 @@
 		<if test="${remote.ssh.pwd == ''}">
 			<fail message="You must specify the property 'remote.ssh.pwd' to execute this command. Use the syntax 'nant -D:remote.ssh.pwd=yourpassword targetname' to define required parameter." />
 		</if>
-		<property name="scp.program.args" value="-batch -q -C -v -r -pw ${remote.ssh.pwd}" />
+		<property name="scp.program.args" value="-batch -C -v -pw ${remote.ssh.pwd}" />
+		<property name="plink.program.args" value="${scp.program.args} ${remote.ssh.user}@${remote.ssh.server}" />
 	</target>
 	
 	<target name="help">
@@ -106,7 +107,7 @@
 		<mkdir dir="${local.web.path}" />
 		<!-- copy images and html files for website to sourceforge (using compression) -->
 		<exec program="${scp.program}" verbose="false" timeout="300000" >
-			<arg line="${scp.program.args}" />
+			<arg line="-q -r ${scp.program.args}" />
 			<arg line="${remote.web.serverpart}/*" />
 			<arg value="${local.web.path}" />
 		</exec>

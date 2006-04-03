@@ -142,7 +142,8 @@ namespace Ch3Etah.Gui {
 		private CommandBarItem cbiViewProjectExplorer;
 		private CommandBarItem cbiViewPropertiesWindow;
 		private CommandBarItem cbiViewOutputWindow;
-		private CommandBarItem cbiViewApplicationSettings;
+		private CommandBarItem cbiEditApplicationSettings;
+		private CommandBarItem cbiSearchText;
 
 		private CommandBarItem cbiExit;
 
@@ -155,10 +156,12 @@ namespace Ch3Etah.Gui {
 		private PropertiesWindow propertiesWindow;
 		private OutputWindow outputWindow;
 		private ProjectExplorer projectExplorer;
+		private SearchTextDialog searchTextDialog;
 
 		#endregion UI member variables
 
-		public MainForm() {
+		public MainForm() 
+		{
 			InitializeForm();
 		}
 
@@ -507,6 +510,7 @@ namespace Ch3Etah.Gui {
 			cbiAddNewMetadataFile.IsEnabled = (_project != null && !_running);
 			cbiAddCodeGenCommand.IsEnabled = (_project != null && !_running);
 			cbiEditProjectParameters.IsEnabled = (_project != null && !_running);
+			cbiSearchText.IsEnabled = (_project != null && !_running);
 			cbiOpenProject.IsEnabled = (!_running);
 			cbiNewProject.IsEnabled = (!_running);
 		}
@@ -1015,13 +1019,19 @@ namespace Ch3Etah.Gui {
 			fileMenu.Items.AddSeparator();
 			SetupMRUList(fileMenu);
 			fileMenu.Items.Add(cbiExit);
+fileMenu=null;
+
+			// Edit menu
+			CommandBarMenu editMenu = menuBar.Items.AddMenu("&Edit");
+			editMenu.Items.Add(cbiSearchText);
+			editMenu.Items.AddSeparator();
+			editMenu.Items.Add(cbiEditApplicationSettings);
 
 			// View menu
 			CommandBarMenu viewMenu = menuBar.Items.AddMenu("&View");
 			viewMenu.Items.Add(cbiViewProjectExplorer);
 			viewMenu.Items.Add(cbiViewPropertiesWindow);
 			viewMenu.Items.Add(cbiViewOutputWindow);
-			viewMenu.Items.Add(cbiViewApplicationSettings);
 
 			CommandBarMenu projectMenu = menuBar.Items.AddMenu("&Project");
 			projectMenu.Items.Add(cbiRunProject);
@@ -1109,6 +1119,11 @@ namespace Ch3Etah.Gui {
 					"Edit Code Generation &Parameters", new EventHandler(EditProjectParameters_Click),
 					Keys.Control | Keys.Shift | Keys.P);
 
+			cbiSearchText = 
+				new CommandBarButton("&Find and Replace", new EventHandler(SearchText_Click), Keys.Control | Keys.F);
+			cbiEditApplicationSettings = 
+				new CommandBarButton("&Application Settings", new EventHandler(EditApplicationSettings_Click));
+			
 			cbiViewProjectExplorer =
 				new CommandBarButton(
 					Images.Ch3Etah, "&Project Explorer", new EventHandler(ViewProjectExplorer_Click), Keys.Control | Keys.Alt | Keys.L);
@@ -1116,8 +1131,6 @@ namespace Ch3Etah.Gui {
 				new CommandBarButton(Images.Properties, "&Properties", new EventHandler(ViewProperties_Click), Keys.F4);
 			cbiViewOutputWindow =
 				new CommandBarButton(Images.Output, "&Output", new EventHandler(ViewOutput_Click));
-			cbiViewApplicationSettings = 
-				new CommandBarButton("&Application Settings", new EventHandler(ViewApplicationSettings_Click));
 
 			cbiWebSite = new CommandBarButton(Images.Home, "CH3ETAH &Web Site", new EventHandler(WebSite_Click));
 			cbiAbout = new CommandBarButton(Images.Help, "&About", new EventHandler(About_Click));
@@ -1125,13 +1138,29 @@ namespace Ch3Etah.Gui {
 			cbiExit = new CommandBarButton("E&xit", new EventHandler(Exit_Click));
 		}
 
-		private void ViewApplicationSettings_Click(object sender, EventArgs e) 
+		private void SearchText_Click(object sender, EventArgs e) 
+		{
+			if (searchTextDialog == null || searchTextDialog.IsDisposed)
+			{
+				searchTextDialog = new SearchTextDialog();
+				searchTextDialog.HideOnClose = true;
+			}
+			if (searchTextDialog.VisibleState == DockState.Unknown)
+			{
+				searchTextDialog.Show(dockPanel1, DockState.Float);
+				searchTextDialog.Pane.FloatWindow.Size = searchTextDialog.MinimumSize;
+			}
+			searchTextDialog.Activate();
+		}
+
+		private void EditApplicationSettings_Click(object sender, EventArgs e) 
 		{
 			SettingsDialog dlg = new SettingsDialog();
 			dlg.ShowDialog(this);
 		}
 
-		private void ViewOutput_Click(object sender, EventArgs e) {
+		private void ViewOutput_Click(object sender, EventArgs e) 
+		{
 			outputWindow.Show();
 		}
 
@@ -1739,6 +1768,8 @@ namespace Ch3Etah.Gui {
 
 			propertiesWindow = new PropertiesWindow();
 			propertiesWindow.Show(projectExplorer.Pane, DockAlignment.Bottom | DockAlignment.Left, .7);
+			
+			searchTextDialog = new SearchTextDialog();
 			
 			HookDockContents();
 		}

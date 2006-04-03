@@ -36,7 +36,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 	/// <summary>
 	/// Description of TextFileEditor.	
 	/// </summary>
-	public class TextFileEditor : UserControl, IObjectEditor
+	public class TextFileEditor : UserControl, IObjectEditor, Ch3Etah.Gui.Widgets.ITextDocument
 	{
 		public event System.EventHandler SelectedObjectChanged;
 
@@ -456,7 +456,36 @@ namespace Ch3Etah.Gui.DocumentHandling
 		{
 			return txtDocument.Text;
 		}
-
+		public void SetSelection(int offset, int length)
+		{
+			int start = Math.Min(offset, offset + length);
+			int end = Math.Max(offset, offset + length);
+			txtDocument.ActiveTextAreaControl.Caret.Position = txtDocument.Document.OffsetToPosition(start);
+			txtDocument.ActiveTextAreaControl.SelectionManager.ClearSelection();
+			txtDocument.ActiveTextAreaControl.SelectionManager.SetSelection(txtDocument.Document.OffsetToPosition(start), txtDocument.Document.OffsetToPosition(end));
+			txtDocument.Refresh();
+		}
+		public int GetSelectionOffset()
+		{
+			return txtDocument.ActiveTextAreaControl.Caret.Offset;
+		}
+		public int GetSelectionLength()
+		{
+			if (txtDocument.ActiveTextAreaControl.TextArea.SelectionManager.SelectionCollection.Count > 0)
+			{
+				int start = txtDocument.ActiveTextAreaControl.TextArea.SelectionManager.SelectionCollection[0].Offset;
+				int length = txtDocument.ActiveTextAreaControl.TextArea.SelectionManager.SelectionCollection[0].Length;
+				if (start < txtDocument.ActiveTextAreaControl.Caret.Offset)
+				{
+					return -length;
+				}
+				else
+				{
+					return length;
+				}
+			}
+			return 0;
+		}
 		protected void OnSaveAs(ref string fileDialogFilter, out bool cancel)
 		{
 			cancel = false;

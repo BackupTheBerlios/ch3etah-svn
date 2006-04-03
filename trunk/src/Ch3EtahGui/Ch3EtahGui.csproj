@@ -312,6 +312,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DocumentHandling\CodeGenerationTemplateEditor.resx"
+                    DependentUpon = "CodeGenerationTemplateEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "DocumentHandling\CodeGeneratorCommandEditor.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
@@ -561,6 +566,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Widgets\ITextDocument.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Widgets\MetadataFileSelector.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
@@ -598,6 +608,16 @@
                 <File
                     RelPath = "Widgets\PropertiesWindow.resx"
                     DependentUpon = "PropertiesWindow.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Widgets\SearchTextDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Widgets\SearchTextDialog.resx"
+                    DependentUpon = "SearchTextDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

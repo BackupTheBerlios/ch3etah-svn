@@ -15,6 +15,7 @@ Summary of Changes:
 * Bug fixes.
 
 Change Log:
+ADD: Added (very) basic search functionality.
 FIX: Adding a new, empty metadata file to a project throws a file not found exception.
 FIX: Making changes in XML view (metadata editor) does not prompt user to save changes when closing the document.
 FIX: Switching from XML to Design view (or vice-versa) in metadata editor when the file is read only causes changes to be lost.

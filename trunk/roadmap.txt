@@ -1,3 +1,13 @@
+Incremental builds (nightly/weekly):
+ - Code compiles and Unit tests pass
+ - No showstopper bugs
+ - Documentation might be incomplete or inconsistent
+Releases: (every 3-6 weeks)
+ - Code compiles and Unit tests pass
+ - No showstopper bugs
+ - Documentation should be consistent
+
+Some major features to be implemented:
 * Region support with hash code generation and checking
 * SimpleEngine
 * Assembly analyzer for reverse engeneering
@@ -14,10 +24,10 @@ BUG: Exception thrown when all output path contains ${...} is uninteligible for 
 BUG: Some newly added entities (see EmailConfiguration) always ask to save changes, even when none were made.
 BUG: Entity name doesn't update in treeview when changed in property grid
 BUG: There is way too much coupling between the OREntityEditor and it's children (like accessing the TreeView on the Design editor). This really needs to be refactored.
-POSSIBLE BUG: It seems that App settings may not be preserved when upgrading an installation (need to verify)
 
-* FEAT: Nant script needs to copy changelog.txt to web directory
 * FEAT: Need to add search dialog to text editor.
+* FEAT: Nant script needs to copy changelog.txt to web directory
+* FEAT: Should validate that links point to valid entities and warn if they don't (i.e. to avoid null ref exceptions when generating)
 * FEAT: It really needs to be easier to create/edit packages with their included templates and sample projets
 * FEAT: Add project-level parameters and project, metadata file, command, and template stencils to packages
 * FEAT: Add data source CustomEntityAttributes to Package (and add a description to attributes)
@@ -27,6 +37,7 @@ POSSIBLE BUG: It seems that App settings may not be preserved when upgrading an 
 * FEAT: Need to implement configurable template loaders so that different engines can have specific features/functionality associated with their templates (like allowing CodeSmith templates to be parsed to find the required parameters)
 * FEAT: Add evaluation syntax to allow metadata entities to be passed to generation context parameters as strongly typed objects rather than just XML ( ex: ${CurrentMetadataFile::Entity[0]} )
 * FEAT: Add a "Rename" command to metadata file right click menu [possibly implement an INamedObject with SupportsRename() and Rename(string newName)]
+* FEAT: Add support for Stored Procedure (SP) metadata for generating stron-typed data access commands. Should have option to use stored XML or refresh from DB every time code is generated (AutoRefreshSchema - possibly same for OREntities).
 * FEAT: Enable visual styles
 * FEAT: In ORM settings, add list of field names to exclude automatically, like SiteID, ReplicationID, etc.
 * FEAT: Remove/Exclude deleted fields, indexes and links when entity is refreshed from db (or mark IsExcluded=true), and advise user (have option in settings)
@@ -41,6 +52,7 @@ http://nsis.sourceforge.net/Check_whether_your_application_is_running_during_uni
 http://nsis.sourceforge.net/Detect_if_a_window_is_open_and_close_it.
 * FEAT: We should look at migrating WeifenLuo docking suit to 1.0+, though not for this release. http://sourceforge.net/users/weifenluo/
 
+* WISH: Visual UML-style modeler. Should use Model-View-Presenter pattern and code to interfaces so that other types of metadata entities (e.g. XMI) can be plugged into the modeler.
 * WISH: Manage multiple files in project structure (i.e. select several metadata files and remove them)
 * WISH: Allow organizing of metadata files into sub directories
 * WISH: We would like to have a simple Entity object and extend it with functionality and attributes such as O/R mapping, GUI-specific, framework-specific, etc. One possible way of acheiving this could be to use the decorator pattern or similar. We would need to figure out how the decorations would show up on editing screens, in property grid, etc. It would also be nice to have it configurable at runtime to make it easier to create/configure/discover/experiement with extending entities without having to create a VS.NET project for the extension and compile it.
