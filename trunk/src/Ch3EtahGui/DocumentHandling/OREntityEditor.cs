@@ -513,8 +513,8 @@ namespace Ch3Etah.Gui.DocumentHandling
 					cancel = true;
 					return;
 				}
-				// TODO: Check what this is supposed to do
-//				_MetadataFile.LoadXml(((IMetadataNode) _MetadataFile).LoadedXmlNode);
+				// revert changes
+				_MetadataFile.Load();
 				cancel = false;
 			}
 			else

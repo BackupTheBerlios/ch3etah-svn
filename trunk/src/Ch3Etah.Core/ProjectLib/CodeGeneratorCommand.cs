@@ -751,6 +751,10 @@ namespace Ch3Etah.Core.ProjectLib {
 			foreach (MetadataFile file in files) {
 				foreach (IMetadataEntity entity in file.MetadataEntities) {
 					string name = PathResolver.GetPluralForm(entity.RootNodeName);
+					if (name == "#comments")
+					{
+						continue;
+					}
 					if (!entityCollections.ContainsKey(name)) {
 						entityCollections.Add(name, new MetadataEntityCollection());
 					}

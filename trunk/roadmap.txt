@@ -13,19 +13,13 @@ Some major features to be implemented:
 * Assembly analyzer for reverse engeneering
 * AppDomain isolation of template engines
 
-BUG: If you call MetadataFile.Save() and it throws (like UnauthorizedAccessException) then MetadataFile.IsDirty no longer returns true, even though it was not saved successfully.
-BUG: Adding xml comments (<!-- -->) just under Metadata tag (i.e. same level as entity tag will throw an exeption "The '#' character, hexadecimal value 0x23, cannot begin with a name." It apears that the comment node is being added to the grouped metadata with a key of "#" by the method GroupMetadataEntities in CodeGeneratorCommand.cs.
-BUG: Xml comments are not ignored by XmlContext in the NVelocity engine.
 BUG: Trace window output for single-output commands should indicate they are single-output.
 BUG: Old ch3etah web generation project was loaded and Page command was converted to single-output when it should have been multiple-output.
-BUG: In ch3etah web project, xml editor *always* asks you to save changes
 BUG: When you delete a node from the project tree (data source, command, metadata file) the deleted object's content editor window is not closed
 BUG: Exception thrown when all output path contains ${...} is uninteligible for single-outout commands - i.e. it says "couldn't evaluate... for metadata file 'NULL'."
-BUG: Some newly added entities (see EmailConfiguration) always ask to save changes, even when none were made.
 BUG: Entity name doesn't update in treeview when changed in property grid
-BUG: There is way too much coupling between the OREntityEditor and it's children (like accessing the TreeView on the Design editor). This really needs to be refactored.
+BUG: There is way too much coupling between the OREntityEditor and it's children (like accessing the TreeView on the Design editor). This really needs to be refactored. Same with MainForm.
 
-* FEAT: Need to add search dialog to text editor.
 * FEAT: Nant script needs to copy changelog.txt to web directory
 * FEAT: Should validate that links point to valid entities and warn if they don't (i.e. to avoid null ref exceptions when generating)
 * FEAT: It really needs to be easier to create/edit packages with their included templates and sample projets

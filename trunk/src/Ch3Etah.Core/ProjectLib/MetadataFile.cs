@@ -21,7 +21,6 @@
  */
 
 using System;
-using System.Drawing.Design;
 using System.IO;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -41,6 +40,7 @@ namespace Ch3Etah.Core.ProjectLib
 	{
 		#region Constructors and Member Variables
 		
+		private string _loadedState;
 		private Guid _guid = Guid.NewGuid();
 		private string _name = "";
 		private string _fileName = "";
@@ -124,7 +124,9 @@ namespace Ch3Etah.Core.ProjectLib
 		[Browsable(false)]
 		public bool IsDirty {
 			get {
-				return this._isNew || MetadataEntities.IsDirty;
+				return this._isNew 
+					|| MetadataEntities.IsDirty
+					|| _loadedState != this.SaveXml();
 			}
 		}
 		#endregion IsDirty
@@ -190,7 +192,6 @@ namespace Ch3Etah.Core.ProjectLib
 			//FileStream input = File.OpenRead(fullPath);
 			document.Load(fullPath);
 			LoadXml(document);
-			
 			FileName = fileName;
 		}
 		
@@ -205,6 +206,7 @@ namespace Ch3Etah.Core.ProjectLib
 			}
 			_isNew = false;
 			_metadata.OwningMetadataFile = this;
+			_loadedState = this.SaveXml();
 		}
 		
 		private void LoadEntitiesFromNode(XmlNode rootNode) {
@@ -241,12 +243,14 @@ namespace Ch3Etah.Core.ProjectLib
 			if (_metadata == null) throw new FileNotLoadedException();
 			
 			XmlDocument document = new XmlDocument();
-			document.LoadXml(SaveXml());
+			string xml = SaveXml();
+			document.LoadXml(xml);
 			using (TextWriter wr = new StreamWriter(GetFullPath(fileName), false, System.Text.Encoding.UTF8))
 			{
 				document.Save(wr);
 			}
 			FileName = fileName;
+			_loadedState = xml;
 		}
 		
 		public string SaveXml() {

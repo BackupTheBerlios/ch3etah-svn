@@ -15,6 +15,10 @@ Summary of Changes:
 * Bug fixes.
 
 Change Log:
+FIX: If error occurs while saving metadata file, the program no longer thinks the file needs to be saved, even though it was not saved successfully.
+FIX: Program always thinks custom XML metadata files have changed and asks user to save changes.
+FIX: Adding XML comments (<!-- -->) just under Metadata tag (i.e. same level as entity tag) will throw an exception when generating. The comment node was being added to the grouped metadata with a key of "#comments".
+FIX: XML comments are not ignored by XmlContext in the NVelocity engine.
 ADD: Added (very) basic search functionality.
 FIX: Adding a new, empty metadata file to a project throws a file not found exception.
 FIX: Making changes in XML view (metadata editor) does not prompt user to save changes when closing the document.

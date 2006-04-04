@@ -55,7 +55,7 @@ namespace Ch3Etah.Core.Metadata
 		
 		public override bool IsDirty {
 			get {
-				return (_originalXml == _node.OuterXml);
+				return (_originalXml != _node.OuterXml);
 			}
 		}
 		

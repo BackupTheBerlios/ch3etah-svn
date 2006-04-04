@@ -180,7 +180,10 @@ namespace Ch3Etah.Core.CodeGen.NVelocityEngine
 		private XmlContext[] GetChildContexts() {
 			ArrayList nodes = new ArrayList();
 			foreach (XmlNode node in _node.ChildNodes) {
-				nodes.Add(node);
+				if (node.Name != "#comment")
+				{
+					nodes.Add(node);
+				}
 			}
 			return GetChildContexts(nodes);
 		}
