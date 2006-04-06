@@ -41,6 +41,11 @@ namespace Ch3Etah.Core.CodeGen.NVelocityEngine
 		{
 		}
 
+		public override void ClearCache()
+		{
+			// No caching implemented.
+		}
+
 		public override void Transform(XmlNode input, TextWriter output)
 		{
 			_inputNode = input;

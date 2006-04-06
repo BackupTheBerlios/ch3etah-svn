@@ -45,6 +45,10 @@ namespace Ch3Etah.Core.CodeGen.Xslt {
 
             return args;
         }
-
+		
+		public override void ClearCache()
+		{
+			// No caching implemented.
+		}
     }
 }

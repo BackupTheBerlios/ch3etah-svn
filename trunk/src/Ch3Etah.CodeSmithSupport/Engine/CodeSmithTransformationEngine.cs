@@ -18,14 +18,16 @@ namespace Ch3Etah.CodeSmithSupport.Engine
 	/// </summary>
 	public class CodeSmithTransformationEngine : TransformationEngineBase
 	{
+		private static Hashtable _templateCache;
+		
 		public CodeSmithTransformationEngine()
 		{
 		}
 		
 		public override void Transform(XmlNode input, TextWriter output) 
 		{
-			CodeTemplateCompiler compiler = new CodeTemplateCompiler(this.Template.GetFullPath());
-			compiler.Compile();
+			CodeTemplateCompiler compiler = GetTemplate(this.Template.GetFullPath());//new CodeTemplateCompiler(this.Template.GetFullPath());
+			//compiler.Compile();
 			
 			if (compiler.Errors.Count == 0)
 			{
@@ -55,5 +57,34 @@ namespace Ch3Etah.CodeSmithSupport.Engine
 			}
 		}
 		
+		public override void ClearCache()
+		{
+			_templateCache = null;
+		}
+
+		private static CodeTemplateCompiler GetTemplate(string path)
+		{
+			if (_templateCache == null)
+			{
+				_templateCache = new Hashtable();
+			}
+			
+			CodeTemplateCompiler compiler = null;
+			if (_templateCache.ContainsKey(path))
+			{
+				compiler = _templateCache[path] as CodeTemplateCompiler;
+			}
+
+			if (compiler == null)
+			{
+				compiler = new CodeTemplateCompiler(path);
+				compiler.Compile();
+				if (compiler.Errors.Count == 0)
+				{
+					_templateCache.Add(path, compiler);
+				}
+			}
+			return compiler;
+		}
 	}
 }

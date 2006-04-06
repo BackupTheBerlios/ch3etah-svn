@@ -77,7 +77,7 @@
 		<echo message="" />
 		<echo message="Some command line examples:" />
 		<echo message="nant -D:version.revision=0 -D:flags.codesmith.build=true -D:flags.codesmith.deploy=true deploy-local" />
-		<echo message="nant -D:remote.ssh.user=yourusername -D:remote.ssh.pwd=yourpassword deploy-web" />
+		<echo message="nant -D:remote.ssh.user=yourusername -D:remote.ssh.pwd=yourpassword deploy-web-site" />
 		<echo message="nant -D:remote.ssh.user=yourusername -D:remote.ssh.pwd=yourpassword web-get-local" />
 		<echo message="" />
 		<echo message="" />
@@ -92,9 +92,54 @@
 		<call target="cleanup" />
 	</target>
 	
-	<target name="deploy-web" depends="prepare-ssh-args" >
+	<target name="validate-version" depends="">
+		<if test="${version.revision == '0'}">
+			<fail message="To execute this target, use the syntax 'nant -D:remote.ssh.pwd=yourpassword -D:version.revision=revisionnumber target-name' to define required parameter. You should also be sure to edit the correct version information in this NAnt script before releasing to SourceForge." />
+		</if>
+	</target>
+	<target name="deploy-sf" depends="validate-version, prepare-ssh-args, prepare-build-dir, package, build, build-installer">
+		<property name="ftp.commands.file" value="${build.dir}/ftp.commands.txt" />
+		<echo file="${ftp.commands.file}">
+binary
+cd incoming
+put "${zipfile.path}"
+put "${installer.path}"
+bye
+		</echo>
+		<echo message="FTP commands outputted to file: ${ftp.commands.file}" />
+		
+		<property name="ftp.server" value="upload.sourceforge.net" />
+		<exec program="ftp.exe" commandline="-A -s:&quot;${ftp.commands.file}&quot; ${ftp.server}" verbose="true" timeout="300000" />
+		
+		<delete file="${ftp.commands.file}" failonerror="true" />
+		<call target="cleanup" />
+		
+		<copy file="${build.dir}\changelog.txt" todir="${local.web.path}" overwrite="true" />
+		
+		<echo message="" />
+		<echo message="" />
+		<echo message="========================================" />
+		<echo message="" />
+		<echo message="The following files have been copied" />
+		<echo message="to the SourceForge server:" />
+		<echo message="${zipfile.name}" />
+		<echo message="${installer.name}" />
+		<echo message="" />
+		<echo message="You will need to make them available" />
+		<echo message="through the SourceForge release system" />
+		<echo message="to complete this task." />
+		<echo message="" />
+		<echo message="See here for more information:" />
+		<echo message="https://sourceforge.net/docman/display_doc.php?docid=6445&amp;group_id=1" />
+		<echo message="" />
+		<echo message="========================================" />
+		<echo message="" />
+		<echo message="" />
+	</target>
+	
+	<target name="deploy-web-site" depends="prepare-ssh-args" >
 		<exec program="${scp.program}" verbose="false" timeout="300000" >
-			<arg line="${scp.program.args}" />
+			<arg line="-q -r ${scp.program.args}" />
 			<arg value="${local.web.path}\*" />
 			<arg line="${remote.web.serverpart}" />
 		</exec>

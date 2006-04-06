@@ -13,13 +13,16 @@ Some major features to be implemented:
 * Assembly analyzer for reverse engeneering
 * AppDomain isolation of template engines
 
+*** NEED TO CREATE BACKUP SCRIPT FOR WEBSITE CONTENT AND WIKI THAT RUNS DAILY
 BUG: Trace window output for single-output commands should indicate they are single-output.
 BUG: Old ch3etah web generation project was loaded and Page command was converted to single-output when it should have been multiple-output.
 BUG: When you delete a node from the project tree (data source, command, metadata file) the deleted object's content editor window is not closed
-BUG: Exception thrown when all output path contains ${...} is uninteligible for single-outout commands - i.e. it says "couldn't evaluate... for metadata file 'NULL'."
+BUG: Exception thrown when output path contains ${...} is uninteligible for single-outout commands - i.e. it says "couldn't evaluate... for metadata file 'NULL'."
 BUG: Entity name doesn't update in treeview when changed in property grid
 BUG: There is way too much coupling between the OREntityEditor and it's children (like accessing the TreeView on the Design editor). This really needs to be refactored. Same with MainForm.
 
+* FEAT: Need to implement unit tests.
+* FEAT: Add visualization of legacy packages in project tree.
 * FEAT: Nant script needs to copy changelog.txt to web directory
 * FEAT: Should validate that links point to valid entities and warn if they don't (i.e. to avoid null ref exceptions when generating)
 * FEAT: It really needs to be easier to create/edit packages with their included templates and sample projets
@@ -40,11 +43,10 @@ BUG: There is way too much coupling between the OREntityEditor and it's children
 * FEAT: Put property browser below and put object editor forms to the side in MetadataFileEditor
 * FEAT: Issue with toolbar buttons on entity editor screen
 * FEAT: Add changed events to properties in project and metadata
-* FEAT: Add 'Text Encoding' option to code generator command (A saída do Velocity está sendo feita em UTF-8. Até aí, nada de mais, uma vez que temos usado apenas ASCII. Porém, peguei um sistema legado que tem nomes de campos acentuados. Adivinha o que acontece com o script SQL quando ele pega um arquivo UTF-8... Precisa mudar a saída prá ANSI ou ISO-8859-1.)
 * FEAT: Installer needs to make sure program isn't running
 http://nsis.sourceforge.net/Check_whether_your_application_is_running_during_uninstallation
 http://nsis.sourceforge.net/Detect_if_a_window_is_open_and_close_it.
-* FEAT: We should look at migrating WeifenLuo docking suit to 1.0+, though not for this release. http://sourceforge.net/users/weifenluo/
+* FEAT: We should look at migrating WeifenLuo docking suite to 1.0+. http://sourceforge.net/users/weifenluo/
 
 * WISH: Visual UML-style modeler. Should use Model-View-Presenter pattern and code to interfaces so that other types of metadata entities (e.g. XMI) can be plugged into the modeler.
 * WISH: Manage multiple files in project structure (i.e. select several metadata files and remove them)

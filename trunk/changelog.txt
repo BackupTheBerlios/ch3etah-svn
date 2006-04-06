@@ -15,6 +15,8 @@ Summary of Changes:
 * Bug fixes.
 
 Change Log:
+ADD: OutputEncoding property has been added to all code generator commands and is available by selecting a command in the project tree and editing the encoding value through the property grid
+CHG: Added template caching to CodeSmith engine, resulting in a performance gain of up to 35% in some projects.
 FIX: If error occurs while saving metadata file, the program no longer thinks the file needs to be saved, even though it was not saved successfully.
 FIX: Program always thinks custom XML metadata files have changed and asks user to save changes.
 FIX: Adding XML comments (<!-- -->) just under Metadata tag (i.e. same level as entity tag) will throw an exception when generating. The comment node was being added to the grouped metadata with a key of "#comments".

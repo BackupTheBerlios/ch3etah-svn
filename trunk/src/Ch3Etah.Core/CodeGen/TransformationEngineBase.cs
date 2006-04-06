@@ -57,5 +57,7 @@ namespace Ch3Etah.Core.CodeGen
 			set { _template = value; }
 		}
 		
+		abstract public void ClearCache();
+
 	}
 }

@@ -977,6 +977,10 @@ namespace Ch3Etah.Gui {
 
 		private void OpenObjectEditor(object contextObject)
 		{
+			OpenObjectEditor(contextObject, "");
+		}
+		private void OpenObjectEditor(object contextObject, string command)
+		{
 			TreeNode node = GetContextNode(contextObject, tvwProject.Nodes);
 			if (node != null)
 			{
@@ -984,7 +988,7 @@ namespace Ch3Etah.Gui {
 				tvwProject.SelectedNode = node;
 			}
 
-			IObjectEditor editor = ObjectEditorFactory.CreateObjectEditor(contextObject);
+			IObjectEditor editor = ObjectEditorFactory.CreateObjectEditor(contextObject, command);
 			if (editor != null) 
 			{
 				editor.SelectedObjectChanged += new EventHandler(IObjectEditor_SelectedObjectChanged);
@@ -1520,7 +1524,7 @@ fileMenu=null;
 				                MessageBoxIcon.Exclamation);
 				return;
 			}
-			OpenObjectEditor(command);
+			OpenObjectEditor(command, "EDIT");
 		}
 
 		private void EditOREntity_Click(object sender, EventArgs e) {

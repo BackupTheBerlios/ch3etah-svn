@@ -40,5 +40,11 @@ namespace Ch3Etah.Core.CodeGen
 		CodeGenerationContext Context { get; set; }
 		
 		void Transform(XmlNode input, TextWriter output);
+		/// <summary>
+		/// In transformation engines that implement a
+		/// caching mechanism, this method allows callers
+		/// to make sure the cache is cleared.
+		/// </summary>
+		void ClearCache();
 	}
 }

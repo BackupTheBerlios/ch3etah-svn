@@ -128,7 +128,12 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File RelPath="CommonAssemblyInfo.cs" Link="..\CommonAssemblyInfo.cs" SubType="Code" BuildAction="Compile" />
+                <File
+                    RelPath = "CommonAssemblyInfo.cs"
+                    Link = "..\CommonAssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "CustomPropertyDescriptor.cs"
                     SubType = "Code"
@@ -191,6 +196,11 @@
                 />
                 <File
                     RelPath = "Converters\TemplateNameConverter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Converters\TextEncodingConverter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

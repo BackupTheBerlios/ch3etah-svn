@@ -70,6 +70,7 @@ namespace Ch3Etah.Core.ProjectLib {
 		private string _package = string.Empty;
 		private string _template = string.Empty;
 		private string _outputPath = string.Empty;
+		private Encoding _outputEncoding = Encoding.UTF8;
 		private bool _overwrite = true;
 		private bool _autoSelectMetadataFiles = true;
 		private CodeGenerationMode _codeGenerationMode;
@@ -113,6 +114,14 @@ namespace Ch3Etah.Core.ProjectLib {
 		}
 
 		#endregion OutputPath
+
+		[Category("Code Generation")]
+		[TypeConverter("Ch3Etah.Design.Converters.TextEncodingConverter,Ch3Etah.Design")]
+		public string OutputEncoding
+		{
+			get { return _outputEncoding.WebName; }
+			set { _outputEncoding = Encoding.GetEncoding(value); }
+		}
 
 		#region Engine
 
@@ -317,6 +326,8 @@ namespace Ch3Etah.Core.ProjectLib {
 						);
 			}
 
+			TransformationEngineFactory.CreateEngine(_engine).ClearCache();
+
 			if (_codeGenerationMode == CodeGenerationMode.MultipleOutput) {
 				ExecuteIndividually();
 			}
@@ -387,7 +398,7 @@ namespace Ch3Etah.Core.ProjectLib {
 								Trace.WriteLine("File content has not changed. Existing file will not be overwritten.");
 								return;
 							}
-							using (StreamWriter outputWriter = new StreamWriter(outputPath)) 
+							using (StreamWriter outputWriter = new StreamWriter(outputPath, false, _outputEncoding)) 
 							{
 								outputWriter.Write(newContent);
 							}
@@ -407,6 +418,7 @@ namespace Ch3Etah.Core.ProjectLib {
 		}
 
 		public void GenerateFile(MetadataFile inputFile, TextWriter outputWriter) {
+			TransformationEngineFactory.CreateEngine(_engine).ClearCache();
 			if (inputFile == null) {
 				Trace.WriteLine("Running '" + Name + "' Code Generator Command");
 			}
