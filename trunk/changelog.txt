@@ -15,6 +15,9 @@ Summary of Changes:
 * Bug fixes.
 
 Change Log:
+CHG: Changed generator command editor to hide metadata files and display help message when command is in single-output mode.
+FIX: Code generator commands with multiple file outputs in older CH3ETAH projects were incorrectly converted to single-output.
+ADD: Added/changed some messages to help in identifying problems when generation fails.
 ADD: OutputEncoding property has been added to all code generator commands and is available by selecting a command in the project tree and editing the encoding value through the property grid
 CHG: Added template caching to CodeSmith engine, resulting in a performance gain of up to 35% in some projects.
 FIX: If error occurs while saving metadata file, the program no longer thinks the file needs to be saved, even though it was not saved successfully.

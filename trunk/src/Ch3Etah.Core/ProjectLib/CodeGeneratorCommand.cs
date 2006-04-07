@@ -51,6 +51,7 @@ namespace Ch3Etah.Core.ProjectLib {
 
 	public enum CodeGenerationMode 
 	{
+		Undefined,
 		SingleOutput,
 		MultipleOutput
 	}
@@ -73,7 +74,7 @@ namespace Ch3Etah.Core.ProjectLib {
 		private Encoding _outputEncoding = Encoding.UTF8;
 		private bool _overwrite = true;
 		private bool _autoSelectMetadataFiles = true;
-		private CodeGenerationMode _codeGenerationMode;
+		private CodeGenerationMode _codeGenerationMode = CodeGenerationMode.Undefined;
 		private string _engine = TransformationEngineFactory.DefaultEngineName;
 		private InputParameterCollection _inputParameters = new InputParameterCollection();
 		private Guid[] _individualMetadataFileIDs;
@@ -115,6 +116,7 @@ namespace Ch3Etah.Core.ProjectLib {
 
 		#endregion OutputPath
 
+		#region OutputEncoding
 		[Category("Code Generation")]
 		[TypeConverter("Ch3Etah.Design.Converters.TextEncodingConverter,Ch3Etah.Design")]
 		public string OutputEncoding
@@ -122,6 +124,8 @@ namespace Ch3Etah.Core.ProjectLib {
 			get { return _outputEncoding.WebName; }
 			set { _outputEncoding = Encoding.GetEncoding(value); }
 		}
+
+		#endregion OutputEncoding
 
 		#region Engine
 
@@ -261,8 +265,26 @@ namespace Ch3Etah.Core.ProjectLib {
 		[Browsable(false)]
 		[XmlElement("GenerationMode")]
 		public CodeGenerationMode CodeGenerationMode {
-			get { return _codeGenerationMode; }
-			set { _codeGenerationMode = value; }
+			get
+			{
+				if (_codeGenerationMode == CodeGenerationMode.Undefined)
+				{
+					if (IndividualMetadataFiles != null && 
+						IndividualMetadataFiles.Count > 0)
+					{
+						return CodeGenerationMode.MultipleOutput;
+					}
+					else
+					{
+						return CodeGenerationMode.SingleOutput;
+					}
+				}
+				return _codeGenerationMode;
+			}
+			set
+			{
+				_codeGenerationMode = value;
+			}
 		}
 
 		#endregion
@@ -347,7 +369,7 @@ namespace Ch3Etah.Core.ProjectLib {
 
 		private void GenerateFile(MetadataFile inputFile) {
 			if (inputFile == null) {
-				Trace.WriteLine("Running '" + Name + "' Code Generator Command");
+				Trace.WriteLine("Running '" + Name + "' Code Generator Command in single file output mode.");
 			}
 			else {
 				Trace.WriteLine("Running '" + Name + "' Code Generator Command for input file '" + inputFile.Name + "'");
@@ -365,7 +387,7 @@ namespace Ch3Etah.Core.ProjectLib {
 						throw new CodeGenerationException(string.Format(
 							"One or more expressions in the output path for the generator command '{0}' could not be evaluated for the metadata file '{1}'. The output path returned was: {2}"
 							, this.Name
-							, inputFile == null ? "NULL" : inputFile.Name
+							, inputFile == null ? "<< No input file specified... command is running in single-output mode >>" : inputFile.Name
 							, outputPath));
 					}
 					outputPath = Path.GetFullPath(Path.Combine(this.Project.GetFullOutputPath(), outputPath));
@@ -420,7 +442,7 @@ namespace Ch3Etah.Core.ProjectLib {
 		public void GenerateFile(MetadataFile inputFile, TextWriter outputWriter) {
 			TransformationEngineFactory.CreateEngine(_engine).ClearCache();
 			if (inputFile == null) {
-				Trace.WriteLine("Running '" + Name + "' Code Generator Command");
+				Trace.WriteLine("Running '" + Name + "' Code Generator Command in single output mode.");
 			}
 			else {
 				Trace.WriteLine("Running '" + Name + "' Code Generator Command for input file '" + inputFile.Name + "'");

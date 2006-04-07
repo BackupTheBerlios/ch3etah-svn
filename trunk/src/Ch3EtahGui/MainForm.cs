@@ -460,7 +460,7 @@ namespace Ch3Etah.Gui {
 				                     "\r\n========================================\r\n");
 				txtOutput.AppendText(ex.ToString());
 				txtOutput.AppendText("\r\n========================================\r\n");
-				MessageBox.Show(this, "Error running project:\r\n\r\n" + ex.ToString());
+				MessageBox.Show(this, "Error running project (Check the Output log window for information that may help you trace the cause of the error):\r\n\r\n" + ex.ToString());
 			}
 			finally {
 				_running = false;
@@ -1563,7 +1563,7 @@ fileMenu=null;
 				txtOutput.AppendText("\r\n========================================\r\n");
 				txtOutput.AppendText(ex.ToString());
 				txtOutput.AppendText("\r\n========================================\r\n");
-				MessageBox.Show("Error running command: \r\n\r\n" + ex.ToString());
+				MessageBox.Show("Error running command (Check the Output log window for information that may help you trace the cause of the error): \r\n\r\n" + ex.ToString());
 			}
 		}
 

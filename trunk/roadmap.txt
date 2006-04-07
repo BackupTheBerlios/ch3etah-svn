@@ -14,10 +14,7 @@ Some major features to be implemented:
 * AppDomain isolation of template engines
 
 *** NEED TO CREATE BACKUP SCRIPT FOR WEBSITE CONTENT AND WIKI THAT RUNS DAILY
-BUG: Trace window output for single-output commands should indicate they are single-output.
-BUG: Old ch3etah web generation project was loaded and Page command was converted to single-output when it should have been multiple-output.
 BUG: When you delete a node from the project tree (data source, command, metadata file) the deleted object's content editor window is not closed
-BUG: Exception thrown when output path contains ${...} is uninteligible for single-outout commands - i.e. it says "couldn't evaluate... for metadata file 'NULL'."
 BUG: Entity name doesn't update in treeview when changed in property grid
 BUG: There is way too much coupling between the OREntityEditor and it's children (like accessing the TreeView on the Design editor). This really needs to be refactored. Same with MainForm.
 

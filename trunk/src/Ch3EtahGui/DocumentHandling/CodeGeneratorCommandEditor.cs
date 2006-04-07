@@ -67,12 +67,13 @@ namespace Ch3Etah.Gui.DocumentHandling {
 		private RadioButton optSingleOutput;
 		private RadioButton optMultiOutput;
 		private GroupBox grpMultiOutput;
-		private Panel panel1;
 		private Button cmdSelectAll;
 		private Button cmdSelectNone;
 		private Button cmdInvertSelection;
 		private ComboBox cboPackage;
 		private ComboBox cboTemplate;
+		private System.Windows.Forms.Label lblSingleOutputAdvice;
+		private System.Windows.Forms.Panel panelMetadataFileSelectionButtons;
 //		private MetadataFileSelector tvwGroupedMetadataFiles;
 		private InputParameterCollectionEditor inputParametersEditor;
 
@@ -86,7 +87,9 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			grpMultiOutput.Controls.Add(tvwIndividualMetadataFiles);
 			tvwIndividualMetadataFiles.BringToFront();
 			tvwIndividualMetadataFiles.Dock = DockStyle.Fill;
-
+			lblSingleOutputAdvice.BringToFront();
+			lblSingleOutputAdvice.Dock = DockStyle.Fill;
+			
 //			tvwGroupedMetadataFiles = new MetadataFileSelector();
 //			pageBatchMetadataFiles.Controls.Add(tvwGroupedMetadataFiles);
 //			tvwGroupedMetadataFiles.BringToFront();
@@ -138,7 +141,8 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			this.txtOutputPath = new System.Windows.Forms.TextBox();
 			this.panelBottomRight = new System.Windows.Forms.Panel();
 			this.grpMultiOutput = new System.Windows.Forms.GroupBox();
-			this.panel1 = new System.Windows.Forms.Panel();
+			this.lblSingleOutputAdvice = new System.Windows.Forms.Label();
+			this.panelMetadataFileSelectionButtons = new System.Windows.Forms.Panel();
 			this.cmdSelectAll = new System.Windows.Forms.Button();
 			this.cmdSelectNone = new System.Windows.Forms.Button();
 			this.cmdInvertSelection = new System.Windows.Forms.Button();
@@ -152,7 +156,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			this.panelTopRight.SuspendLayout();
 			this.panelBottomRight.SuspendLayout();
 			this.grpMultiOutput.SuspendLayout();
-			this.panel1.SuspendLayout();
+			this.panelMetadataFileSelectionButtons.SuspendLayout();
 			this.grpOutputGeneration.SuspendLayout();
 			this.panelBottom.SuspendLayout();
 			this.SuspendLayout();
@@ -187,7 +191,6 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			this.cboEngine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
-			this.cboEngine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDown;
 			this.cboEngine.Location = new System.Drawing.Point(0, 64);
 			this.cboEngine.Name = "cboEngine";
 			this.cboEngine.Size = new System.Drawing.Size(328, 21);
@@ -201,6 +204,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			this.chkOverwrite.Size = new System.Drawing.Size(152, 24);
 			this.chkOverwrite.TabIndex = 8;
 			this.chkOverwrite.Text = "Overwrite existing file(s)";
+			this.chkOverwrite.CheckedChanged += new System.EventHandler(this.chkOverwrite_CheckedChanged);
 			// 
 			// lblPackage
 			// 
@@ -349,7 +353,8 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			// grpMultiOutput
 			// 
-			this.grpMultiOutput.Controls.Add(this.panel1);
+			this.grpMultiOutput.Controls.Add(this.lblSingleOutputAdvice);
+			this.grpMultiOutput.Controls.Add(this.panelMetadataFileSelectionButtons);
 			this.grpMultiOutput.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpMultiOutput.Location = new System.Drawing.Point(0, 112);
 			this.grpMultiOutput.Name = "grpMultiOutput";
@@ -358,16 +363,30 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			this.grpMultiOutput.TabStop = false;
 			this.grpMultiOutput.Text = "Selected metadata files";
 			// 
-			// panel1
+			// lblSingleOutputAdvice
 			// 
-			this.panel1.Controls.Add(this.cmdSelectAll);
-			this.panel1.Controls.Add(this.cmdSelectNone);
-			this.panel1.Controls.Add(this.cmdInvertSelection);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-			this.panel1.Location = new System.Drawing.Point(221, 16);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(104, 213);
-			this.panel1.TabIndex = 0;
+			this.lblSingleOutputAdvice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.lblSingleOutputAdvice.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.lblSingleOutputAdvice.Location = new System.Drawing.Point(16, 72);
+			this.lblSingleOutputAdvice.Name = "lblSingleOutputAdvice";
+			this.lblSingleOutputAdvice.Size = new System.Drawing.Size(288, 80);
+			this.lblSingleOutputAdvice.TabIndex = 1;
+			this.lblSingleOutputAdvice.Text = "Change the ouptut mode above to \'Multiple output files\' above to make metadata files se" +
+				"lectable.";
+			this.lblSingleOutputAdvice.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// panelMetadataFileSelectionButtons
+			// 
+			this.panelMetadataFileSelectionButtons.Controls.Add(this.cmdSelectAll);
+			this.panelMetadataFileSelectionButtons.Controls.Add(this.cmdSelectNone);
+			this.panelMetadataFileSelectionButtons.Controls.Add(this.cmdInvertSelection);
+			this.panelMetadataFileSelectionButtons.Dock = System.Windows.Forms.DockStyle.Right;
+			this.panelMetadataFileSelectionButtons.Location = new System.Drawing.Point(221, 16);
+			this.panelMetadataFileSelectionButtons.Name = "panelMetadataFileSelectionButtons";
+			this.panelMetadataFileSelectionButtons.Size = new System.Drawing.Size(104, 213);
+			this.panelMetadataFileSelectionButtons.TabIndex = 0;
 			// 
 			// cmdSelectAll
 			// 
@@ -430,13 +449,11 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			// optSingleOutput
 			// 
-			this.optSingleOutput.Checked = true;
 			this.optSingleOutput.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.optSingleOutput.Location = new System.Drawing.Point(16, 24);
 			this.optSingleOutput.Name = "optSingleOutput";
 			this.optSingleOutput.Size = new System.Drawing.Size(112, 24);
 			this.optSingleOutput.TabIndex = 9;
-			this.optSingleOutput.TabStop = true;
 			this.optSingleOutput.Text = "Single output file";
 			this.optSingleOutput.CheckedChanged += new System.EventHandler(this.optSingleOutput_CheckedChanged);
 			// 
@@ -465,7 +482,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			this.panelTopRight.ResumeLayout(false);
 			this.panelBottomRight.ResumeLayout(false);
 			this.grpMultiOutput.ResumeLayout(false);
-			this.panel1.ResumeLayout(false);
+			this.panelMetadataFileSelectionButtons.ResumeLayout(false);
 			this.grpOutputGeneration.ResumeLayout(false);
 			this.panelBottom.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -510,6 +527,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			cboEngine.DataBindings.Add("Text", _generatorCommand, "Engine");
 
 			tvwIndividualMetadataFiles.Bind(_generatorCommand.Project.MetadataFiles, _generatorCommand.IndividualMetadataFiles);
+			optSingleOutput.Checked = (_generatorCommand.CodeGenerationMode == CodeGenerationMode.SingleOutput);
 			optMultiOutput.Checked = (_generatorCommand.CodeGenerationMode == CodeGenerationMode.MultipleOutput);
 //			tvwGroupedMetadataFiles.Bind(_generatorCommand.Project.MetadataFiles, _generatorCommand.GroupedMetadataFiles);
 
@@ -627,10 +645,16 @@ namespace Ch3Etah.Gui.DocumentHandling {
 
 		private void optSingleOutput_CheckedChanged(object sender, EventArgs e) {
 			_generatorCommand.CodeGenerationMode = CodeGenerationMode.SingleOutput;
+			lblSingleOutputAdvice.Visible = true;
+			panelMetadataFileSelectionButtons.Visible = false;
+			tvwIndividualMetadataFiles.Visible = false;
 		}
 
 		private void optMultiOutput_CheckedChanged(object sender, EventArgs e) {
 			_generatorCommand.CodeGenerationMode = CodeGenerationMode.MultipleOutput;
+			lblSingleOutputAdvice.Visible = false;
+			panelMetadataFileSelectionButtons.Visible = true;
+			tvwIndividualMetadataFiles.Visible = true;
 		}
 
 		private void cboPackage_DropDown(object sender, EventArgs e) {
@@ -664,6 +688,11 @@ namespace Ch3Etah.Gui.DocumentHandling {
 		}
 
 		#endregion Events
+
+		private void chkOverwrite_CheckedChanged(object sender, System.EventArgs e)
+		{
+		
+		}
 
 
 	}
