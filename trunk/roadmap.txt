@@ -12,6 +12,7 @@ Some major features to be implemented:
 * SimpleEngine
 * Assembly analyzer for reverse engeneering
 * AppDomain isolation of template engines
+* http://www.developerdotstar.com/mag/articles/o-r_mapping_persistence.html
 
 *** NEED TO CREATE BACKUP SCRIPT FOR WEBSITE CONTENT AND WIKI THAT RUNS DAILY
 BUG: When you delete a node from the project tree (data source, command, metadata file) the deleted object's content editor window is not closed
