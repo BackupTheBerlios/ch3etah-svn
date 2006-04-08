@@ -76,7 +76,8 @@
 		<echo message="" />
 		<echo message="" />
 		<echo message="Some command line examples:" />
-		<echo message="nant -D:version.revision=0 -D:flags.codesmith.build=true -D:flags.codesmith.deploy=true deploy-local" />
+		<echo message="nant -D:flags.codesmith.build=true -D:flags.codesmith.deploy=true -D:version.revision=0 deploy-local" />
+		<echo message="nant -D:remote.ssh.user=yourusername -D:remote.ssh.pwd=yourpassword -D:flags.codesmith.build=true -D:version.revision=0 deploy-sf" />
 		<echo message="nant -D:remote.ssh.user=yourusername -D:remote.ssh.pwd=yourpassword deploy-web-site" />
 		<echo message="nant -D:remote.ssh.user=yourusername -D:remote.ssh.pwd=yourpassword web-get-local" />
 		<echo message="" />
@@ -111,10 +112,10 @@ bye
 		<property name="ftp.server" value="upload.sourceforge.net" />
 		<exec program="ftp.exe" commandline="-A -s:&quot;${ftp.commands.file}&quot; ${ftp.server}" verbose="true" timeout="300000" />
 		
+		<copy file="${build.dir}\changelog.txt" todir="${local.web.path}" overwrite="true" />
+		
 		<delete file="${ftp.commands.file}" failonerror="true" />
 		<call target="cleanup" />
-		
-		<copy file="${build.dir}\changelog.txt" todir="${local.web.path}" overwrite="true" />
 		
 		<echo message="" />
 		<echo message="" />
