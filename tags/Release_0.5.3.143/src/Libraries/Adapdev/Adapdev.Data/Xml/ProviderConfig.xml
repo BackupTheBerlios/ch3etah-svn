@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<adapdev xmlns="http://tempuri.org/ProviderConfig.xsd">
+    <connections>
+        <!-- 
+		You MUST specify a OLEDB connecion type as a minimum for a provider and 
+		specifiy it in the internalProvider attribute. 
+			
+		Defining a connection string, use the following field replacement tokens:
+			{0}	Server Name or file location
+			{1}	Data Source or Initial Catalog Name
+			{2}	User Name or UserID to connect as
+			{3}	Password
+
+		Available Settings are:
+			<server file="true">Prompt</server>
+			<name>Prompt<name>
+			<userid>Prompt</userid>
+			<password>Prompt</password>
+	     
+		Note: When specifying a Driver={name} you must specify using {{ eg: Driver={{SQL Server}}
+	-->                                                
+		<connection name="SQL Server" type="SQLSERVER" internalProvider="OLEDB">
+			<settings file="false" server="true" name="true" userid="true" password="true"/>
+			<providers>
+				<provider name="Sql Connect" type="SQLSERVER" allowEmptyParameters="true">
+					Data Source={0}; Initial Catalog={1}; User ID={2}; Password={3}; Trusted_Connection=false;
+				</provider>			
+				<provider name="OLEDB" type="OLEDB">
+					Provider=sqloledb;Data Source={0}; Initial Catalog={1}; User ID={2}; Password={3};
+				</provider>			
+				<provider name="ODBC" type="ODBC" enabled="false">
+					Driver={{SQL Server}};Server={0}; Database={1}; Uid={2}; Pwd={3};
+				</provider>			
+			</providers>
+		</connection>
+		
+		<connection name="SQL Server - Trusted" type="SQLSERVER" internalProvider="OLEDB">
+			<settings file="false" server="true" name="true" userid="false" password="false"/>
+			<providers>
+				<provider name="Sql Connect" type="SQLSERVER">
+					Data Source={0}; Initial Catalog={1}; Integrated Security=SSPI;
+				</provider>			
+				<provider name="OLEDB" type="OLEDB">
+					Provider=sqloledb;Data Source={0}; Initial Catalog={1}; Integrated Security=SSPI
+				</provider>			
+				<provider name="ODBC" type="ODBC" enabled="false">
+					Driver={{SQL Server}};Server={0}; Database={1}; Trusted_Connection=yes;
+				</provider>			
+			</providers>
+		</connection>
+		
+		<connection name="Microsoft Access" type="ACCESS" internalProvider="OLEDB">
+			<settings file="true" server="false" name="false" userid="true" password="true"/>
+			<providers>
+				<provider name="ODBC" type="ODBC" enabled="false">
+					Driver={{Microsoft Access Driver (*.mdb)}}; Dbq={0}; Uid={2}; Pwd={3};
+				</provider>			
+				<provider name="OLEDB" type="OLEDB" fileMask="Access Database (*.mdb)|*.mdb">
+					Provider=Microsoft.Jet.OLEDB.4.0; Data Source={0}; User ID={2}; Password={3};				
+				</provider>			
+				<provider name="OLEDB (DNS)" type="OLEDB" fileMask="File Data Sources (*.dsn)|*.dsn">
+					DSN={0};Uid={2};Pwd={3};				
+				</provider>			
+			</providers>
+		</connection>
+
+		<connection name="Oracle" type="ORACLE" internalProvider="OLEDB (Microsoft)">
+			<settings file="false" server="true" name="false" userid="true" password="true" filter="Schema"/>
+			<providers>
+				<provider name="Oracle Connect" type="ORACLE" enabled="true">
+					Data Source={0}; User ID={2}; Password={3}; Integrated Security=no;
+				</provider>			
+				<provider name="OLEDB (Microsoft)" type="OLEDB" enabled="true">
+					Provider=msdaora; Data Source={0}; Database={1}; User ID={2}; Password={3};
+				</provider>			
+				<provider name="OLEDB (Oracle)" type="OLEDB" enabled="false">
+					Provider=OraOLEDB; Data Source={0}; User ID={2}; Password={3};
+				</provider>			
+				<provider name="ODBC" type="ODBC" enabled="false">
+					Driver={{Microsoft ODBC for Oracle}}; Server={0}; Uid={2}; Pwd={3}
+				</provider>			
+			</providers>
+		</connection>
+
+		<connection name="Oracle - Trusted" type="ORACLE" internalProvider="OLEDB (Oracle)">
+			<settings file="false" server="true" name="Schema" userid="true" password="true"/>
+			<providers>
+				<provider name="Oracle Connect" type="ORACLE" enabled="false">
+					Data Source={0}; Integrated Security=yes;
+				</provider>			
+				<provider name="OLEDB (Oracle)" type="OLEDB" enabled="false">
+					Provider=OraOLEDB; Data Source={0}; OSAuthent=1;
+				</provider>			
+			</providers>
+		</connection>
+		
+		<connection name="MySql" type="MYSQL" internalProvider="MySql Native">
+			<settings file="false" server="true" name="true" userid="true" password="true"/>
+			<providers>
+				<provider name="MySql Native" type="MYSQL" enabled="true">
+					Data Source={0};Database={1};User ID={2};Password={3};
+				</provider>	
+				<provider name="ODBC" type="ODBC" enabled="false">
+					DRIVER={{MySQL ODBC 3.51 Driver}};SERVER={0};DATABASE={1};USER={2};PASSWORD={3};
+				</provider>	
+			</providers>
+		</connection>
+	
+    </connections>
+</adapdev>

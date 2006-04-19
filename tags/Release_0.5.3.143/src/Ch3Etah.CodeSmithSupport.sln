@@ -1,0 +1,71 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch3Etah.Core", "Ch3Etah.Core\Ch3Etah.Core.csproj", "{2A171F7D-E0A0-4FFF-B63E-22F1D6E4DDA5}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateHelpers", "TemplateHelpers\TemplateHelpers.csproj", "{3B34F867-8186-4F3C-878E-ACB605C9C6E2}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch3EtahGui", "Ch3EtahGui\Ch3EtahGui.csproj", "{075D98F5-0DBB-4A5E-AAD9-1B9637B50656}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch3Etah.Design", "Ch3Etah.Design\Ch3Etah.Design.csproj", "{BDF3BE96-49F0-46C0-87CC-BFB5F4F41F00}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch3Etah.Console", "Ch3Etah.Console\Ch3Etah.Console.csproj", "{08EABFB4-4E16-4732-9264-97935EF34FF0}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "Installer\Installer.vdproj", "{7089EE39-1E40-4A49-B8E1-313D1E75CEB7}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch3Etah.CodeSmithSupport", "Ch3Etah.CodeSmithSupport\Ch3Etah.CodeSmithSupport.csproj", "{C059DFF5-6E65-44AA-B9B0-F92855F85D68}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{2A171F7D-E0A0-4FFF-B63E-22F1D6E4DDA5}.Debug.ActiveCfg = Debug|.NET
+		{2A171F7D-E0A0-4FFF-B63E-22F1D6E4DDA5}.Debug.Build.0 = Debug|.NET
+		{2A171F7D-E0A0-4FFF-B63E-22F1D6E4DDA5}.Release.ActiveCfg = Release|.NET
+		{2A171F7D-E0A0-4FFF-B63E-22F1D6E4DDA5}.Release.Build.0 = Release|.NET
+		{3B34F867-8186-4F3C-878E-ACB605C9C6E2}.Debug.ActiveCfg = Debug|.NET
+		{3B34F867-8186-4F3C-878E-ACB605C9C6E2}.Debug.Build.0 = Debug|.NET
+		{3B34F867-8186-4F3C-878E-ACB605C9C6E2}.Release.ActiveCfg = Release|.NET
+		{3B34F867-8186-4F3C-878E-ACB605C9C6E2}.Release.Build.0 = Release|.NET
+		{075D98F5-0DBB-4A5E-AAD9-1B9637B50656}.Debug.ActiveCfg = Debug|.NET
+		{075D98F5-0DBB-4A5E-AAD9-1B9637B50656}.Debug.Build.0 = Debug|.NET
+		{075D98F5-0DBB-4A5E-AAD9-1B9637B50656}.Release.ActiveCfg = Release|.NET
+		{075D98F5-0DBB-4A5E-AAD9-1B9637B50656}.Release.Build.0 = Release|.NET
+		{BDF3BE96-49F0-46C0-87CC-BFB5F4F41F00}.Debug.ActiveCfg = Debug|.NET
+		{BDF3BE96-49F0-46C0-87CC-BFB5F4F41F00}.Debug.Build.0 = Debug|.NET
+		{BDF3BE96-49F0-46C0-87CC-BFB5F4F41F00}.Release.ActiveCfg = Release|.NET
+		{BDF3BE96-49F0-46C0-87CC-BFB5F4F41F00}.Release.Build.0 = Release|.NET
+		{08EABFB4-4E16-4732-9264-97935EF34FF0}.Debug.ActiveCfg = Debug|.NET
+		{08EABFB4-4E16-4732-9264-97935EF34FF0}.Debug.Build.0 = Debug|.NET
+		{08EABFB4-4E16-4732-9264-97935EF34FF0}.Release.ActiveCfg = Release|.NET
+		{08EABFB4-4E16-4732-9264-97935EF34FF0}.Release.Build.0 = Release|.NET
+		{7089EE39-1E40-4A49-B8E1-313D1E75CEB7}.Debug.ActiveCfg = Debug
+		{7089EE39-1E40-4A49-B8E1-313D1E75CEB7}.Release.ActiveCfg = Release
+		{7089EE39-1E40-4A49-B8E1-313D1E75CEB7}.Release.Build.0 = Release
+		{C059DFF5-6E65-44AA-B9B0-F92855F85D68}.Debug.ActiveCfg = Debug|.NET
+		{C059DFF5-6E65-44AA-B9B0-F92855F85D68}.Debug.Build.0 = Debug|.NET
+		{C059DFF5-6E65-44AA-B9B0-F92855F85D68}.Release.ActiveCfg = Release|.NET
+		{C059DFF5-6E65-44AA-B9B0-F92855F85D68}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		_LICENSE.txt = _LICENSE.txt
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

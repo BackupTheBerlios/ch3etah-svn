@@ -1,0 +1,84 @@
+---------------------------------------------------------------------------
+- Version 0.5.3
+---------------------------------------------------------------------------
+Breaking Changes:
+* Support was added for DataSources of different types. Due to the way XML serialization of inheritance trees is done in .NET, projects saved with this version will not be backward-compatible. In other words, opening projects created with version 0.5.3+ in older versions of CH3ETAH will throw a nasty exception. (But projects saved in previous versions can still be opened in CH3ETAH 0.5.3 with no problems)
+
+Summary of Changes:
+* Code generation engines are now configurable at run time.
+* Added support for CodeSmith templates.
+* Up to 80% improvement in performance on large projects.
+* Many improvements in syncronization of entities with the database (most notably the handling of relationships).
+* Numerous UI/visual feedback improvements and usability improvements (see log for full list).
+* Friendlier reporting of unhandled exceptions, with ability to file a bug report from the error dialog.
+* Application Settings dialog.
+* Bug fixes.
+
+Change Log:
+CHG: Changed generator command editor to hide metadata files and display help message when command is in single-output mode.
+FIX: Code generator commands with multiple file outputs in older CH3ETAH projects were incorrectly converted to single-output.
+ADD: Added/changed some messages to help in identifying problems when generation fails.
+ADD: OutputEncoding property has been added to all code generator commands and is available by selecting a command in the project tree and editing the encoding value through the property grid
+CHG: Added template caching to CodeSmith engine, resulting in a performance gain of up to 35% in some projects.
+FIX: If error occurs while saving metadata file, the program no longer thinks the file needs to be saved, even though it was not saved successfully.
+FIX: Program always thinks custom XML metadata files have changed and asks user to save changes.
+FIX: Adding XML comments (<!-- -->) just under Metadata tag (i.e. same level as entity tag) will throw an exception when generating. The comment node was being added to the grouped metadata with a key of "#comments".
+FIX: XML comments are not ignored by XmlContext in the NVelocity engine.
+ADD: Added (very) basic search functionality.
+FIX: Adding a new, empty metadata file to a project throws a file not found exception.
+FIX: Making changes in XML view (metadata editor) does not prompt user to save changes when closing the document.
+FIX: Switching from XML to Design view (or vice-versa) in metadata editor when the file is read only causes changes to be lost.
+FIX: Fixed a typo in the CodeSmith base template.
+FIX: Entity fields are now ordered the same as the corresponding table columns when synchronizing from OleDbDataSource.
+ADD: The full paths of metadata files are now viewable in the property grid.
+ADD: Added a generic DataSource editor to the UI.
+ADD: Added basic support (no UI support yet) for a data source that parses entity metadata from a .NET assembly.
+CHG: Metadata Files node in project explorer is now ordered correctly. Performance was also dramatically improved.
+FIX: Fixed a bug in the OleDbDataSource that was preventing the correct fields from being added to indexes that were refreshed from the database.
+FIX: Fixed various errors that would occur if the properties toolbox was closed.
+ADD: Updating entities from the database will exclude any mapped fields, indexes, or links that are no longer valid.
+CHG: Made some small usability improvements to the OR Entity editor.
+CHG: Made some changes to node insertion and deletion code on the OREntity editor to make these functions a little more generic, robust, and easier to use.
+CHG: Changed key mappings on entity design view editor so that [Delete] will toggle the IsExcluded property on a node and [Shift] + [Delete] removes it.
+ADD: Added faded icons in project tree and entity editor tree for better visual feedback.
+ADD: Added some debugging information to the Project loading process.
+ADD: Added ability to have DataSources of different types and made OleDbDataSource the default.
+CHG: Disable form elements on OleDbDataSourceEditor while adding/refreshing entities for visual feedback.
+CHG: Made project file version and format checking more robust and added the checks to the project loading process.
+FIX: Fixed a bug in ObjectID creation in the CSharpEntityTemplate base CodeSmith template.
+CHG: Removed message boxes when running single generator commands and put feedback in output window.
+ADD: Show output window when running a single generator command.
+ADD: Generator commands now only overwrite files when content has changed.
+ADD: Added auto-mapping of links/relationships when entities are added/refreshed from a data source.
+ADD: Added application settings dialog.
+ADD: Added ability to set attribute values on IMetadataNode objects programatically.
+ADD: Added AssemblyName and Namespace properties to O/R Entity class.
+ADD: Added ability to configure renaming of surrogate keys and primary key indexes.
+ADD: Added dialog for global reporting of unhandled exceptions.
+FIX: Fixed bug with removal of unused fields from indexes when refreshing entity from database.
+ADD: In Data Source editor, when you check/uncheck a node in the entity list, any sub-nodes are checked/unchecked accordingly.
+ADD: Added support in OREntity for mapping var-binary SQL fields.
+ADD: Added command to the context menu in the project explorer to remove a data source.
+ADD: Added support for using the enter key to open documents from the project explorer.
+CHG: Better user feedback (disable buttons and change cursor) on Data Source editor when refreshing entity list.
+CHG: The program now tries to save any open documents that have changed before running code generation (like VS.NET).
+CHG: All project metadata files are now added to code generation context rather than just the selected files.
+ADD: Added check to make sure all expressions in output paths are evaluated successfully. This avoids outputting to strange and unintended paths when evaluation fails.
+FIX: Fixed some annoying UI exceptions that happened occasionally when using CTRL+TAB and CTRL+F4 with docked content windows.
+FIX: CodeGenOutputPath parameter was not being set to the full path of the file being written to.
+ADD: Added auto-selection of entities in the data source editor, making it easier to refresh the entities in a project.
+ADD: Added the ability to define custom XML attributes that will be added to entities created from a datasource (via ORM configuration in App Settings dialog).
+ADD: Added IsFromUniqueSide to OREntity Link class.
+CHG: Changed FileName property on MetadataFile to return the relative path if path is rooted.
+FIX: Fixed a minor but annoying bug with the layout of the XML text box on the OREntityEditor.
+ADD: Added "ch3:exclude" XML attribute and IsExcluded property to the base metadata node class.
+CHG: Projects can now contain parameter values that can be evaluated at generation time, such as ${Metadata.Entity.name}. Previously, evaluation of project-level parameters was causing the value of the parameter in the project to be changed globally.
+CHG: Fixed bug in auto-selection of metadata files in code generator commands.
+CHG: Fixed bug in Project tree when metadata file cannot be loaded.
+CHG: Fixed Helper loading compatibility issue between NVelocity and CodeSmith. Helpers can now be loaded from several alternate directories (though only one directory per app instance due to .NET assembly loading restrictions. A fix for this may be to use AppDomains).
+ADD: Added some troubleshooting information to the About dialog
+CHG: Several performance improvements - especially regarding metadata grouping. One project with 50+ metadata files showed an 83% performance improvement (from 1min20s down to 20s).
+ADD: Added link to web site in help menu.
+ADD: Modified loading of TransformationEngines to load from configuration settings.
+ADD: Added support for CodeSmith templates.
+ADD: Fly-out of the output window when it is unpinned;
