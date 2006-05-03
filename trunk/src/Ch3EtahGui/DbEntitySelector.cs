@@ -108,6 +108,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 			// btnOK
 			// 
 			this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnOK.Location = new System.Drawing.Point(128, 296);
 			this.btnOK.Name = "btnOK";
 			this.btnOK.TabIndex = 2;
@@ -117,6 +118,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 			// btnCancel
 			// 
 			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnCancel.Location = new System.Drawing.Point(208, 296);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.TabIndex = 3;

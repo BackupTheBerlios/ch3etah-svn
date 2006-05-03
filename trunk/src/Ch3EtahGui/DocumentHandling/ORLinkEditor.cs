@@ -156,6 +156,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			// chkHidden
 			// 
+			this.chkHidden.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkHidden.Location = new System.Drawing.Point(240, 16);
 			this.chkHidden.Name = "chkHidden";
 			this.chkHidden.TabIndex = 2;
@@ -163,6 +164,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			// chkReadOnly
 			// 
+			this.chkReadOnly.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkReadOnly.Location = new System.Drawing.Point(240, 36);
 			this.chkReadOnly.Name = "chkReadOnly";
 			this.chkReadOnly.TabIndex = 5;
@@ -170,6 +172,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			// chkIsProperty
 			// 
+			this.chkIsProperty.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkIsProperty.Location = new System.Drawing.Point(124, 36);
 			this.chkIsProperty.Name = "chkIsProperty";
 			this.chkIsProperty.TabIndex = 4;
@@ -177,6 +180,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			// chkIsCollection
 			// 
+			this.chkIsCollection.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkIsCollection.Location = new System.Drawing.Point(12, 36);
 			this.chkIsCollection.Name = "chkIsCollection";
 			this.chkIsCollection.TabIndex = 3;
@@ -184,6 +188,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			// chkCascadeDelete
 			// 
+			this.chkCascadeDelete.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkCascadeDelete.Location = new System.Drawing.Point(124, 16);
 			this.chkCascadeDelete.Name = "chkCascadeDelete";
 			this.chkCascadeDelete.TabIndex = 1;
@@ -191,6 +196,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			// chkCascadeUpdate
 			// 
+			this.chkCascadeUpdate.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkCascadeUpdate.Location = new System.Drawing.Point(12, 16);
 			this.chkCascadeUpdate.Name = "chkCascadeUpdate";
 			this.chkCascadeUpdate.TabIndex = 0;
@@ -251,6 +257,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			this.btnRemoveLinkField.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btnRemoveLinkField.Enabled = false;
+			this.btnRemoveLinkField.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnRemoveLinkField.Location = new System.Drawing.Point(92, 180);
 			this.btnRemoveLinkField.Name = "btnRemoveLinkField";
 			this.btnRemoveLinkField.Size = new System.Drawing.Size(84, 24);
@@ -262,6 +269,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			this.btnAddLinkField.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btnAddLinkField.Enabled = false;
+			this.btnAddLinkField.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnAddLinkField.Location = new System.Drawing.Point(4, 180);
 			this.btnAddLinkField.Name = "btnAddLinkField";
 			this.btnAddLinkField.Size = new System.Drawing.Size(84, 24);

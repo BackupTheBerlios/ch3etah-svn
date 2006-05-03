@@ -179,9 +179,9 @@ namespace Ch3Etah.Gui.DocumentHandling {
 		#region InitializeMetadataFileCombo
 
 		private void InitializeMetadataFileCombo() {
-			cboMetadataFile.DataSource = _generatorCommand.IndividualMetadataFiles;
+			cboMetadataFile.DataSource = _generatorCommand.SelectedMetadataFiles;
 			try {
-				cboMetadataFile.SelectedItem = _generatorCommand.IndividualMetadataFiles[0];
+				cboMetadataFile.SelectedItem = _generatorCommand.SelectedMetadataFiles[0];
 				metadataFileEditor.SelectedObject = cboMetadataFile.SelectedValue;
 			}
 			catch {}

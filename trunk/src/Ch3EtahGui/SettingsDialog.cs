@@ -120,6 +120,7 @@ namespace Ch3Etah.Gui
 			// btnCancel
 			// 
 			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnCancel.Location = new System.Drawing.Point(384, 8);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.TabIndex = 1;
@@ -129,6 +130,7 @@ namespace Ch3Etah.Gui
 			// btnOK
 			// 
 			this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnOK.Location = new System.Drawing.Point(304, 8);
 			this.btnOK.Name = "btnOK";
 			this.btnOK.TabIndex = 0;

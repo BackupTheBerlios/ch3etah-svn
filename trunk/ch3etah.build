@@ -177,8 +177,11 @@ bye
 				</fileset>
 			</delete>
 		</if>
+
+		<property name="installer.dir" value="${build.dir}\src\Installer\Debug\" />
 		<property name="installer.name" value="CH3ETAH-${version.full}.exe" />
-		<property name="installer.path" value="${build.dir}\src\Installer\Debug\${installer.name}" />
+		<property name="installer.path" value="${installer.dir}${installer.name}" />
+		<mkdir dir="${installer.dir}" />
 		<exec program="makensis.exe" verbose="true">
 			<arg line="/DPRODUCT_VERSION=${version.full}" />
 			<arg line="/DINSTALLER_PATH=Debug\${installer.name}" />

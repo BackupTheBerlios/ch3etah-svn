@@ -58,7 +58,7 @@ namespace Ch3Etah.Metadata.OREntities {
 
 		private void DoNameChanged(string oldName, string newName)
 		{
-			if (NameChanged != null && oldName != "" && newName != "")
+			if (NameChanged != null && oldName != newName && oldName != "" && newName != "")
 			{
 				NameChanged(this, new EntityFieldNameChangedEventArgs(
 					this,

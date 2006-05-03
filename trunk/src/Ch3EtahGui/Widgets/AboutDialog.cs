@@ -115,6 +115,7 @@ Current directory: {3}
 			// 
 			this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnClose.Location = new System.Drawing.Point(418, 398);
 			this.btnClose.Name = "btnClose";
 			this.btnClose.TabIndex = 0;
@@ -123,6 +124,7 @@ Current directory: {3}
 			// 
 			// btnTestExceptionHandling
 			// 
+			this.btnTestExceptionHandling.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnTestExceptionHandling.Location = new System.Drawing.Point(4, 400);
 			this.btnTestExceptionHandling.Name = "btnTestExceptionHandling";
 			this.btnTestExceptionHandling.Size = new System.Drawing.Size(164, 23);

@@ -78,7 +78,8 @@ namespace Ch3Etah.Gui.Widgets
 			// 
 			// MatchCase
 			// 
-			this.MatchCase.Location = new System.Drawing.Point(8, 56);
+			this.MatchCase.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.MatchCase.Location = new System.Drawing.Point(8, 64);
 			this.MatchCase.Name = "MatchCase";
 			this.MatchCase.Size = new System.Drawing.Size(136, 16);
 			this.MatchCase.TabIndex = 2;
@@ -87,6 +88,7 @@ namespace Ch3Etah.Gui.Widgets
 			// MatchWholeWord
 			// 
 			this.MatchWholeWord.Enabled = false;
+			this.MatchWholeWord.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.MatchWholeWord.Location = new System.Drawing.Point(8, 80);
 			this.MatchWholeWord.Name = "MatchWholeWord";
 			this.MatchWholeWord.Size = new System.Drawing.Size(144, 16);
@@ -122,6 +124,7 @@ namespace Ch3Etah.Gui.Widgets
 			// SearchSelectedText
 			// 
 			this.SearchSelectedText.Enabled = false;
+			this.SearchSelectedText.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.SearchSelectedText.Location = new System.Drawing.Point(16, 66);
 			this.SearchSelectedText.Name = "SearchSelectedText";
 			this.SearchSelectedText.Size = new System.Drawing.Size(128, 16);
@@ -131,6 +134,7 @@ namespace Ch3Etah.Gui.Widgets
 			// SearchProject
 			// 
 			this.SearchProject.Enabled = false;
+			this.SearchProject.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.SearchProject.Location = new System.Drawing.Point(16, 50);
 			this.SearchProject.Name = "SearchProject";
 			this.SearchProject.Size = new System.Drawing.Size(128, 16);
@@ -140,6 +144,7 @@ namespace Ch3Etah.Gui.Widgets
 			// SearchAllOpenDocuments
 			// 
 			this.SearchAllOpenDocuments.Enabled = false;
+			this.SearchAllOpenDocuments.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.SearchAllOpenDocuments.Location = new System.Drawing.Point(16, 34);
 			this.SearchAllOpenDocuments.Name = "SearchAllOpenDocuments";
 			this.SearchAllOpenDocuments.Size = new System.Drawing.Size(128, 16);
@@ -149,6 +154,7 @@ namespace Ch3Etah.Gui.Widgets
 			// SearchCurrentDocument
 			// 
 			this.SearchCurrentDocument.Checked = true;
+			this.SearchCurrentDocument.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.SearchCurrentDocument.Location = new System.Drawing.Point(16, 18);
 			this.SearchCurrentDocument.Name = "SearchCurrentDocument";
 			this.SearchCurrentDocument.Size = new System.Drawing.Size(128, 16);
@@ -158,6 +164,7 @@ namespace Ch3Etah.Gui.Widgets
 			// 
 			// FindButton
 			// 
+			this.FindButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.FindButton.Location = new System.Drawing.Point(432, 8);
 			this.FindButton.Name = "FindButton";
 			this.FindButton.Size = new System.Drawing.Size(80, 22);
@@ -168,6 +175,7 @@ namespace Ch3Etah.Gui.Widgets
 			// ReplaceButton
 			// 
 			this.ReplaceButton.Enabled = false;
+			this.ReplaceButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.ReplaceButton.Location = new System.Drawing.Point(432, 32);
 			this.ReplaceButton.Name = "ReplaceButton";
 			this.ReplaceButton.Size = new System.Drawing.Size(80, 22);
@@ -178,6 +186,7 @@ namespace Ch3Etah.Gui.Widgets
 			// ReplaceAllButton
 			// 
 			this.ReplaceAllButton.Enabled = false;
+			this.ReplaceAllButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.ReplaceAllButton.Location = new System.Drawing.Point(432, 56);
 			this.ReplaceAllButton.Name = "ReplaceAllButton";
 			this.ReplaceAllButton.Size = new System.Drawing.Size(80, 22);
@@ -211,7 +220,7 @@ namespace Ch3Etah.Gui.Widgets
 			// CloseDialogButton
 			// 
 			this.CloseDialogButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.CloseDialogButton.Enabled = true;
+			this.CloseDialogButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.CloseDialogButton.Location = new System.Drawing.Point(432, 120);
 			this.CloseDialogButton.Name = "CloseDialogButton";
 			this.CloseDialogButton.Size = new System.Drawing.Size(80, 22);
@@ -225,19 +234,19 @@ namespace Ch3Etah.Gui.Widgets
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.CloseDialogButton;
 			this.ClientSize = new System.Drawing.Size(520, 152);
+			this.Controls.Add(this.MatchingAlgorithm);
+			this.Controls.Add(this.lblMatchingAlgorithm);
+			this.Controls.Add(this.MatchWholeWord);
+			this.Controls.Add(this.MatchCase);
 			this.Controls.Add(this.CloseDialogButton);
 			this.Controls.Add(this.ReplaceText);
 			this.Controls.Add(this.FindText);
 			this.Controls.Add(this.label2);
-			this.Controls.Add(this.MatchingAlgorithm);
 			this.Controls.Add(this.ReplaceAllButton);
 			this.Controls.Add(this.ReplaceButton);
 			this.Controls.Add(this.SearchMode);
-			this.Controls.Add(this.MatchWholeWord);
-			this.Controls.Add(this.MatchCase);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.FindButton);
-			this.Controls.Add(this.lblMatchingAlgorithm);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
 			this.MinimumSize = new System.Drawing.Size(528, 178);
 			this.Name = "SearchTextDialog";

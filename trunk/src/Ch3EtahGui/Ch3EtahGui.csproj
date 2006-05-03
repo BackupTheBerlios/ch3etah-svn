@@ -147,6 +147,27 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                     Private = "True"
                 />
+                <Reference
+                    Name = "Interop.SHDocVw"
+                    AssemblyName = "Interop.SHDocVw"
+                    HintPath = "..\Libraries\bin\Interop.SHDocVw.dll"
+                />
+                <Reference
+                    Name = "AxInterop.SHDocVw"
+                    AssemblyName = "AxInterop.SHDocVw"
+                    HintPath = "..\Libraries\bin\AxInterop.SHDocVw.dll"
+                />
+                <Reference
+                    Name = "Microsoft.mshtml"
+                    AssemblyName = "Microsoft.mshtml"
+                    HintPath = "..\..\..\..\..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll"
+                    AssemblyFolderKey = "hklm\primary interop assemblies"
+                />
+                <Reference
+                    Name = "Ch3Etah.BugTracker"
+                    Project = "{365CDC5B-9880-4BEB-AFE0-7F8C215FAE26}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -205,16 +226,6 @@
                     RelPath = "EventTraceListener.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ExceptionReporter.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ExceptionReporter.resx"
-                    DependentUpon = "ExceptionReporter.cs"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "ImageList16.png"
@@ -282,6 +293,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "UnhandledExceptionReporter.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "UnhandledExceptionReporter.resx"
+                    DependentUpon = "UnhandledExceptionReporter.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Utility.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -305,6 +326,36 @@
                 <File
                     RelPath = "XML-Mode.xshd"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "BugTracker\TrackerListForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BugTracker\TrackerListForm.resx"
+                    DependentUpon = "TrackerListForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "BugTracker\TrackerListLoaderForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BugTracker\TrackerListLoaderForm.resx"
+                    DependentUpon = "TrackerListLoaderForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "BugTracker\TrackerSubmitForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BugTracker\TrackerSubmitForm.resx"
+                    DependentUpon = "TrackerSubmitForm.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "DocumentHandling\CodeGenerationTemplateEditor.cs"
@@ -345,6 +396,11 @@
                     RelPath = "DocumentHandling\InputParameterCollectionEditor.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DocumentHandling\InputParameterCollectionEditor.resx"
+                    DependentUpon = "InputParameterCollectionEditor.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "DocumentHandling\IObjectEditor.cs"

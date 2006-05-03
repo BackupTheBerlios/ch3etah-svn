@@ -1,5 +1,16 @@
 ---------------------------------------------------------------------------
-- Version 0.5.3
+- Version 0.5.3.144
+---------------------------------------------------------------------------
+ADD: Added integration with the Source Forge Bug Tracker to make bug reporting easier and more seamless.
+ADD: Enabled visual styles (Windows XP look and feel).
+ADD: Added Unit Test project to solution.
+FIX: Entity index name change was being cascaded even when the old name and new name were the same.
+CHG: Removed Installer project from VS solution as it is no longer being used.
+FIX: Fixed a compatibility problem with older project files which used single-output generator commands. (See Bug ID# 1479979)
+ADD: Added "auto-select new metadata files" checkbox to code generator command editor. This option was available through the properties window in older versions.
+
+---------------------------------------------------------------------------
+- Version 0.5.3.143
 ---------------------------------------------------------------------------
 Breaking Changes:
 * Support was added for DataSources of different types. Due to the way XML serialization of inheritance trees is done in .NET, projects saved with this version will not be backward-compatible. In other words, opening projects created with version 0.5.3+ in older versions of CH3ETAH will throw a nasty exception. (But projects saved in previous versions can still be opened in CH3ETAH 0.5.3 with no problems)

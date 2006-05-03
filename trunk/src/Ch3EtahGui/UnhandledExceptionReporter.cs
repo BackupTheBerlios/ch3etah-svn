@@ -1,12 +1,11 @@
 using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
 using System.Windows.Forms;
+
+using Ch3Etah.Gui.BugTracker;
 
 namespace Ch3Etah.Gui
 {
-	public class ExceptionReporter : System.Windows.Forms.Form
+	public class UnhandledExceptionReporter : System.Windows.Forms.Form
 	{
 		#region Fields and Constructors
 		private System.Windows.Forms.PictureBox pictureBox1;
@@ -17,10 +16,16 @@ namespace Ch3Etah.Gui
 		private System.Windows.Forms.TextBox txtError;
 		private System.Windows.Forms.Label label3;
 		private System.ComponentModel.Container components = null;
-
-		public ExceptionReporter()
+		
+		Exception _exception;
+		public UnhandledExceptionReporter(Exception exception)
 		{
+			_exception = exception;
 			InitializeComponent();
+			
+			string msg = "CH3ETAH Version: " + Utility.GetCh3EtahVersion() + "\r\n";
+			msg += _exception.ToString();
+			txtError.Text = msg;
 		}
 
 		protected override void Dispose( bool disposing )
@@ -43,7 +48,7 @@ namespace Ch3Etah.Gui
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(ExceptionReporter));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(UnhandledExceptionReporter));
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
@@ -103,6 +108,7 @@ namespace Ch3Etah.Gui
 			this.btnReportError.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.btnReportError.BackColor = System.Drawing.SystemColors.Control;
+			this.btnReportError.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnReportError.Location = new System.Drawing.Point(184, 328);
 			this.btnReportError.Name = "btnReportError";
 			this.btnReportError.Size = new System.Drawing.Size(400, 23);
@@ -115,6 +121,7 @@ namespace Ch3Etah.Gui
 			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnCancel.BackColor = System.Drawing.SystemColors.Control;
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnCancel.Location = new System.Drawing.Point(586, 328);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(80, 23);
@@ -169,10 +176,7 @@ namespace Ch3Etah.Gui
 			{
 				if (IsFilteredException(e.Exception))
 					return;
-				string msg = "CH3ETAH Version: " + Utility.GetCh3EtahVersion() + "\r\n";
-				msg += e.Exception.ToString();
-				ExceptionReporter dlg = new ExceptionReporter();
-				dlg.txtError.Text = msg;
+				UnhandledExceptionReporter dlg = new UnhandledExceptionReporter(e.Exception);
 				dlg.ShowDialog();
 			}
 			catch (Exception ex)
@@ -200,10 +204,8 @@ namespace Ch3Etah.Gui
 		{
 			try
 			{
-				Clipboard.SetDataObject(
-					new DataObject(DataFormats.Text, txtError.Text), 
-					true);
-				Utility.OpenUrl(@"http://sourceforge.net/tracker/?func=add&group_id=118003&atid=679758");
+				TrackerListForm trackerList = new TrackerListForm(_exception);
+				trackerList.ShowDialog();
 				this.Close();
 			}
 			catch (Exception ex)

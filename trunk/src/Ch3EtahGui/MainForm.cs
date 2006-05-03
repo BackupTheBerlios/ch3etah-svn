@@ -34,6 +34,7 @@ using Ch3Etah.Core.Config;
 using Ch3Etah.Core.CodeGen.PackageLib;
 using Ch3Etah.Core.Metadata;
 using Ch3Etah.Core.ProjectLib;
+using Ch3Etah.Gui.BugTracker;
 using Ch3Etah.Gui.DocumentHandling;
 using Ch3Etah.Gui.DocumentHandling.MdiStrategy;
 using Ch3Etah.Gui.Widgets;
@@ -147,9 +148,11 @@ namespace Ch3Etah.Gui {
 
 		private CommandBarItem cbiExit;
 
+		private CommandBarItem cbiSubmitBugReport;
 		private CommandBarItem cbiWebSite;
-		private DockPanel dockPanel1;
 		private CommandBarItem cbiAbout;
+		
+		private DockPanel dockPanel1;
 		private TreeView tvwProject;
 		private PropertyGrid propertyGrid;
 		private TextBox txtOutput;
@@ -1037,6 +1040,7 @@ fileMenu=null;
 			viewMenu.Items.Add(cbiViewPropertiesWindow);
 			viewMenu.Items.Add(cbiViewOutputWindow);
 
+			// Project menu
 			CommandBarMenu projectMenu = menuBar.Items.AddMenu("&Project");
 			projectMenu.Items.Add(cbiRunProject);
 			projectMenu.Items.AddSeparator();
@@ -1047,13 +1051,11 @@ fileMenu=null;
 			projectMenu.Items.Add(cbiAddExistingMetadataFile);
 			projectMenu.Items.Add(cbiAddNewMetadataFile);
 
+			// Help menu
 			CommandBarMenu helpMenu = menuBar.Items.AddMenu("&Help");
 			helpMenu.Items.Add(cbiWebSite);
+			helpMenu.Items.Add(cbiSubmitBugReport);
 			helpMenu.Items.AddSeparator();
-//			helpMenu.Items.Add(cbiRunTests);
-//			helpMenu.Items.AddSeparator();
-//			helpMenu.Items.Add(cbiFixFileAssociations);
-//			helpMenu.Items.AddSeparator();
 			helpMenu.Items.Add(cbiAbout);
 
 			// Toolbar
@@ -1136,10 +1138,17 @@ fileMenu=null;
 			cbiViewOutputWindow =
 				new CommandBarButton(Images.Output, "&Output", new EventHandler(ViewOutput_Click));
 
+			cbiSubmitBugReport = new CommandBarButton(Images.Properties, "Submit &Bug Report", new EventHandler(SubmitBugReport_Click));
 			cbiWebSite = new CommandBarButton(Images.Home, "CH3ETAH &Web Site", new EventHandler(WebSite_Click));
 			cbiAbout = new CommandBarButton(Images.Help, "&About", new EventHandler(About_Click));
 
 			cbiExit = new CommandBarButton("E&xit", new EventHandler(Exit_Click));
+		}
+
+		private void SubmitBugReport_Click(object sender, EventArgs e)
+		{
+			TrackerListForm trackerList = new TrackerListForm();
+			trackerList.ShowDialog();
 		}
 
 		private void SearchText_Click(object sender, EventArgs e) 
@@ -1263,7 +1272,7 @@ fileMenu=null;
 				p.MetadataFiles.Add(mf);
 				CodeGeneratorCommand gc = new CodeGeneratorCommand();
 				p.GeneratorCommands.Add(gc);
-				gc.IndividualMetadataFiles.Add(p.MetadataFiles[0]);
+				gc.SelectedMetadataFiles.Add(p.MetadataFiles[0]);
 // 				gc.GroupedMetadataFiles.Add(p.MetadataFiles[0]);
 				gc.Package = "CSLA";
 				gc.Template = "SP_S_Object_By_Index";
@@ -1306,7 +1315,7 @@ fileMenu=null;
 				p.MetadataFiles.Add(mf);
 				CodeGeneratorCommand gc = new CodeGeneratorCommand();
 				p.GeneratorCommands.Add(gc);
-				gc.IndividualMetadataFiles.Add(p.MetadataFiles[0]);
+				gc.SelectedMetadataFiles.Add(p.MetadataFiles[0]);
 				gc.Package = "TEST_NCODEGEN_PACKAGE";
 				gc.Template = "SPs_CRUD_Object";
 				p.GeneratorCommands.Add(gc);

@@ -19,11 +19,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch3Etah.Console", "Ch3Etah.
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Installer", "Installer\Installer.vdproj", "{7089EE39-1E40-4A49-B8E1-313D1E75CEB7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch3Etah.CodeSmithSupport", "Ch3Etah.CodeSmithSupport\Ch3Etah.CodeSmithSupport.csproj", "{C059DFF5-6E65-44AA-B9B0-F92855F85D68}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch3Etah.CodeSmithSupport", "Ch3Etah.CodeSmithSupport\Ch3Etah.CodeSmithSupport.csproj", "{C059DFF5-6E65-44AA-B9B0-F92855F85D68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch3Etah.BugTracker", "Ch3Etah.BugTracker\Ch3Etah.BugTracker.csproj", "{365CDC5B-9880-4BEB-AFE0-7F8C215FAE26}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ch3Etah.Tests", "Ch3Etah.Tests\Ch3Etah.Tests.csproj", "{66744742-4196-426A-8A3E-F25E81AD98AB}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -53,13 +57,17 @@ Global
 		{08EABFB4-4E16-4732-9264-97935EF34FF0}.Debug.Build.0 = Debug|.NET
 		{08EABFB4-4E16-4732-9264-97935EF34FF0}.Release.ActiveCfg = Release|.NET
 		{08EABFB4-4E16-4732-9264-97935EF34FF0}.Release.Build.0 = Release|.NET
-		{7089EE39-1E40-4A49-B8E1-313D1E75CEB7}.Debug.ActiveCfg = Debug
-		{7089EE39-1E40-4A49-B8E1-313D1E75CEB7}.Release.ActiveCfg = Release
-		{7089EE39-1E40-4A49-B8E1-313D1E75CEB7}.Release.Build.0 = Release
 		{C059DFF5-6E65-44AA-B9B0-F92855F85D68}.Debug.ActiveCfg = Debug|.NET
 		{C059DFF5-6E65-44AA-B9B0-F92855F85D68}.Debug.Build.0 = Debug|.NET
 		{C059DFF5-6E65-44AA-B9B0-F92855F85D68}.Release.ActiveCfg = Release|.NET
 		{C059DFF5-6E65-44AA-B9B0-F92855F85D68}.Release.Build.0 = Release|.NET
+		{365CDC5B-9880-4BEB-AFE0-7F8C215FAE26}.Debug.ActiveCfg = Debug|.NET
+		{365CDC5B-9880-4BEB-AFE0-7F8C215FAE26}.Debug.Build.0 = Debug|.NET
+		{365CDC5B-9880-4BEB-AFE0-7F8C215FAE26}.Release.ActiveCfg = Release|.NET
+		{66744742-4196-426A-8A3E-F25E81AD98AB}.Debug.ActiveCfg = Debug|.NET
+		{66744742-4196-426A-8A3E-F25E81AD98AB}.Debug.Build.0 = Debug|.NET
+		{66744742-4196-426A-8A3E-F25E81AD98AB}.Release.ActiveCfg = Release|.NET
+		{66744742-4196-426A-8A3E-F25E81AD98AB}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		_LICENSE.txt = _LICENSE.txt

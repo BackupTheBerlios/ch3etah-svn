@@ -20,12 +20,8 @@
  */
 
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Schema;
 using Ch3Etah.Gui.Widgets;
 
 namespace Ch3Etah.Gui {
@@ -39,18 +35,17 @@ namespace Ch3Etah.Gui {
 		[STAThread]
 		private static int Main(string[] args) {
 			
-//			Application.EnableVisualStyles();
-//			Application.DoEvents();
-			
+			try
+			{
+				Application.EnableVisualStyles();
+				Application.DoEvents();
+			}
+			catch{}
+
 			SplashScreen.Show();
 
-			ExceptionReporter.Register();
+			UnhandledExceptionReporter.Register();
 
-//			try {
-//				Application.EnableVisualStyles();
-//			}
-//			catch {}
-			
 //			XmlSchemaCollection sc = new XmlSchemaCollection();
 //			Assembly assembly = typeof(Ch3Etah.Core.xsd.Metadata).Assembly;
 //			Stream stream = assembly.GetManifestResourceStream("Ch3Etah.Core.xsd.Metadata.xsd");

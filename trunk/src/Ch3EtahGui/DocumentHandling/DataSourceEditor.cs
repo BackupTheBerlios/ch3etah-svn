@@ -56,6 +56,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 			// cmdTest
 			// 
 			this.cmdTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.cmdTest.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.cmdTest.Location = new System.Drawing.Point(440, 24);
 			this.cmdTest.Name = "cmdTest";
 			this.cmdTest.Size = new System.Drawing.Size(128, 24);
@@ -67,6 +68,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 			// 
 			this.btnAddEntities.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnAddEntities.Enabled = false;
+			this.btnAddEntities.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnAddEntities.Location = new System.Drawing.Point(440, 88);
 			this.btnAddEntities.Name = "btnAddEntities";
 			this.btnAddEntities.Size = new System.Drawing.Size(128, 23);
@@ -77,6 +79,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 			// btnRefreshEntityList
 			// 
 			this.btnRefreshEntityList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnRefreshEntityList.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnRefreshEntityList.Location = new System.Drawing.Point(440, 56);
 			this.btnRefreshEntityList.Name = "btnRefreshEntityList";
 			this.btnRefreshEntityList.Size = new System.Drawing.Size(128, 23);

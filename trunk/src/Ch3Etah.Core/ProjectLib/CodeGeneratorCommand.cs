@@ -77,8 +77,9 @@ namespace Ch3Etah.Core.ProjectLib {
 		private CodeGenerationMode _codeGenerationMode = CodeGenerationMode.Undefined;
 		private string _engine = TransformationEngineFactory.DefaultEngineName;
 		private InputParameterCollection _inputParameters = new InputParameterCollection();
-		private Guid[] _individualMetadataFileIDs;
-		private MetadataFileCollection _individualMetadataFiles;
+		private Guid[] _selectedMetadataFileIDs;
+		private Guid[] _groupedMetadataFileIDs;
+		private MetadataFileCollection _selectedMetadataFiles;
 
 //		Guid[] _groupedMetadataFileIDs;
 //		MetadataFileCollection _groupedMetadataFiles;
@@ -170,48 +171,69 @@ namespace Ch3Etah.Core.ProjectLib {
 
 		#endregion InputParameters
 
-		#region IndividualMetadataFiles
-
-		[Browsable(false)]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		[Obsolete("This field is meant to be used only for XML serialization and" +
+		#region SelectedMetadataFiles
+		[Browsable(false)
+		, XmlArray("IndividualMetadataFileIDs")
+		, EditorBrowsable(EditorBrowsableState.Never)
+		, Obsolete("This field is meant to be used only for XML serialization and" +
 		          " deserialization. It should not be accessed programatically.")]
-		public Guid[] IndividualMetadataFileIDs {
+		public Guid[] SelectedMetadataFileIDs {
 			get {
-				Guid[] ids = new Guid[IndividualMetadataFiles.Count];
-				for (int x = 0; x < IndividualMetadataFiles.Count; x++) {
-					ids[x] = IndividualMetadataFiles[x].Guid;
+				Guid[] ids = new Guid[SelectedMetadataFiles.Count];
+				for (int x = 0; x < SelectedMetadataFiles.Count; x++) {
+					ids[x] = SelectedMetadataFiles[x].Guid;
 				}
 				return ids;
 			}
-			set { _individualMetadataFileIDs = value; }
+			set { _selectedMetadataFileIDs = value; }
 		}
-
-		[Browsable(false)]
-		[XmlIgnore()]
+		
+		[Browsable(false)
+		, XmlArray("GroupedMetadataFileIDs")
+		, EditorBrowsable(EditorBrowsableState.Never)
+		, Obsolete("This field is meant to be used only for XML serialization and" +
+			  " deserialization. It should not be accessed programatically.")]
+		public Guid[] GroupedMetadataFileIDs 
+		{ // DEPRECIATED
+			get { return null; }
+			set { _groupedMetadataFileIDs = value; }
+		}
+		
+		[Browsable(false)
+		, XmlIgnore()]
 		// FIXME: Specify the EditorAttribute for this property
-			//http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/html/cpconattributesdesign-timesupport.asp
-			public MetadataFileCollection IndividualMetadataFiles {
+		//http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpguide/html/cpconattributesdesign-timesupport.asp
+		public MetadataFileCollection SelectedMetadataFiles {
 			get {
-				if (_individualMetadataFiles == null) {
-					_individualMetadataFiles = new MetadataFileCollection();
-					//_individualMetadataFiles.Project = this.Project;
-					if (_individualMetadataFileIDs != null) {
-						foreach (Guid guid in _individualMetadataFileIDs) {
-							MetadataFile file = Project.MetadataFiles.GetMetadataFile(guid);
-							if (file != null) {
-								_individualMetadataFiles.Add(file);
-							}
-						}
+				if (_selectedMetadataFiles == null)
+				{
+					_selectedMetadataFiles = new MetadataFileCollection();
+					if (_selectedMetadataFileIDs != null && _selectedMetadataFileIDs.Length > 0)
+					{
+						FillMetadataFiles(_selectedMetadataFiles, _selectedMetadataFileIDs);
+					}
+					else if (_groupedMetadataFileIDs != null)
+					{
+						FillMetadataFiles(_selectedMetadataFiles, _groupedMetadataFileIDs);
 					}
 				}
-				//_individualMetadataFiles.Project = this.Project;
-				return _individualMetadataFiles;
+				return _selectedMetadataFiles;
 			}
-			set { _individualMetadataFiles = value; }
+			set { _selectedMetadataFiles = value; }
 		}
 
-		#endregion IndividualMetadataFiles
+		private void FillMetadataFiles(MetadataFileCollection fileCollection, Guid[] metadataFileIDs)
+		{
+			if (Project == null) return;
+
+			foreach (Guid guid in metadataFileIDs) {
+				MetadataFile file = Project.MetadataFiles.GetMetadataFile(guid);
+				if (file != null) {
+					fileCollection.Add(file);
+				}
+			}
+		}
+		#endregion SelectedMetadataFiles
 
 		#region GroupedMetadataFiles (DEPRECATED)
 
@@ -262,21 +284,22 @@ namespace Ch3Etah.Core.ProjectLib {
 
 		#region CodeGenerationMode
 
-		[Browsable(false)]
-		[XmlElement("GenerationMode")]
+		[Browsable(false)
+		, XmlElement("GenerationMode")]
 		public CodeGenerationMode CodeGenerationMode {
 			get
 			{
+				// Backwards compatability
 				if (_codeGenerationMode == CodeGenerationMode.Undefined)
 				{
-					if (IndividualMetadataFiles != null && 
-						IndividualMetadataFiles.Count > 0)
+					if (_selectedMetadataFileIDs == null
+						|| _selectedMetadataFileIDs.Length <= 0)
 					{
-						return CodeGenerationMode.MultipleOutput;
+						return CodeGenerationMode.SingleOutput;
 					}
 					else
 					{
-						return CodeGenerationMode.SingleOutput;
+						return CodeGenerationMode.MultipleOutput;
 					}
 				}
 				return _codeGenerationMode;
@@ -306,8 +329,8 @@ namespace Ch3Etah.Core.ProjectLib {
 				foreach (IMetadataEntity entity in file.MetadataEntities) {
 					if (entity.BrandName == brand.Name ||
 					    (entity.BrandName == "XmlEntity" && entity.RootNodeName == brand.Name)) {
-						if (!IndividualMetadataFiles.Contains(file)) {
-							IndividualMetadataFiles.Add(file);
+						if (!SelectedMetadataFiles.Contains(file)) {
+							SelectedMetadataFiles.Add(file);
 						}
 					}
 				}
@@ -362,7 +385,7 @@ namespace Ch3Etah.Core.ProjectLib {
 		}
 
 		private void ExecuteIndividually() {
-			foreach (MetadataFile inputFile in IndividualMetadataFiles) {
+			foreach (MetadataFile inputFile in SelectedMetadataFiles) {
 				GenerateFile(inputFile);
 			}
 		}
@@ -876,7 +899,6 @@ namespace Ch3Etah.Core.ProjectLib {
 		#region SetTemplateBaseFolder / RestoreTemplateBaseFolder
 
 		private string _oldTemplateBaseFolder = null;
-
 		private void SetTemplateBaseFolder() {
 			_oldTemplateBaseFolder = Directory.GetCurrentDirectory();
 			if (Project != null) {
@@ -913,8 +935,8 @@ namespace Ch3Etah.Core.ProjectLib {
 		}
 
 		void IMetadataFileObserver.OnMetadataFileRemoved(MetadataFile file) {
-			if (IndividualMetadataFiles.Contains(file)) {
-				IndividualMetadataFiles.Remove(file);
+			if (SelectedMetadataFiles.Contains(file)) {
+				SelectedMetadataFiles.Remove(file);
 			}
 		}
 

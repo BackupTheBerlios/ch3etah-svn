@@ -13,13 +13,16 @@ Some major features to be implemented:
 * Assembly analyzer for reverse engeneering
 * AppDomain isolation of template engines
 * http://www.developerdotstar.com/mag/articles/o-r_mapping_persistence.html
+* http://www.hanselminutes.com/default.aspx?showID=20
 
 *** NEED TO CREATE BACKUP SCRIPT FOR WEBSITE CONTENT AND WIKI THAT RUNS DAILY
 BUG: When you delete a node from the project tree (data source, command, metadata file) the deleted object's content editor window is not closed
 BUG: Entity name doesn't update in treeview when changed in property grid
 BUG: There is way too much coupling between the OREntityEditor and it's children (like accessing the TreeView on the Design editor). This really needs to be refactored. Same with MainForm.
+BUG: It seems if you close the property grid, it doesn't show again through the menu
 
-* FEAT: Need to implement unit tests.
+* FEAT: Add *.build and *.bat files to solution
+* FEAT: When an entity is removed from the project, update links pointing to that entity.
 * FEAT: Add visualization of legacy packages in project tree.
 * FEAT: Nant script needs to copy changelog.txt to web directory
 * FEAT: Should validate that links point to valid entities and warn if they don't (i.e. to avoid null ref exceptions when generating)
@@ -33,7 +36,6 @@ BUG: There is way too much coupling between the OREntityEditor and it's children
 * FEAT: Add evaluation syntax to allow metadata entities to be passed to generation context parameters as strongly typed objects rather than just XML ( ex: ${CurrentMetadataFile::Entity[0]} )
 * FEAT: Add a "Rename" command to metadata file right click menu [possibly implement an INamedObject with SupportsRename() and Rename(string newName)]
 * FEAT: Add support for Stored Procedure (SP) metadata for generating stron-typed data access commands. Should have option to use stored XML or refresh from DB every time code is generated (AutoRefreshSchema - possibly same for OREntities).
-* FEAT: Enable visual styles
 * FEAT: In ORM settings, add list of field names to exclude automatically, like SiteID, ReplicationID, etc.
 * FEAT: Remove/Exclude deleted fields, indexes and links when entity is refreshed from db (or mark IsExcluded=true), and advise user (have option in settings)
 * FEAT: Add ability to include/exclude nodes in entity editor tree via right-click
@@ -45,6 +47,10 @@ BUG: There is way too much coupling between the OREntityEditor and it's children
 http://nsis.sourceforge.net/Check_whether_your_application_is_running_during_uninstallation
 http://nsis.sourceforge.net/Detect_if_a_window_is_open_and_close_it.
 * FEAT: We should look at migrating WeifenLuo docking suite to 1.0+. http://sourceforge.net/users/weifenluo/
+* FEAT: Make the ID column on the bug report list a hyperlink to take you to the tracker page.
+http://www.codeproject.com/cs/miscctrl/LinkLabelDatagridColumn.asp?df=100&forumid=226832&select=1447710#xx1447710xx
+http://www.codeproject.com/vb/net/Datagrid_ColumnStyles.asp#xx1396971xx
+
 
 * WISH: Visual UML-style modeler. Should use Model-View-Presenter pattern and code to interfaces so that other types of metadata entities (e.g. XMI) can be plugged into the modeler.
 * WISH: Manage multiple files in project structure (i.e. select several metadata files and remove them)
@@ -52,7 +58,7 @@ http://nsis.sourceforge.net/Detect_if_a_window_is_open_and_close_it.
 * WISH: We would like to have a simple Entity object and extend it with functionality and attributes such as O/R mapping, GUI-specific, framework-specific, etc. One possible way of acheiving this could be to use the decorator pattern or similar. We would need to figure out how the decorations would show up on editing screens, in property grid, etc. It would also be nice to have it configurable at runtime to make it easier to create/configure/discover/experiement with extending entities without having to create a VS.NET project for the extension and compile it.
 
 ============================================
-Documentation Points (possibly use a WIKI)
+Documentation Points
 ============================================
 SEE: http://moinmoin.wikiwikiweb.de/SourceForge?highlight=%28SourceForge%29
 - Getting started

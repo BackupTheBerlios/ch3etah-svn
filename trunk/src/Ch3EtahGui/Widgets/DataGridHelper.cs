@@ -42,26 +42,35 @@ namespace Ch3Etah.Gui.Widgets
 		}
 
 		public static DataGridColumnStyle AddDataGridColumn(DataGrid grid, string propertyName, string headerText) {
+			return AddDataGridColumn(grid, propertyName, headerText, "");
+		}
+
+		public static DataGridColumnStyle AddDataGridColumn(DataGrid grid, string propertyName, string headerText, string format) 
+		{
 			PropertyDescriptorCollection props =((CurrencyManager) grid.BindingContext[grid.DataSource]).GetItemProperties();
 			PropertyDescriptor prop = props[propertyName];
 			DataGridColumnStyle style = null;
-			if (prop == null) {
+			if (prop == null) 
+			{
 				style = new DataGridTextBoxColumn();
 			}
-			else if (prop.PropertyType == typeof(bool)) {
+			else if (prop.PropertyType == typeof(bool)) 
+			{
 				style = new DataGridBoolColumn(prop, true);
 				((DataGridBoolColumn)style).AllowNull = false;
 			}
-			else {
-				style = new DataGridTextBoxColumn(prop, true);
+			else 
+			{
+				style = new DataGridTextBoxColumn(prop, format, true);
 			}
 			grid.TableStyles[0].GridColumnStyles.Add(style);
 			style.HeaderText = headerText;
 			
 			return style;
 		}
-
-		public static DataGridColumnStyle AddDataGridColumn(DataGrid grid, string propertyName, string headerText, Type columnType) {
+		
+		public static DataGridColumnStyle AddDataGridColumn(DataGrid grid, string propertyName, string headerText, Type columnType) 
+		{
 			PropertyDescriptorCollection props =((CurrencyManager) grid.BindingContext[grid.DataSource]).GetItemProperties();
 			PropertyDescriptor prop = props[propertyName];
 			DataGridColumnStyle style = null;

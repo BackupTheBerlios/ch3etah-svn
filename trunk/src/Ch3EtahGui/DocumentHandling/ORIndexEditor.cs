@@ -161,6 +161,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			// chkUnique
 			// 
+			this.chkUnique.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkUnique.Location = new System.Drawing.Point(100, 16);
 			this.chkUnique.Name = "chkUnique";
 			this.chkUnique.TabIndex = 1;
@@ -168,6 +169,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			// chkPrimaryKey
 			// 
+			this.chkPrimaryKey.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkPrimaryKey.Location = new System.Drawing.Point(12, 16);
 			this.chkPrimaryKey.Name = "chkPrimaryKey";
 			this.chkPrimaryKey.TabIndex = 0;
@@ -175,6 +177,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			// chkDeleteBy
 			// 
+			this.chkDeleteBy.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkDeleteBy.Location = new System.Drawing.Point(100, 36);
 			this.chkDeleteBy.Name = "chkDeleteBy";
 			this.chkDeleteBy.TabIndex = 3;
@@ -182,6 +185,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			// chkSelectBy
 			// 
+			this.chkSelectBy.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.chkSelectBy.Location = new System.Drawing.Point(12, 36);
 			this.chkSelectBy.Name = "chkSelectBy";
 			this.chkSelectBy.TabIndex = 2;
@@ -243,6 +247,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// btnRemoveIndexField
 			// 
 			this.btnRemoveIndexField.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.btnRemoveIndexField.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnRemoveIndexField.Location = new System.Drawing.Point(92, 200);
 			this.btnRemoveIndexField.Name = "btnRemoveIndexField";
 			this.btnRemoveIndexField.Size = new System.Drawing.Size(84, 24);
@@ -253,6 +258,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// btnAddIndexField
 			// 
 			this.btnAddIndexField.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.btnAddIndexField.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnAddIndexField.Location = new System.Drawing.Point(4, 200);
 			this.btnAddIndexField.Name = "btnAddIndexField";
 			this.btnAddIndexField.Size = new System.Drawing.Size(84, 24);
@@ -289,6 +295,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// btnRemoveOrderField
 			// 
 			this.btnRemoveOrderField.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.btnRemoveOrderField.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnRemoveOrderField.Location = new System.Drawing.Point(92, 200);
 			this.btnRemoveOrderField.Name = "btnRemoveOrderField";
 			this.btnRemoveOrderField.Size = new System.Drawing.Size(84, 24);
@@ -299,6 +306,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// btnAddOrderList
 			// 
 			this.btnAddOrderList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.btnAddOrderList.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnAddOrderList.Location = new System.Drawing.Point(4, 200);
 			this.btnAddOrderList.Name = "btnAddOrderList";
 			this.btnAddOrderList.Size = new System.Drawing.Size(84, 24);
