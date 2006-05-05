@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------------
-- Version 0.5.3.144
+- Version 0.5.3.146
 ---------------------------------------------------------------------------
 ADD: Added integration with the Source Forge Bug Tracker to make bug reporting easier and more seamless.
 ADD: Enabled visual styles (Windows XP look and feel).

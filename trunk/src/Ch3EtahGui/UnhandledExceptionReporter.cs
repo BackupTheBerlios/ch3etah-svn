@@ -14,7 +14,6 @@ namespace Ch3Etah.Gui
 		private System.Windows.Forms.Button btnReportError;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.TextBox txtError;
-		private System.Windows.Forms.Label label3;
 		private System.ComponentModel.Container components = null;
 		
 		Exception _exception;
@@ -55,7 +54,6 @@ namespace Ch3Etah.Gui
 			this.txtError = new System.Windows.Forms.TextBox();
 			this.btnReportError = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.label3 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// pictureBox1
@@ -78,13 +76,15 @@ namespace Ch3Etah.Gui
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(488, 48);
 			this.label1.TabIndex = 1;
-			this.label1.Text = @"An unexpected error has occurred in the application. Often these errors are not fatal and you can continue working without any problems. We would like to ask you to help us make CH3ETAH better by reporting this error to us through the forums on the project website.";
+			this.label1.Text = "An unexpected error has occurred in the application. Often these errors are not f" +
+				"atal and you can continue working without any problems. We would like to ask you" +
+				" to help us make CH3ETAH better by reporting this error to us.";
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(184, 112);
+			this.label2.Location = new System.Drawing.Point(184, 56);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(368, 24);
+			this.label2.Size = new System.Drawing.Size(368, 16);
 			this.label2.TabIndex = 2;
 			this.label2.Text = "Thank you for helping us to make this program better!";
 			// 
@@ -94,12 +94,12 @@ namespace Ch3Etah.Gui
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.txtError.BackColor = System.Drawing.SystemColors.Menu;
-			this.txtError.Location = new System.Drawing.Point(184, 128);
+			this.txtError.Location = new System.Drawing.Point(184, 72);
 			this.txtError.Multiline = true;
 			this.txtError.Name = "txtError";
 			this.txtError.ReadOnly = true;
 			this.txtError.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.txtError.Size = new System.Drawing.Size(480, 200);
+			this.txtError.Size = new System.Drawing.Size(480, 256);
 			this.txtError.TabIndex = 3;
 			this.txtError.Text = "";
 			// 
@@ -129,17 +129,7 @@ namespace Ch3Etah.Gui
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 			// 
-			// label3
-			// 
-			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
-			this.label3.Location = new System.Drawing.Point(184, 55);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(488, 57);
-			this.label3.TabIndex = 6;
-			this.label3.Text = @"All you need to do is click the button labeled ""Report this error."" When you do this, the contents of the text box below will be copied to the clipboard and a new browser window will be opened to the web site. Simply paste the text in the message, along with any information (or suggestions) you may wish to add.";
-			// 
-			// ExceptionReporter
+			// UnhandledExceptionReporter
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.BackColor = System.Drawing.SystemColors.Control;
@@ -149,13 +139,12 @@ namespace Ch3Etah.Gui
 			this.Controls.Add(this.txtError);
 			this.Controls.Add(this.pictureBox1);
 			this.Controls.Add(this.label2);
-			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "ExceptionReporter";
+			this.Name = "UnhandledExceptionReporter";
 			this.Text = "Unhandled Exception";
 			this.ResumeLayout(false);
 

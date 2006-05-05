@@ -286,11 +286,6 @@ namespace Ch3Etah.Gui.Widgets
 			if (base.DockPanel.ActiveDocument is ObjectEditorForm)
 			{
 				return GetActiveTextDocument((ObjectEditorForm)base.DockPanel.ActiveDocument);
-//				Control ctl = ((ObjectEditorForm)base.DockPanel.ActiveDocument).ActiveControl;
-//				if (ctl is ITextDocument)
-//				{
-//					return (ITextDocument)ctl;
-//				}
 			}
 			return null;
 		}
