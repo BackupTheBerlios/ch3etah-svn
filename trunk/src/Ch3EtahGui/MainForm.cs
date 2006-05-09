@@ -601,28 +601,34 @@ namespace Ch3Etah.Gui {
 			
 			foreach (MetadataFile file in _project.MetadataFiles) {
 				TreeNode node = GetContextNode(file, metadataFilesNode.Nodes);
-				if (node == null && !sortedItems.ContainsKey(file.Name)) {
-					node = new TreeNode(file.Name);
+				if (node == null) {
+					node = new TreeNode();
 				}
 //				try 
 //				{
 					node.Tag = file;
-					//file.Load();
-					if (File.Exists(file.FullPath))
+					node.Text = file.Name;
+					if (File.Exists(file.FullPath) && !sortedItems.ContainsKey(node.Text))
 					{
-						node.Text = file.Name;
-						sortedItems.Add(file.Name, node);
+						sortedItems.Add(node.Text, node);
 						node.ImageIndex = Images.Indexes.DocumentText;
 						node.SelectedImageIndex = Images.Indexes.DocumentText;
 					}
 					else
 					{
-						node.Text = file.Name + ERROR_MESSAGE_1;
-//						int i = 1;
-//						while (sortedItems.ContainsKey(node.Text))
-//						{
-//							node.Text = file.Name + string.Format(" ({0})", i++) + ERROR_MESSAGE_1;
-//						}
+						if (sortedItems.ContainsKey(node.Text))
+						{
+							node.Text = file.Name + " [duplicate 1]" + ERROR_MESSAGE_1;
+						}
+						else
+						{
+							node.Text = file.Name + ERROR_MESSAGE_1;
+						}
+						int i = 1;
+						while (sortedItems.ContainsKey(node.Text))
+						{
+							node.Text = file.Name + string.Format(" [duplicate {0}]", i++) + ERROR_MESSAGE_1;
+						}
 						sortedItems.Add(node.Text, node);
 						node.ImageIndex = Images.Indexes.Delete;
 						node.SelectedImageIndex = Images.Indexes.Delete;

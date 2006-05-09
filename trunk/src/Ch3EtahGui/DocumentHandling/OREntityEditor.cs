@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using Ch3Etah.Core.Metadata;
@@ -72,7 +73,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 					canceled = true;
 					return;
 				}
-			
+				
 				if (newEditMode == MetadataEditMode.Xml)
 				{
 					SwitchToXML();
@@ -122,7 +123,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 
 		private bool VerifySave()
 		{
-			if (this.IsDirty)
+			if (!_isLoading && this.IsDirty)
 			{
 				DialogResult result =
 					MessageBox.Show("Do you want to save your changes?", "Confirmation", MessageBoxButtons.YesNoCancel,
@@ -338,7 +339,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 		#region Fields
 
 		private MetadataFile _MetadataFile;
-		private bool loading;
+		private bool _isLoading;
 		internal const String Const_DefaultNewIndexText = "New Index...";
 		internal const String Const_DefaultNewLinkText = "New Link...";
 		internal const String Const_DefaultNewFieldText = "New Field...";
@@ -346,9 +347,8 @@ namespace Ch3Etah.Gui.DocumentHandling
 		#endregion
 
 		#region IObjectEditor implementation
-
+		
 		public event EventHandler SelectedObjectChanged;
-
 		protected virtual void OnSelectedObjectChanged()
 		{
 			if (SelectedObjectChanged != null)
@@ -357,6 +357,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 			}
 		}
 
+		
 		#region DoBinding
 
 		private void DoBinding()
@@ -454,7 +455,6 @@ namespace Ch3Etah.Gui.DocumentHandling
 		#endregion ToString
 
 		#region CommitChanges
-
 		public bool CommitChanges()
 		{
 			if (CurrentEditMode == MetadataEditMode.Xml)
@@ -472,18 +472,31 @@ namespace Ch3Etah.Gui.DocumentHandling
 			}
 			else
 			{
-				if (_MetadataFile != null && _MetadataFile.FileName != string.Empty)
+				DialogResult fileExists = MetadataFileExists(FileDialogMode.Save);
+				if (fileExists == DialogResult.Yes)
 				{
+					FileAttributes attr = File.GetAttributes(_MetadataFile.GetFullPath());
+					if ((attr & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+					{
+						string msg = string.Format(
+							"The file '{0}' is read-only and cannot be overwritten."
+							, _MetadataFile.GetFullPath());
+						MessageBox.Show(
+							msg
+							, _MetadataFile.Name
+							, MessageBoxButtons.OK
+							, MessageBoxIcon.Error);
+						return false;
+					}
 					_MetadataFile.Save();
 				}
-				return true;
+				return fileExists == DialogResult.Yes;
 			}
 		}
 
 		#endregion CommitChanges
 
 		#region QueryUnload
-
 		public void QueryUnload(out bool cancel)
 		{
 			if (!Validate())
@@ -500,22 +513,33 @@ namespace Ch3Etah.Gui.DocumentHandling
 			}
 			if (IsDirty)
 			{
-				DialogResult result =
-					MessageBox.Show("Do you wish to save the changes you've made to the entity '" + _MetadataFile.Name + "'",
-					                _MetadataFile.Name, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question,
-					                MessageBoxDefaultButton.Button3);
+				string msg = string.Format(
+					"Do you wish to save the changes you've made to the entity '{0}'?"
+					, _MetadataFile.Name);
+				DialogResult result = MessageBox.Show(
+					msg
+					, _MetadataFile.Name
+					, MessageBoxButtons.YesNoCancel
+					, MessageBoxIcon.Question
+					, MessageBoxDefaultButton.Button3);
 				if (result == DialogResult.Yes)
 				{
-					cancel = CommitChanges();
+					cancel = !CommitChanges();
+					return;
 				}
 				else if (result == DialogResult.Cancel)
 				{
 					cancel = true;
 					return;
 				}
-				// revert changes
-				_MetadataFile.Load();
-				cancel = false;
+
+				DialogResult fileExists = MetadataFileExists(FileDialogMode.Open);
+				if (fileExists == DialogResult.Yes)
+				{
+					// revert changes
+					_MetadataFile.Load();
+				}
+				cancel = fileExists == DialogResult.Cancel;
 			}
 			else
 			{
@@ -525,24 +549,97 @@ namespace Ch3Etah.Gui.DocumentHandling
 
 		#endregion QueryUnload
 
+		private enum FileDialogMode
+		{
+			Open
+			, Save
+		}
+		private DialogResult MetadataFileExists(FileDialogMode mode)
+		{
+			if (_MetadataFile == null || _MetadataFile.FileName == string.Empty)
+			{
+				return DialogResult.No;
+			}
+
+			if (!File.Exists(_MetadataFile.FullPath))
+			{
+				string msg = string.Format(
+					"The file '{0}' could not be found. The file may have been moved or renamed, or this project's MetadataBaseDir property may not be correct. \r\n\r\n"
+					+ "Would you like to locate the file now?"
+					, _MetadataFile.FullPath);
+				DialogResult result = MessageBox.Show(
+					msg
+					, _MetadataFile.Name
+					, MessageBoxButtons.YesNo
+					, MessageBoxIcon.Question
+					, MessageBoxDefaultButton.Button2);
+				if (result == DialogResult.Yes)
+				{
+					FileDialog dlg = null;
+					if (mode == FileDialogMode.Save)
+					{
+						dlg = new SaveFileDialog();
+					}
+					else
+					{
+						dlg = new OpenFileDialog();
+					}
+					if (_MetadataFile.Project != null)
+					{
+						dlg.InitialDirectory = _MetadataFile.Project.GetFullMetadataPath();
+					}
+					dlg.Title = "Locate File";
+					dlg.Filter = string.Format(
+						"{0}|{0}|XML Files (.XML)|*.xml|All Files (*.*)|*.*"
+						, Path.GetFileName(_MetadataFile.GetFullPath()));
+					result = dlg.ShowDialog(this);
+					if (result == DialogResult.OK) 
+					{
+						_MetadataFile.FileName = dlg.FileName;
+						return DialogResult.Yes;
+					}
+					else
+					{
+						return result;
+					}
+				}
+				else
+				{
+					return result;
+				}
+			}
+			else
+			{
+				return DialogResult.Yes;
+			}
+		}
+		
 		#endregion IObjectEditor implementation
 
 		#region Events
 
 		private void OREntityEditor_Load(object sender, EventArgs e)
 		{
-			loading = true;
-			SetupToolBar();
-			if (designView.TreeView.Nodes.Count > 0) {
-				tbiEditor.Pushed = true;
-				tlbMode_ButtonClick(tlbMode, new ToolBarButtonClickEventArgs(tbiEditor));
+			_isLoading = true;
+			try
+			{
+				SetupToolBar();
+				if (designView.TreeView.Nodes.Count > 0) 
+				{
+					tbiEditor.Pushed = true;
+					tlbMode_ButtonClick(tlbMode, new ToolBarButtonClickEventArgs(tbiEditor));
+				}
+				else 
+				{
+					tbiEditor.Enabled = false;
+					tbiXML.Pushed = true;
+					tlbMode_ButtonClick(tlbMode, new ToolBarButtonClickEventArgs(tbiXML));
+				}
 			}
-			else {
-				tbiEditor.Enabled = false;
-				tbiXML.Pushed = true;
-				tlbMode_ButtonClick(tlbMode, new ToolBarButtonClickEventArgs(tbiXML));
+			finally
+			{
+				_isLoading = false;
 			}
-			loading = false;
 		}
 
 		private void btnSave_Click(object sender, EventArgs e)
@@ -938,19 +1035,6 @@ namespace Ch3Etah.Gui.DocumentHandling
 			}
 		}
 
-		private void textFileEditor1_IsDirtyChanged(object sender, System.EventArgs e) 
-		{
-			string text;
-			if (textFileEditor1.IsDirty) 
-			{
-				text = _MetadataFile.Name + " *";
-			}
-			else 
-			{
-				text = _MetadataFile.Name;
-			}
-			if (Text != text) Text = text;
-		}
 		#endregion Events
 
 		#region Methods

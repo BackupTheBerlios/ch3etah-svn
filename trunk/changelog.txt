@@ -1,6 +1,9 @@
 ---------------------------------------------------------------------------
-- Version 0.5.3.146
+- Version 0.5.3.147
 ---------------------------------------------------------------------------
+FIX: The relative path functionality was treating path names as case-sensitive, which sometimes led to complicated relative paths.
+FIX: Fixed some bugs in the metadata entity editor related to missing or read-only files. (See Bug ID# 1482527)
+FIX: Adding duplicate metadata file entries would throw an unhandled exception when refreshing the project tree.
 ADD: Added integration with the Source Forge Bug Tracker to make bug reporting easier and more seamless.
 ADD: Enabled visual styles (Windows XP look and feel).
 ADD: Added Unit Test project to solution.

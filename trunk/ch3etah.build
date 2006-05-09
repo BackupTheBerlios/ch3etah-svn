@@ -139,7 +139,7 @@ bye
 	</target>
 	
 	<target name="deploy-web-site" depends="prepare-ssh-args" >
-		<exec program="${scp.program}" verbose="false" timeout="300000" >
+		<exec program="${scp.program}" verbose="false" timeout="150000" >
 			<arg line="-q -r ${scp.program.args}" />
 			<arg value="${local.web.path}\*" />
 			<arg line="${remote.web.serverpart}" />

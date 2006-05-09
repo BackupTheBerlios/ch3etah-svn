@@ -229,7 +229,7 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			this.cboTemplate.Location = new System.Drawing.Point(8, 64);
 			this.cboTemplate.Name = "cboTemplate";
-			this.cboTemplate.Size = new System.Drawing.Size(248, 21);
+			this.cboTemplate.Size = new System.Drawing.Size(244, 21);
 			this.cboTemplate.Sorted = true;
 			this.cboTemplate.TabIndex = 1;
 			this.cboTemplate.DropDown += new System.EventHandler(this.cboTemplate_DropDown);
@@ -372,9 +372,10 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			// 
 			// chkAutoSelectMetadataFiles
 			// 
-			this.chkAutoSelectMetadataFiles.Location = new System.Drawing.Point(8, 104);
+			this.chkAutoSelectMetadataFiles.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.chkAutoSelectMetadataFiles.Location = new System.Drawing.Point(16, 104);
 			this.chkAutoSelectMetadataFiles.Name = "chkAutoSelectMetadataFiles";
-			this.chkAutoSelectMetadataFiles.Size = new System.Drawing.Size(88, 32);
+			this.chkAutoSelectMetadataFiles.Size = new System.Drawing.Size(80, 32);
 			this.chkAutoSelectMetadataFiles.TabIndex = 1;
 			this.chkAutoSelectMetadataFiles.Text = "Auto-select new files";
 			// 

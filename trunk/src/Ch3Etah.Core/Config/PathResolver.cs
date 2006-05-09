@@ -19,7 +19,6 @@
  *   Date: 26/09/2004
  */
 
-using System;
 using System.IO;
 
 namespace Ch3Etah.Core.Config
@@ -50,7 +49,7 @@ namespace Ch3Etah.Core.Config
 			
 			int x = 0;
 			for ( ; x < basePath.Length && x < destPath.Length; ++x) {
-				if (basePath[x] != destPath[x]) {
+				if (basePath[x].ToUpper() != destPath[x].ToUpper()) {
 					break;
 				}
 			}
