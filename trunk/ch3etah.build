@@ -138,7 +138,25 @@ bye
 		<echo message="" />
 	</target>
 	
-	<target name="deploy-web-site" depends="prepare-ssh-args" >
+	<target name="docs-copy-web-local" depends="" >
+		<echo message="Copying docs to web folder from '${source.dir}'..." />
+		<copy todir="${local.web.path}" includeemptydirs="false">
+			<fileset basedir="${source.dir}">
+				<include name="docs\**" />
+				<exclude name="**/.svn/**" />
+				<exclude name="**/bin/**" />
+				<exclude name="**/obj/**" />
+				<exclude name="**/*resharper*/**" />
+				<exclude name="**/*Thumbs.db/**" />
+			</fileset>
+		</copy>
+		<zip zipfile="${local.web.path}\docs\getting_started.zip" includeemptydirs="false">
+			<fileset basedir="${local.web.path}\docs">
+				<include name="GettingStarted\**" />
+			</fileset>
+		</zip>
+	</target>
+	<target name="deploy-web-site" depends="prepare-ssh-args, docs-copy-web-local" >
 		<exec program="${scp.program}" verbose="false" timeout="150000" >
 			<arg line="-q -r ${scp.program.args}" />
 			<arg value="${local.web.path}\*" />
@@ -226,6 +244,7 @@ bye
 		<copy todir="${build.dir}" includeemptydirs="false">
 			<fileset basedir="${source.dir}">
 				<include name="src\**" />
+				<include name="docs\**" />
 				<include name="web\**" />
 				<include name="*" />
 				<exclude name="**/.svn/**" />
