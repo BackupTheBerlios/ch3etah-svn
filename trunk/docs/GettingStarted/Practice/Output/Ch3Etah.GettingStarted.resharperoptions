@@ -1,0 +1,20 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean />
+  </SettingsComponent>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Qualified:Northwind.Domain.Order">
+      <Item value="ShipName" priority="0" />
+      <Item value="CustomerID" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+  <RecentFilesTracker>
+    <RecentFilesTracker>
+      <TrackedFile location="C:\Documents and Settings\egglestonjg\My Documents\CH3ETAH\trunk\docs\GettingStarted\_example\Output\Northwind.Domain\Generated\Employees.cs" offset="368" line="0" column="0" />
+      <TrackedFile location="C:\Documents and Settings\egglestonjg\My Documents\CH3ETAH\trunk\docs\GettingStarted\_example\Output\Northwind.Gui\OrdersForm.cs" offset="1238" line="13" column="0" />
+      <TrackedFile location="C:\Documents and Settings\egglestonjg\My Documents\CH3ETAH\trunk\docs\GettingStarted\_example\Output\Northwind.Domain\Order.cs" offset="0" line="-1" column="-1" />
+    </RecentFilesTracker>
+  </RecentFilesTracker>
+</Configuration>

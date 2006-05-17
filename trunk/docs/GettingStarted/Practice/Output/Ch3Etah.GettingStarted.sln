@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Northwind.Domain", "Northwind.Domain\Northwind.Domain.csproj", "{69629A6D-FD9C-4206-BBC2-10BC790351DA}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Northwind.Gui", "Northwind.Gui\Northwind.Gui.csproj", "{119276AF-E67F-444F-A415-63E1736C1C83}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{69629A6D-FD9C-4206-BBC2-10BC790351DA}.Debug.ActiveCfg = Debug|.NET
+		{69629A6D-FD9C-4206-BBC2-10BC790351DA}.Debug.Build.0 = Debug|.NET
+		{69629A6D-FD9C-4206-BBC2-10BC790351DA}.Release.ActiveCfg = Release|.NET
+		{69629A6D-FD9C-4206-BBC2-10BC790351DA}.Release.Build.0 = Release|.NET
+		{119276AF-E67F-444F-A415-63E1736C1C83}.Debug.ActiveCfg = Debug|.NET
+		{119276AF-E67F-444F-A415-63E1736C1C83}.Debug.Build.0 = Debug|.NET
+		{119276AF-E67F-444F-A415-63E1736C1C83}.Release.ActiveCfg = Release|.NET
+		{119276AF-E67F-444F-A415-63E1736C1C83}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

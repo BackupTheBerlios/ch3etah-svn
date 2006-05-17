@@ -38,6 +38,7 @@ namespace Ch3Etah.Metadata.OREntities
 		public Link()
 		{
 			Entity.NameChanged += new EntityNameChangedEventHandler(Entity_NameChanged);
+			Entity.PluralNameChanged += new EntityNameChangedEventHandler(Entity_PluralNameChanged);
 			EntityField.NameChanged += new EntityFieldNameChangedEventHandler(EntityField_NameChanged);
 			Index.NameChanged += new IndexNameChangedEventHandler(Index_NameChanged);
 			IndexField.NameChanged += new IndexFieldNameChangedEventHandler(IndexField_NameChanged);
@@ -61,7 +62,7 @@ namespace Ch3Etah.Metadata.OREntities
 		#region Entity
 		private Entity _entity;
 		private string _category;
-		private bool _browsable = false;
+		private bool _browsable = true;
 
 		[XmlIgnore()]
 		public Entity Entity {
@@ -155,14 +156,14 @@ namespace Ch3Etah.Metadata.OREntities
 		
 		[XmlAttribute("isconstrained")]
 		[Category("Link setup")]
-		[Description("Allows you to specify if the link represents a foreign key.")]
+		[Description("Allows you to specify if the link is constrained by a foreign key.")]
 		public bool IsConstrained 
 		{
 			get { return _isConstrained; }
 			set { _isConstrained = value; }
 		}
 		
-		[Category("Field")]
+		[Category("Link setup")]
 		[XmlAttribute("browsable")]
 		public bool Browsable 
 		{
@@ -274,13 +275,35 @@ namespace Ch3Etah.Metadata.OREntities
 
 		private void Entity_NameChanged(object sender, EntityNameChangedEventArgs e)
 		{
-			if (this.TargetEntityName == e.OldName)
+			if (sender is Entity && this.TargetEntityName == e.OldName)
 			{
 				bool save = this.Entity != null 
 					&& this.Entity.OwningMetadataFile != null 
 					&& !this.Entity.OwningMetadataFile.IsDirty;
 				this.TargetEntityName = e.NewName;
+				
+				if (LinkDerivesName(e.OldName)
+					&& !LinkDerivesName(((Entity)sender).PluralName))
+				{
+					this.Name = this.Name.Replace(e.OldName, e.NewName);
+				}
+				
 				if (save) this.Entity.OwningMetadataFile.Save();
+			}
+		}
+
+		private void Entity_PluralNameChanged(object sender, EntityNameChangedEventArgs e)
+		{
+			if (sender is Entity && this.TargetEntityName == ((Entity)sender).Name)
+			{
+				bool save = this.Entity != null 
+					&& this.Entity.OwningMetadataFile != null 
+					&& !this.Entity.OwningMetadataFile.IsDirty;
+				if (LinkDerivesName(e.OldName))
+				{
+					this.Name = this.Name.Replace(e.OldName, e.NewName);
+					if (save) this.Entity.OwningMetadataFile.Save();
+				}
 			}
 		}
 
@@ -295,6 +318,30 @@ namespace Ch3Etah.Metadata.OREntities
 				{
 					field.SourceFieldName = e.NewName;
 				}
+			}
+		}
+		
+		/// <summary>
+		/// Returns whether or not the link name derives
+		/// from (i.e begins with / ends with) the specified
+		/// name parameter.
+		/// </summary>
+		private bool LinkDerivesName(string name)
+		{
+			if (name == "")
+			{
+				return false;
+			}
+
+			string linkName = this.Name;
+			int pos = linkName.IndexOf(name);
+			if (pos == 0 || pos == linkName.Length - name.Length - 1)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 

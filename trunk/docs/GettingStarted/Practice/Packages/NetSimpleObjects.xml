@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package Name="NetSimpleObjects">
+    <Templates>
+        <Template Name="CS_BusinessEntity" Address="Templates\CS_BusinessEntity.xslt">
+			<IndividualMetadataBrands>
+				<Brand Name="OREntity" />
+			</IndividualMetadataBrands>
+		</Template>
+        <Template Name="CS_AbstractEntity" Address="Templates\CS_AbstractEntity.xslt">
+			<IndividualMetadataBrands>
+				<Brand Name="OREntity" />
+			</IndividualMetadataBrands>
+		</Template>
+    </Templates>
+    <Libraries>
+    </Libraries>
+    <Helpers>
+    </Helpers>
+    <InputParameters>
+        <Parameter Name = "EntityNamespace" IsRequired="true" />
+    </InputParameters>
+</Package>

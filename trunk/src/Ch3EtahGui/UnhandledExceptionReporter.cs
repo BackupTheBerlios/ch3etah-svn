@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 
 using Ch3Etah.Gui.BugTracker;
+using Ch3Etah.Gui.Widgets;
 
 namespace Ch3Etah.Gui
 {
@@ -25,6 +26,11 @@ namespace Ch3Etah.Gui
 			string msg = "CH3ETAH Version: " + Utility.GetCh3EtahVersion() + "\r\n";
 			msg += _exception.ToString();
 			txtError.Text = msg;
+			if (exception is Ch3EtahTestException)
+			{
+				btnReportError.Enabled = false;
+				btnReportError.Text = "This exception is for testing only and cannot be reported...";
+			}
 		}
 
 		protected override void Dispose( bool disposing )

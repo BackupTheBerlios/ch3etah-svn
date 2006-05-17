@@ -27,6 +27,8 @@ using System.Drawing.Design;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+
+using Ch3Etah.Core.Config;
 using Ch3Etah.Core.Metadata;
 using Ch3Etah.Metadata.OREntities;
 using Ch3Etah.Core.CodeGen.PackageLib;
@@ -165,9 +167,19 @@ namespace Ch3Etah.Core.ProjectLib {
 		/// in this project.
 		/// </summary>
 		[Category("Paths")]
-		[Editor("Ch3Etah.Design.CustomUI.RelativeDirectoryDialog,Ch3Etah.Design", typeof (UITypeEditor))]
+		[Editor("Ch3Etah.Design.CustomUI.PhysicalPathDialog,Ch3Etah.Design", typeof (UITypeEditor))]
 		public string MetadataBaseDir {
-			get { return _metadataBaseDir; }
+			get
+			{
+				if (Path.IsPathRooted(_metadataBaseDir))
+				{
+					return GetRelativePath(_metadataBaseDir);
+				}
+				else
+				{
+					return _metadataBaseDir;
+				}
+			}
 			set { _metadataBaseDir = value; }
 		}
 
@@ -178,7 +190,17 @@ namespace Ch3Etah.Core.ProjectLib {
 		[Category("Paths")]
 		[Editor("Ch3Etah.Design.CustomUI.PhysicalPathDialog,Ch3Etah.Design", typeof (UITypeEditor))]
 		public string TemplatePackageBaseDir {
-			get { return _templatePackageBaseDir; }
+			get
+			{
+				if (Path.IsPathRooted(_templatePackageBaseDir))
+				{
+					return GetRelativePath(_templatePackageBaseDir);
+				}
+				else
+				{
+					return _templatePackageBaseDir;
+				}
+			}
 			set { _templatePackageBaseDir = value; }
 		}
 
@@ -186,12 +208,22 @@ namespace Ch3Etah.Core.ProjectLib {
 		/// Base directory for output files from this project.
 		/// </summary>
 		[Category("Paths")]
-		[Editor("Ch3Etah.Design.CustomUI.RelativeDirectoryDialog,Ch3Etah.Design", typeof (UITypeEditor))]
+		[Editor("Ch3Etah.Design.CustomUI.PhysicalPathDialog,Ch3Etah.Design", typeof (UITypeEditor))]
 		public string OutputBaseDir {
-			get { return _outputBaseDir; }
+			get
+			{
+				if (Path.IsPathRooted(_outputBaseDir))
+				{
+					return GetRelativePath(_outputBaseDir);
+				}
+				else
+				{
+					return _outputBaseDir;
+				}
+			}
 			set { _outputBaseDir = value; }
 		}
-
+		
 		#endregion Directories
 
 		#region MetadataFileObservers
@@ -451,9 +483,16 @@ namespace Ch3Etah.Core.ProjectLib {
 		}
 		#endregion Save
 
-		#region GetFullPaths
+		#region GetPaths
 
-		public string GetFullMetadataPath() {
+		public string GetRelativePath(string fileName) 
+		{
+			string baseDirectory = Path.GetDirectoryName(this.FileName);
+			return PathResolver.GetRelativePath(baseDirectory, fileName);
+		}
+		
+		public string GetFullMetadataPath() 
+		{
 			return GetFullPath(MetadataBaseDir);
 		}
 
@@ -465,7 +504,8 @@ namespace Ch3Etah.Core.ProjectLib {
 			return GetFullPath(OutputBaseDir);
 		}
 
-		private string GetFullPath(string fileName) {
+		private string GetFullPath(string fileName) 
+		{
 			if (Path.IsPathRooted(fileName))
 			{
 				return fileName;
@@ -474,25 +514,8 @@ namespace Ch3Etah.Core.ProjectLib {
 			{
 				return Path.GetFullPath(Path.Combine(Path.GetDirectoryName(FileName), fileName));
 			}
-// REMOVED by Igor @ Oct 13, 2005
-//			string oldDirectory = Directory.GetCurrentDirectory();
-//			string fullPath = Directory.GetCurrentDirectory();
-//			try {
-//				if (FileName != "") {
-//					Directory.SetCurrentDirectory(Path.GetDirectoryName(FileName));
-//				}
-//				if (path != "") {
-//					fullPath = Path.GetFullPath(path);
-//				}
-//				//Debug.WriteLine("Project.GetFullPath(): path=" + path + " this.FileName=" + this.FileName + " CurrentDirectory=" + Directory.GetCurrentDirectory() + " fullPath=" + fullPath);
-//			}
-//			finally {
-//				Directory.SetCurrentDirectory(oldDirectory);
-//			}
-//			return fullPath;
 		}
-
-		#endregion GetFullPaths
+		#endregion GetPaths
 		
 //		private void LoadMetadataFiles()
 //		{

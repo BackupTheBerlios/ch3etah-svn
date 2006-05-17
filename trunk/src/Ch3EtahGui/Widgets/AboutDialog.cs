@@ -1,10 +1,5 @@
 using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
 using System.Reflection;
-using System.Threading;
-using System.Windows.Forms;
 
 namespace Ch3Etah.Gui.Widgets
 {
@@ -173,8 +168,17 @@ Current directory: {3}
 
 		private void btnTestExceptionHandling_Click(object sender, System.EventArgs e)
 		{
-			throw new Exception();
+			throw new Ch3EtahTestException();
 		}
 		
 	}
+
+	public class Ch3EtahTestException : ApplicationException
+	{
+		public Ch3EtahTestException() 
+			: base ("This is a test exception that is meant only for testing unhandled exception reporting.")
+		{
+		}
+	}
+
 }

@@ -1,0 +1,265 @@
+<html>
+	<body>
+		<div id="container">
+			<div id="pageHeader">
+				<h1>Getting Started With Code Generation Using CH3ETAH</h1>
+				<p>
+				The purpose of this tutorial is to give you a brief 
+				introduction to code generation using CH3ETAH. It will
+				walk you through a very basic code generation scenario
+				using the Northwind example database that ships with
+				Microsoft SQL Server.
+				</p>
+<p>
+To keep things simple, we will only generate code for the Orders and Order Details tables in the Northwind database.  However the steps followed here could easily be expanded to generate code for all the tables in the database.  I suggest that you first follow the steps here to generate code for these two entities, and then when you are comfortable with the process, go back and try to do the same for the other tables in the database.
+</p>
+			</div>
+			
+			<div id=toc>
+				<h2 class=select>Topics in this section:</h3>
+				<ul>
+					<li><a href="#Prerequisites">Prerequisites</a></li>
+					<li><a href="#CreateProject">Creating a project</a></li>
+					<li><a href="#ConfigurationSettings">Editing configuration settings</a></li>
+					<li><a href="#GetSqlMetadata">Getting metadata from SQL Server</a></li>
+					<li><a href="#CodeGenCommands">Using templates for code generation</a></li>
+					<li><a href="#CustomMetadata">Adding custom metadata</a></li>
+					<li><a href="#TemplatesAndPackages">Creating your own templates and packages</a></li>
+				</ul>
+			</div>
+			
+			<div id="Prerequisites">
+				<h2>Prerequisites</h2>
+				<p>Before you start, you will need to download the demo 
+				project files for this tutorial
+				<a target=_blank href="http:\\ch3etah.sourceforge.net\docs\getting_started.zip">here</a>
+				and extract the zip archive somewhere on your computer.</p>
+				
+				<p>Obviously I'm also assuming you have downloaded
+				and installed the CH3ETAH. If not, you can get the 
+				latest version
+				<a target=_blank href="http://ch3etah.sourceforge.net/download.html">here</a>
+				.</p>
+				
+				<p>In this tutorial I'm using MS Visual Studio 
+				2003, SQL Server 2000 (along with the Northwind Traders 
+				example database).
+				You should be able to complete the tutorial using other
+				versions of these products (or other products entirely),
+				but you may need to adapt the instructions to suit your
+				environment.
+				</p>
+				
+				</p>A familiarity with code generation concepts in general
+				would certainly be useful, but you can complete the tutorial 
+				just fine without it. One of my goals is to make available 
+				an introduction to code generation and the principles 
+				driving this project. Until then, I highly recommend you 
+				check out
+				<a href="http://www.amazon.com/gp/product/1590591372/102-8784169-6360119?v=glance&n=283155">
+				Code Generation in Microsoft .NET</a>,
+				 by Kathleen Dollard and 
+				<a href="http://www.codegeneration.net/cgia/">
+				Code Generation in Action</a>,
+				 by Jack Herrington. These are two of the best books that 
+				I've read on the subject of implementing code generation 
+				tools and practices. One of this project's main goals is to 
+				implement and build on the concepts taught in these two books.
+				</p>
+				
+			</div>
+			
+			<div id=CreateProject>
+				<h2>Creating a code generation project in CH3ETAH</h2>
+<p>
+				After downloading and extracting the zip file for this tutorial, open CH3ETAH and create a new project by going to the file menu and selecting new.  Navigate to the "GettingStarted\Practice" folder, create a name your project such as "Northwind.ch3", and click Save. 
+				(Note that here I'm using the name "GettingStarted_Practice.ch3" but the name you choose for your project doesn't really matter)
+</p>
+
+<img src = "img\getting_started_01.jpg" />
+				
+			</div>
+			
+			<div id="ConfigurationSettings">
+				<h2>Editing configuration settings</h2>
+<p>
+After your project has loaded, select the root node in the Project Explorer and in the properties window, define the following (relative) paths:
+</p>
+
+<ul>
+<li>MetadataBaseDir = Metadata</li>
+<li>OutputBaseDir = Output</li>
+<li>TemplatePackageBaseDir = Packages</li>
+</ul>
+
+<img src = "img\getting_started_02.jpg" />
+
+<p>
+You should see the Packages node loaded with the templates that are in the "Practice" folder which you downloaded earlier.  If not, make sure you created your project in the right directory.
+</p>
+
+<p>
+Double-click on the global parameters node in the Project Explorer and then click the "Add" button at the bottom to create a new parameter. Named the parameter "EntityNamespace" and give it a value of "Northwind.Domain".
+</p>
+
+<img src = "img\getting_started_03.jpg" />
+
+<p>
+This Global Parameters editor lets you define parameters that will be supplied to your code generation templates at generation time. Here we are telling our templates to output "Northwind.Domain" as the namespace for our classes. 
+(Note that alternately we could define custom metadata for each one of our classes so that they didn't all have to output to the same namespace. More advanced metadata and parameter topics will be covered in more detail later.)
+</p>
+
+<p>
+How you access these parameters in your template depends on the template language engine you are using. 
+For example: in NVelocity templates parameters are accessed using the syntax <code>${ParameterName}</code>, while in XSLT templates you would use </code>&lt;xsl:value-of select="$ParameterName"/&gt;</code>.
+</p>
+
+<p>
+You can access "Applications Settings" through the Edit menu. Currently the only settings available through this dialog are those relating to Object-Relational Mapping.  Here you can define the defaults that will be used when new data sources are added to a project. Once a data source has been created, you can edit its ORM settings by selecting the data source in the Project Explorer and editing the configuration settings in the Properties Window. Go ahead and change AutoEnableMappedIndexes to false and AutoMapLinks to true, and then click Save.
+</p>
+
+<img src = "img\getting_started_04.jpg" />
+
+			</div>
+			
+			<div id="GetSqlMetadata">
+				<h2>Getting metadata from SQL Server</h2>
+<p>
+Right-click on the Data Sources node now, select "Add New Data Source", and name your new data source "Northwind".  In the data source editor window, click the Build button to create your connection string.  (Alternately, you can enter your connection string directly into the connection string text box) To connect to the Northwind database in SQL Server, choose "Microsoft OLE DB Provider for SQL Server" under the Provider tab, use the Connection tab to edit your connection settings, and click OK. (Note that your connection settings may differ from those shown here.)
+</p>
+
+<img src = "img\getting_started_05.jpg" />
+<img src = "img\getting_started_06.jpg" />
+
+<p>
+When you close the connection string builder, the Treeview below should be filled with all of the tables and views in your database.  Select "Orders" and "Order Details" from under the Tables node and then click the "Add/Update Selected" button on the right to add these two entities to your project.
+</p>
+
+<img src = "img\getting_started_07.jpg" />
+
+<p>
+When you expand the Metadata Files node in the Project Explorer, you should see that an XML file was created for each one of the tables selected in the previous step. Double-click the Orders XML file to edit the properties for this entity.  The metadata file editor has two views: Design and XML.  Design view allows exploring your metadata tree visually and editing its components through custom GUI widgets as well as the properties window, providing any context-sensitive help that may be available.  Currently design view is only supported for O/R (Object Relational) entities, but pluggable support for other strongly typed metadata is in the works.
+</p>
+
+<img src = "img\getting_started_08.jpg" />
+<img src = "img\getting_started_09.jpg" />
+
+<p>
+In the design view for the Orders entity, you'll notice that it was given the same name as the Orders table. In C# (and .NET in general) it's considered good practice to name your classes in the singular, so let's go ahead and change our Orders entity to Order.  You should also update the CollectionName and PluralName properties as well. If you look at the links that were generated you will see that the link to our OrderDetails entity is spelled incorrectly.  Don't worry about this for now, when we update the OrderDetails entity, this link should be updated automatically for us.  Go ahead and make the same changes to the OrderDetails entity now. When you're done editing the entity XML files, save your changes and close the editor windows.
+
+</p>
+
+<p>
+NOTE: in design view, double-clicking on any one of the entities sub-attributes in the Treeview will open up a dialog box that gives you an alternate method of editing that attribute's properties.  (More intuitive access to the contents of these dialogs is planned and should be available soon)
+</p>
+			</div>
+			
+			<div id="CodeGenCommands">
+				<h2>Using templates for code generation</h2>
+<p>
+Now let's use the XML files we've created to generate some code.  Right-click on the "Generator Commands" node in the Project Explorer, and select "Add New Code Generator Command".  Name this command "Abstract Entity" using the Properties Window and define the following attribute values in the editor window:
+</p>
+
+<ul>
+<li>Package = NetSimpleObjects.xml</li>
+<li>Template = CS_AbstractEntity</li>
+<li>OutputPath = Northwind.Domain/Generated/${Metadata.OREntity.name}.cs</li>
+<li>Engine = XSLT</li>
+<li>Output generation = Multiple output files</li>
+</ul>
+
+<img src = "img\getting_started_10.jpg" />
+
+<p>
+Make sure that both of the XML files are selected and that "Auto-select new files" is checked, then save your changes.
+</p>
+
+<p>
+If you click the Edit button next to the template name, you can see and edit the template for this generator command.  You can also edit templates from the Packages node under the Project Explorer  Later on we'll cover templates editing in more detail.
+</p>
+
+<img src = "img\getting_started_10a.jpg" />
+
+<p>
+Add another generator command named "Business Entity" and define the following attribute values in the editor window:
+</p>
+
+<ul>
+<li>Package = NetSimpleObjects.xml</li>
+<li>Template = CS_BusinessEntity</li>
+<li>OutputPath = Northwind.Domain/${Metadata.OREntity.name}.cs</li>
+<li>Engine = XSLT</li>
+<li>Output generation = Multiple output files</li>
+<li>Overwrite existing files = false</li>
+</ul>
+
+<img src = "img\getting_started_11.jpg" />
+
+<p>
+And again select both XML files and then save your changes.  The reason why we don't want to overwrite existing files for this command is because this class will inherit from our abstract entity and be used for any customizations that we want to make.  We wouldn't want our custom code to be overwritten!  Another way of preserving custom changes would be to use regions and merging.  The ghostly se subjects will be covered in a future tutorial.
+</p>
+
+<p>
+Now let's generate some code!  Click the Run Project button on the toolbar (the green arrow).  If you've configured everything correctly, you should see a bunch of messages flying by in the output window with information about the generation process.  After a couple of seconds, code generation should be complete and for files should have been created in the Northwind.Domain and Northwind.Domain\Generated folders in the output directory where your CH3ETAH project is located.
+</p>
+
+<img src = "img\getting_started_12.jpg" />
+
+<p>
+Go to the output directory and open the Ch3Etah.GettingStarted solution in Visual Studio.
+</p>
+
+<img src = "img\getting_started_13.jpg" />
+
+<p>
+In the Solution Explorer, select the four files that were generated, right-click, and select "Include In Project".
+</p>
+
+<img src = "img\getting_started_14.jpg" />
+
+<p>
+Then open the files and take a look at the code that was generated.  There isn't much here right now, but the templates could be modified to support just about any functionality you can think of.
+</p>
+
+<img src = "img\getting_started_15.jpg" />
+
+<p>
+You can open the code editor for the orders form in the Northwind.Gui project and write code to test the entities that we've just generated.  If you've done everything correctly up to now, the solution should compile and run.
+</p>
+
+<img src = "img\getting_started_16.jpg" />
+
+<p>
+Something to note: going to all this effort to generate simple classes for two relational entities isn't very efficient. You could probably get the same result in the same, or maybe even less time by hand coding. But the magic of code generation kicks in when you start generating multiple artifacts for larger numbers of entities. We've used this process for dozens of projects with the number of mapped entities ranging anywhere from 10 to about 100. Some of the artifacts we can generate for each entity include much more functional classes than what we just created, binding-friendly collections, NHibernate mapping files, stored procedures, project stubs, and typed datasets to facilitate using the design time formatting capabilities of .NET controls such as those from Janus and Infragistics. In these types of scenarios, the time savings can be astounding. We'll be doing some of that below.
+</p>
+			</div>
+			
+			<div id="CustomMetadata">
+				<h2>Adding custom metadata</h2>
+<p><i>This section is not yet finished</i></p>
+				
+				<h4>CH3ETAH's metadata structure</h4>
+				
+				<h4>How metadata gets passed to templates</h4>
+				
+				<h4>Adding custom elements and attributes to a strongly typed metadata structure</h4>
+				
+				<h4> Using custom XML structures within CH3ETAH </h4>
+				
+			</div>
+			
+			<div id="TemplatesAndPackages">
+				<h2>Creating your own templates and packages</h2>
+				
+<p><i>This section is not yet finished</i></p>
+			</div>
+			
+		</div>
+		
+		
+		
+
+
+
+	</body>
+</html>

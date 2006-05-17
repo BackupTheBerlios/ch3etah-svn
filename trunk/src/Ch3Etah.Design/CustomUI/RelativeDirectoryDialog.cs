@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.IO;
 using System.Windows.Forms;
+using Ch3Etah.Core.Config;
 
 namespace Ch3Etah.Design.CustomUI
 {
@@ -84,49 +85,51 @@ namespace Ch3Etah.Design.CustomUI
 	
 		private string EvaluateRelativePath(string sourcePath, string destinationPath)
 		{
-			string[]
-				firstPathParts = sourcePath.Trim(Path.DirectorySeparatorChar).Split(Path.DirectorySeparatorChar);
-			string[]
-				secondPathParts = destinationPath.Trim(Path.DirectorySeparatorChar).Split(Path.DirectorySeparatorChar);
+			return PathResolver.GetRelativePath(sourcePath, destinationPath);
 
-			int sameCounter = 0;
-			for (int i = 0;
-				i < Math.Min(firstPathParts.Length,
-				secondPathParts.Length);
-				i++)
-			{
-				if (
-					!firstPathParts[i].ToLower().Equals(secondPathParts[i].ToLower()))
-				{
-					break;
-				}
-				sameCounter++;
-			}
-
-			if (sameCounter == 0)
-			{
-				return destinationPath;
-			}
-
-			string newPath = String.Empty;
-			for (int i = sameCounter; i < firstPathParts.Length; i++)
-			{
-				if (i > sameCounter)
-				{
-					newPath += Path.DirectorySeparatorChar;
-				}
-				newPath += "..";
-			}
-			if (newPath.Length == 0)
-			{
-				newPath = ".";
-			}
-			for (int i = sameCounter; i < secondPathParts.Length; i++)
-			{
-				newPath += Path.DirectorySeparatorChar;
-				newPath += secondPathParts[i];
-			}
-			return newPath;
+//			string[]
+//				firstPathParts = sourcePath.Trim(Path.DirectorySeparatorChar).Split(Path.DirectorySeparatorChar);
+//			string[]
+//				secondPathParts = destinationPath.Trim(Path.DirectorySeparatorChar).Split(Path.DirectorySeparatorChar);
+//
+//			int sameCounter = 0;
+//			for (int i = 0;
+//				i < Math.Min(firstPathParts.Length,
+//				secondPathParts.Length);
+//				i++)
+//			{
+//				if (
+//					!firstPathParts[i].ToLower().Equals(secondPathParts[i].ToLower()))
+//				{
+//					break;
+//				}
+//				sameCounter++;
+//			}
+//
+//			if (sameCounter == 0)
+//			{
+//				return destinationPath;
+//			}
+//
+//			string newPath = String.Empty;
+//			for (int i = sameCounter; i < firstPathParts.Length; i++)
+//			{
+//				if (i > sameCounter)
+//				{
+//					newPath += Path.DirectorySeparatorChar;
+//				}
+//				newPath += "..";
+//			}
+//			if (newPath.Length == 0)
+//			{
+//				newPath = ".";
+//			}
+//			for (int i = sameCounter; i < secondPathParts.Length; i++)
+//			{
+//				newPath += Path.DirectorySeparatorChar;
+//				newPath += secondPathParts[i];
+//			}
+//			return newPath;
 		}
 
 	}

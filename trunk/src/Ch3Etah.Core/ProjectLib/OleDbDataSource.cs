@@ -277,18 +277,11 @@ namespace Ch3Etah.Core.ProjectLib
 				EntityField field = GetEntityField(column, entity);
 				field.SetEntity(entity);
 				this.RefreshFieldDBInfo(column, field);
-//				if (entity.Fields.Contains(field))
-//				{
-//					entity.Fields.Add(field);
-//				}
-//				else
-//				{
-//					entity.Fields.Insert(entity.Fields.IndexOf(previousField), field);
-//				}
 				entity.Fields.Insert(entity.Fields.IndexOf(previousField)+1, field);
 				previousField = field;
 			}
 			RemoveStaleDBFields(entity);
+			RenameSurragateKeys(entity);
 		}
 
 		private EntityField GetEntityField(ColumnSchema column, Entity entity) 
@@ -316,12 +309,6 @@ namespace Ch3Etah.Core.ProjectLib
 				column.DefaultValue + " " + column.DefaultTestValue);
 			field.DBColumn = column.Name;
 			field.KeyField = column.IsPrimaryKey;
-			if (field.KeyField 
-				&& this.OrmConfiguration.RenameSurrogateKeys 
-				&& this.OrmConfiguration.SurrogateKeyName != "")
-			{
-				field.Name = this.OrmConfiguration.SurrogateKeyName;
-			}
 			field.DBIdentity = column.IsAutoIncrement;
 			field.DBReadOnly = column.IsReadOnly;
 			field.DBType = GetFieldDbType(column.DataTypeId, field);
@@ -399,6 +386,23 @@ namespace Ch3Etah.Core.ProjectLib
 				if (field.DBColumn != "" && !_dbfields.Contains(field.DBColumn))
 				{
 					field.IsExcluded = true;
+				}
+			}
+		}
+		private void RenameSurragateKeys(Entity entity)
+		{
+			if (!this.OrmConfiguration.RenameSurrogateKeys
+				|| this.OrmConfiguration.SurrogateKeyName == ""
+				|| entity.HasCompositePK)
+			{
+				return;
+			}
+			
+			foreach (EntityField field in entity.Fields)
+			{
+				if (field.KeyField)
+				{
+					field.Name = this.OrmConfiguration.SurrogateKeyName;
 				}
 			}
 		}
@@ -638,7 +642,7 @@ namespace Ch3Etah.Core.ProjectLib
 
 		private void FillLinks(string sourcePrefix, string targetPrefix, Entity entity, bool excludeSourceFields)
 		{
-			DataView linkSchema = GetDBLinkSchema(entity);
+			DataView linkSchema = GetDBLinkSchema();
 			linkSchema.RowFilter = string.Format(
 				"{0}TABLE_NAME = '{1}'"
 				, sourcePrefix
@@ -700,7 +704,7 @@ namespace Ch3Etah.Core.ProjectLib
 			}
 		}
 		
-		private DataView GetDBLinkSchema(Entity entity) 
+		private DataView GetDBLinkSchema() 
 		{
 			using (OleDbConnection cn = new OleDbConnection(this.ConnectionString)) 
 			{

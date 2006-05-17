@@ -104,6 +104,7 @@
                     AssemblyName = "ADODB"
                     HintPath = "..\..\..\..\..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\adodb.dll"
                     AssemblyFolderKey = "hklm\primary interop assemblies"
+                    Private = "True"
                 />
                 <Reference
                     Name = "System.Web"
@@ -325,6 +326,10 @@
                 />
                 <File
                     RelPath = "XML-Mode.xshd"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "XSLT-Mode.xshd"
                     BuildAction = "Content"
                 />
                 <File

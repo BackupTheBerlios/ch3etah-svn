@@ -65,7 +65,7 @@ namespace Ch3Etah.Core.Config
 		}
 
 		[Category("Fields")]
-		[Description("Allows you to indicate if surrogate keys (primary key fields that are GUIDs or Identity/AutoNumber) should be renamed. For example you might want all surrogate key fields to be renamed 'ID' as a standard.")]
+		[Description("Allows you to indicate if surrogate keys (non-composite primary key fields) should be renamed. For example you might want all surrogate key fields to be renamed 'ID' or 'Code' as a standard.")]
 		[XmlAttribute()]
 		public bool RenameSurrogateKeys
 		{

@@ -101,7 +101,7 @@ namespace Ch3Etah.Gui.DocumentHandling
 			this.propertyGrid1.CommandsVisibleIfAvailable = true;
 			this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.propertyGrid1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.propertyGrid1.HelpVisible = false;
+			this.propertyGrid1.HelpVisible = true;
 			this.propertyGrid1.LargeButtons = false;
 			this.propertyGrid1.LineColor = System.Drawing.SystemColors.ScrollBar;
 			this.propertyGrid1.Location = new System.Drawing.Point(179, 24);

@@ -19,16 +19,11 @@
  *   Date: 23/12/2004
  */
 
-using System;
-using System.Collections;
 using System.ComponentModel;
-using System.Data;
-using System.Data.OleDb;
-using System.Diagnostics;
 using System.Drawing.Design;
 using System.Xml.Serialization;
-using Adapdev.Data.Schema;
-using Ch3Etah.Core.Config;
+
+using Ch3Etah.Core;
 using Ch3Etah.Core.Metadata;
 using Ch3Etah.Core.ProjectLib;
 
@@ -72,11 +67,26 @@ namespace Ch3Etah.Metadata.OREntities {
 		}
 		#endregion EntityNameChangedEvent
 
+		#region EntityPluralNameChangedEvent
+		public static event EntityNameChangedEventHandler PluralNameChanged;
+
+		private void DoPluralNameChanged(string oldName, string newName)
+		{
+			if (PluralNameChanged != null && oldName != "" && newName != "")
+			{
+				PluralNameChanged(this, new EntityNameChangedEventArgs(
+					this,
+					oldName,
+					newName));
+			}
+		}
+		#endregion EntityPluralNameChangedEvent
+		
 		private const string ROOT_NODE_NAME = "OREntity";
 
 		public Entity() : base(ROOT_NODE_NAME, ROOT_NODE_NAME)
 		{
-			DataSource.NameChanged +=new DataSourceNameChangedEventHandler(DataSource_NameChanged);
+			DataSource.NameChanged += new DataSourceNameChangedEventHandler(DataSource_NameChanged);
 		}
 
 
@@ -139,13 +149,17 @@ namespace Ch3Etah.Metadata.OREntities {
 		public string PluralName {
 			get {
 				if (_pluralName == string.Empty && _name != string.Empty) {
-					return Ch3Etah.Core.Utility.GetPluralForm(_name);
+					return Utility.GetPluralForm(_name);
 				}
 				else {
 					return _pluralName;
 				}
 			}
-			set { _pluralName = value; }
+			set
+			{
+				DoPluralNameChanged(_pluralName, value);
+				_pluralName = value;
+			}
 		}
 
 		[Category("Entity")]
@@ -170,7 +184,7 @@ namespace Ch3Etah.Metadata.OREntities {
 		}
 
 		[XmlAttribute("cacheable"),
-		Category("Entity")]
+			Category("Entity")]
 		public bool Cacheable 
 		{
 			get { return _cacheable; }
@@ -182,7 +196,7 @@ namespace Ch3Etah.Metadata.OREntities {
 		#region Collection Properties
 
 		[Category("Entity")]
-		[MetadataNodeCollectionAttribute("Fields", "Field", typeof (EntityField))]
+		[MetadataNodeCollection("Fields", "Field", typeof (EntityField))]
 		[TypeConverter(typeof (ExpandableObjectConverter))]
 		public EntityFieldCollection Fields {
 			get {
@@ -193,7 +207,7 @@ namespace Ch3Etah.Metadata.OREntities {
 		}
 
 		[Category("Entity")]
-		[MetadataNodeCollectionAttribute("Indexes", "Index", typeof (Index))]
+		[MetadataNodeCollection("Indexes", "Index", typeof (Index))]
 		[TypeConverter(typeof (ExpandableObjectConverter))]
 		public IndexCollection Indexes {
 			get {
@@ -204,7 +218,7 @@ namespace Ch3Etah.Metadata.OREntities {
 		}
 
 		[Category("Entity")]
-		[MetadataNodeCollectionAttribute("Links", "Link", typeof (Link))]
+		[MetadataNodeCollection("Links", "Link", typeof (Link))]
 		[TypeConverter(typeof (ExpandableObjectConverter))]
 		public LinkCollection Links {
 			get {
@@ -299,235 +313,6 @@ namespace Ch3Etah.Metadata.OREntities {
 
 		#endregion Misc Properties
 
-//		#region RefreshDBInfo
-//
-//		public void RefreshDBInfo(OleDbDataSource dataSource, DatabaseSchema database, TableSchema table) {
-//			Debug.WriteLine("Parsing data source information for the table [" + table.Name + "].");
-//			Debug.Indent();
-//			try
-//			{
-//				DataSourceName = dataSource.Name;
-//				DBName = database.Name;
-//				DBEntityName = table.Name;
-//				if (Name == string.Empty) 
-//				{
-//					Name = table.Name.Replace(" ", "");
-//				}
-//				FillFields(dataSource.OrmConfiguration, table);
-//				if (dataSource.OrmConfiguration.AutoMapIndexes)
-//				{
-//					FillIndexes(dataSource);
-//				}
-//			}
-//			finally
-//			{
-//				Debug.Unindent();
-//			}
-//		}
-//
-//
-//		public void RefreshDBLinks(OleDbDataSource ds)
-//		{
-//			FillManyToLinks(ds);
-//			FillOneToLinks(ds);
-//		}
-//		private void FillManyToLinks(OleDbDataSource ds)
-//		{
-//			FillLinks(ds, "FK_", "PK_", ds.OrmConfiguration.ExcludeFKSourceFields);
-//		}
-//
-//		private void FillOneToLinks(OleDbDataSource ds)
-//		{
-//			FillLinks(ds, "PK_", "FK_", false);
-//		}
-//
-//		private void FillLinks(OleDbDataSource ds, string sourcePrefix, string targetPrefix, bool excludeSourceFields)
-//		{
-//			DataView linkSchema = GetDBLinkSchema(ds);
-//			linkSchema.RowFilter = string.Format(
-//				"{1}TABLE_NAME = '{0}'"
-//				, this.DBEntityName
-//				, sourcePrefix);
-//			linkSchema.Table.Columns.Add("Key", typeof(string));
-//			ArrayList keys = new ArrayList();
-//			foreach (DataRowView row in linkSchema)
-//			{
-//				row["Key"] = row[sourcePrefix + "NAME"] + "_" + row[targetPrefix + "NAME"];
-//				if (row[sourcePrefix + "NAME"] is string && !keys.Contains(row[sourcePrefix + "NAME"] as string))
-//				{
-//					keys.Add(row["Key"] as string);
-//				}
-//			}
-//
-//			foreach (string key in keys)
-//			{
-//				linkSchema.RowFilter = string.Format(
-//					"{2}TABLE_NAME = '{0}' and Key = '{1}'"
-//					, this.DBEntityName
-//					, key
-//					, sourcePrefix);
-//				Entity linkedEntity = FindDBEntity(linkSchema[0][targetPrefix + "TABLE_NAME"] as string);
-//				if (linkedEntity == null) continue;
-//				Index linkedIndex = linkedEntity.Indexes.FindByDBName(linkSchema[0][targetPrefix + "NAME"] as string);
-//				if (linkedIndex == null) continue;
-//				Link link = this.Links.FindByDBName(key);
-//				bool isCollection = (!linkedIndex.Unique && !linkedIndex.PrimaryKey);
-//				if (link == null)
-//				{
-//					link = new Link();
-//					link.IsExcluded = !ds.OrmConfiguration.AutoEnableMappedLinks;
-//					link.DBName = key;
-//					link.IsProperty = true;
-//					if (isCollection)
-//						link.Name = linkedEntity.PluralName;
-//					else
-//						link.Name = linkedEntity.Name;
-//					this.Links.Add(link);
-//				}
-//				link.IsCollection = isCollection;
-//				link.TargetEntityName = linkedEntity.Name;
-//				link.TargetIndexName = linkedIndex.Name;
-//				link.Fields.Clear();
-//				foreach (DataRowView row in linkSchema)
-//				{
-//					LinkField field = new LinkField();
-//					field.SourceFieldName = this.Fields.GetFieldFromDBColumn(row[sourcePrefix + "COLUMN_NAME"] as string).Name;
-//					field.TargetFieldName = linkedEntity.Fields.GetFieldFromDBColumn(row[targetPrefix + "COLUMN_NAME"] as string).Name;
-//					link.Fields.Add(field);
-//					if (excludeSourceFields && !link.IsExcluded)
-//					{
-//						this.Fields.GetFieldFromName(field.SourceFieldName)
-//							.IsExcluded = true;
-//					}
-//				}
-//			}
-//		}
-//		
-//		private Entity FindDBEntity(string dbName)
-//		{
-//			foreach (MetadataFile file in this.OwningMetadataFile.Project.MetadataFiles)
-//			{
-//				foreach (IMetadataEntity entity in file.MetadataEntities)
-//				{
-//					if (entity is Entity && ((Entity)entity).DBEntityName == dbName)
-//					{
-//						return (Entity)entity;
-//					}
-//				}
-//			}
-//			return null;
-//		}
-//
-//		private EntityField GetEntityField(ColumnSchema column) 
-//		{
-//			foreach (EntityField field in Fields) {
-//				if (field.DBColumn == column.Name) {
-//					return field;
-//				}
-//			}
-//			return new EntityField();
-//		}
-//
-//		private void FillFields(OrmConfiguration config, TableSchema table) {
-//			foreach (ColumnSchema column in table.Columns.Values) {
-//				EntityField field = GetEntityField(column);
-//				field.SetEntity(this);
-//				field.RefreshDBInfo(config, column);
-//				if (!Fields.Contains(field)) {
-//					Fields.Add(field);
-//				}
-//			}
-//		}
-//
-//		private void FillIndexes(OleDbDataSource dataSource) {
-//			DataView indexes = GetDBIndexes(dataSource);
-//			indexes.RowFilter = "TABLE_NAME = '" + DBEntityName + "'";
-//			indexes.Sort = "INDEX_NAME asc, ORDINAL_POSITION asc";
-//			foreach (DataRowView row in indexes) {
-//				Index index = LoadIndexRow(dataSource.OrmConfiguration, row);
-//				if (index != null) {
-//					index.RemoveUnusedFields(indexes);
-//				}
-//			}
-//		}
-//
-//		private Index LoadIndexRow(OrmConfiguration config, DataRowView row) {
-//			Debug.WriteLine(row["COLUMN_NAME"]);
-//			string fieldName = (String) row["COLUMN_NAME"];
-//			EntityField field = null;
-//			foreach (EntityField f in Fields) {
-//				if (f.DBColumn == fieldName) {
-//					field = f;
-//					break;
-//				}
-//			}
-//			if (field == null) {
-//				return null;
-//			}
-//			string name = (String) row["INDEX_NAME"];
-//			Index index = null;
-//			foreach (Index i in Indexes) {
-//				if (i.DBName == name) {
-//					index = i;
-//					break;
-//				}
-//			}
-//			if (index == null) {
-//				index = new Index();
-//				Indexes.Add(index);
-//			}
-//			index.RefreshDBInfo(config, row, field);
-//			return index;
-//		}
-//
-//		private DataView GetDBIndexes(OleDbDataSource dataSource) {
-//			using (OleDbConnection cn = new OleDbConnection(dataSource.ConnectionString)) {
-//				cn.Open();
-//				try {
-//					DataTable dbIndexes = cn.GetOleDbSchemaTable(OleDbSchemaGuid.Indexes, null);
-//					if (dataSource.OrmConfiguration.AutoMapLinks)
-//					{
-//						FillFKIndexes(cn, dbIndexes);
-//					}
-//					return new DataView(dbIndexes);
-//				}
-//				finally {
-//					cn.Close();
-//				}
-//			}
-//		}
-//		
-//		private void FillFKIndexes(OleDbConnection cn, DataTable dbIndexes)
-//		{
-//			DataView fks = new DataView(cn.GetOleDbSchemaTable(OleDbSchemaGuid.Foreign_Keys, null));
-//			fks.RowFilter = string.Format("FK_TABLE_NAME = '{0}'", this.DBEntityName);
-//			foreach (DataRowView fk in fks)
-//			{
-//				DataRow ix = dbIndexes.NewRow();
-//				ix["TABLE_NAME"] = (string)fk["FK_TABLE_NAME"];
-//				ix["INDEX_NAME"] = (string)fk["FK_NAME"];
-//				ix["COLUMN_NAME"] = (string)fk["FK_COLUMN_NAME"];
-//				ix["PRIMARY_KEY"] = false;
-//				ix["UNIQUE"] = false;
-//				ix["ORDINAL_POSITION"] = (Int64)fk["ORDINAL"];
-//				dbIndexes.Rows.Add(ix);
-//			}
-//		}
-//		#endregion RefreshDBInfo
-//
-//
-//		private DataView GetDBLinkSchema(OleDbDataSource ds) {
-//			using (OleDbConnection cn = new OleDbConnection(ds.ConnectionString)) {
-//				cn.Open();
-//				try {
-//					return new DataView(cn.GetOleDbSchemaTable(OleDbSchemaGuid.Foreign_Keys, null));
-//				}
-//				finally {
-//					cn.Close();
-//				}
-//			}
-//		}
-//
 		public override string ToString() {
 			return Name;
 		}
@@ -539,6 +324,26 @@ namespace Ch3Etah.Metadata.OREntities {
 				bool save = this.OwningMetadataFile != null && !this.OwningMetadataFile.IsDirty;
 				this.DataSourceName = e.NewName;
 				if (save) this.OwningMetadataFile.Save();
+			}
+		}
+
+		public bool HasCompositePK
+		{
+			get
+			{
+				bool hasKey = false;
+				foreach (EntityField field in this.Fields)
+				{
+					if (field.KeyField)
+					{
+						if (hasKey)
+						{
+							return true;
+						}
+						hasKey = true;
+					}
+				}
+				return false;
 			}
 		}
 	}

@@ -1472,11 +1472,6 @@ fileMenu=null;
 		}
 
 		private void RemoveMetadataFile_Click(object sender, EventArgs e) {
-			if (
-				MessageBox.Show("Are you sure you want to remove this metadata file?", "Confirmation", MessageBoxButtons.YesNo,
-				                MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) != DialogResult.Yes) {
-				return;
-			}
 			// TODO: Ask user if they want to delete, remove or cancel
 			// TODO: remove file from generator commands
 			MetadataFile file = (MetadataFile) ((CommandBarItem) sender).Tag;
@@ -1727,6 +1722,8 @@ fileMenu=null;
 
 		private void MainForm_Load(object sender, EventArgs e) {
 
+			SplashScreen.Hide();
+			
 			tvwProject.Focus();
 
 			if (autoRunFiles != null) {
@@ -1737,8 +1734,6 @@ fileMenu=null;
 				}
 				Close();
 			}
-
-			SplashScreen.Hide();
 		}
 
 

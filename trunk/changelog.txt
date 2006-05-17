@@ -1,3 +1,12 @@
+ADD: Added a "getting started" tutorial. (still incomplete)
+FIX: Updated App.config so that CH3ETAH will run correctly on machines with .NET framework 2.0 installed.
+ADD: Renaming an entity or its changing its plural name will update any links that point to it when the link name is equal to, begins with, or ends with that entity's name/plural name.
+FIX: When RenameSurrogateKeys was turned on and an entity had a composite PK, all key fields would be renamed. Now key fields are only renamed if there is no composite PK.
+ADD: Included the primary interop DLL for interfacing with ADODB in the Libraries\bin folder since on some systems it may not be present.
+ADD: Added XSLT highlighting configuration. This is more usefull in template editing than the standard XML configuration.
+CHG: Disabled reporting of test exception to try to prevent unintentional bug reports.
+FIX: Fixed a minor bug in the custom property editor for relative project paths.
+
 ---------------------------------------------------------------------------
 - Version 0.5.3.147
 ---------------------------------------------------------------------------

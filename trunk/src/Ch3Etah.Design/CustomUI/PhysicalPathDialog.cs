@@ -1,7 +1,10 @@
 using System;
 using System.ComponentModel;
 using System.Drawing.Design;
+using System.IO;
 using System.Windows.Forms;
+
+using Ch3Etah.Core.ProjectLib;
 
 namespace Ch3Etah.Design.CustomUI
 {
@@ -26,27 +29,33 @@ namespace Ch3Etah.Design.CustomUI
 	
 		public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
 		{
-			// Cria Objetos
 			String sReturnData = String.Empty;
-			FolderBrowserDialog oFolderBrowserDialog;
-
-			// Instancia oFolderBrowserDialog
-			oFolderBrowserDialog = new FolderBrowserDialog();
-			
-			// Configura
+			FolderBrowserDialog oFolderBrowserDialog = new FolderBrowserDialog();
 			oFolderBrowserDialog.ShowNewFolderButton = true;
 			oFolderBrowserDialog.Description = "Folder Selection";
 
-			// Seta (Se já existir) o diretório
+			// set the directory if it exists
 			if (value != null && ! value.ToString().Trim().Equals(String.Empty))
 			{
-				if (System.IO.Directory.Exists(value.ToString().Trim()))
+				string basedir = value.ToString().Trim();
+				while (basedir.IndexOf(".\\") == 0)
 				{
-					oFolderBrowserDialog.SelectedPath = value.ToString();
+					basedir = basedir.Substring(2);
+				}
+				if (context.Instance is Project)
+				{
+					Project prj = (Project)context.Instance;
+					basedir = Path.Combine(
+						Path.GetDirectoryName(prj.FileName)
+						, basedir);
+				}
+				
+				if (System.IO.Directory.Exists(basedir))
+				{
+					oFolderBrowserDialog.SelectedPath = basedir;
 				}
 			}
 
-			// Mostra Dialog
 			if (oFolderBrowserDialog.ShowDialog() == DialogResult.OK)
 			{
 				sReturnData = oFolderBrowserDialog.SelectedPath;
@@ -62,8 +71,7 @@ namespace Ch3Etah.Design.CustomUI
 					sReturnData = String.Empty;
 				}
 			}
-
-			// Retorna
+			
 			return sReturnData;
 		}
 	}

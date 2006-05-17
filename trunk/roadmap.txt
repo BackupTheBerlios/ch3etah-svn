@@ -8,19 +8,33 @@ Releases: (every 3-6 weeks)
  - Documentation should be consistent
 
 Some major features to be implemented:
-* Region support with hash code generation and checking
-* SimpleEngine
-* Assembly analyzer for reverse engeneering
-* AppDomain isolation of template engines
+* Package Editing (v0.6) !!! very urgent !!!
+* Region support with hash code generation and checking (v0.6)
+* Multiple generation using XPath to extract metadata (v0.7)
+* Dynamic, configurable design support for strongly-typed metadata (v0.7)
+* Assembly analyzer for reverse engeneering (v0.7)
+* SimpleEngine (v0.8)
+* Better binding and change notification (v0.8)
+* AppDomain isolation of template engines (at least NVelocity) (v0.8)
+* Graphical DSL support similar to MS DSL Workbench (http://www.ddj.com/dept/architect/184429825) (v1+)
+* Nant/MSBuild project files (v1+)
+
+References
+* http://www.ddj.com/dept/architect/184429825
 * http://www.developerdotstar.com/mag/articles/o-r_mapping_persistence.html
 * http://www.hanselminutes.com/default.aspx?showID=20
 
 *** NEED TO CREATE BACKUP SCRIPT FOR WEBSITE CONTENT AND WIKI THAT RUNS DAILY
+BUG: If you right-click on a metadata file that could not be loaded, you get an exception so you can't remove the file except by editing the project XML file.
 BUG: When you delete a node from the project tree (data source, command, metadata file) the deleted object's content editor window is not closed
 BUG: Entity name doesn't update in treeview when changed in property grid
 BUG: There is way too much coupling between the OREntityEditor and it's children (like accessing the TreeView on the Design editor). This really needs to be refactored. Same with MainForm.
 BUG: It seems if you close the property grid, it doesn't show again through the menu
+BUG: If a message box is displayed (eg. invalid project file name) while the splash screen is visible, the message box is hidden behind the splash.
 
+* FEAT: Add parameter to ORM settings to specify when database entity names are plural
+* FEAT: When give user option to apply app-level ORM settings to all data sources in project
+* FEAT: Add ability to check ch3etah.sf.net/version.xml for updates. Also store changelog and version info in xml files.
 * FEAT: Add *.build and *.bat files to solution
 * FEAT: When an entity is removed from the project, update links pointing to that entity.
 * FEAT: Add visualization of legacy packages in project tree.
@@ -50,6 +64,7 @@ http://nsis.sourceforge.net/Detect_if_a_window_is_open_and_close_it.
 * FEAT: Make the ID column on the bug report list a hyperlink to take you to the tracker page.
 http://www.codeproject.com/cs/miscctrl/LinkLabelDatagridColumn.asp?df=100&forumid=226832&select=1447710#xx1447710xx
 http://www.codeproject.com/vb/net/Datagrid_ColumnStyles.asp#xx1396971xx
+* FEAT: Need support for different sources of metadata other than files, eg. "select Name, MessageTypeID from MessageType" that would be translated to XML at gentime and passed to the templates with other metadata. A source of metadata could even be an extraction, XPath and XSLT transform that takes metadata from a DB and transforms it to a particular format that then has strong-typed entities built on top of it.
 
 
 * WISH: Visual UML-style modeler. Should use Model-View-Presenter pattern and code to interfaces so that other types of metadata entities (e.g. XMI) can be plugged into the modeler.

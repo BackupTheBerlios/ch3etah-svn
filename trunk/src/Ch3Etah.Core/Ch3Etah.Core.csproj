@@ -94,6 +94,7 @@
                     AssemblyName = "ADODB"
                     HintPath = "..\..\..\..\..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\adodb.dll"
                     AssemblyFolderKey = "hklm\primary interop assemblies"
+                    Private = "True"
                 />
                 <Reference
                     Name = "CommandBar"
