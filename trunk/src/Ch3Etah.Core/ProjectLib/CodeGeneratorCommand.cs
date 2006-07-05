@@ -462,6 +462,24 @@ namespace Ch3Etah.Core.ProjectLib {
 			}
 		}
 
+		public string ResolveOutputPath(MetadataFile inputFile) 
+		{
+			XmlDocument document = PrepareMetadata(inputFile);
+			CodeGenerator generator = GetGenerator(document, inputFile);
+			string outputPath = generator.Context.Parameters["CodeGenOutputPath"].Value;
+			if (outputPath.IndexOf("${") >= 0 || outputPath.IndexOf("$!{") >= 0)
+			{
+				throw new CodeGenerationException(string.Format(
+					"One or more expressions in the output path for the generator command '{0}' could not be evaluated for the metadata file '{1}'. The output path returned was: {2}"
+					, this.Name
+					, inputFile == null ? "<< No input file specified... command is running in single-output mode >>" : inputFile.Name
+					, outputPath));
+			}
+			outputPath = Path.GetFullPath(Path.Combine(this.Project.GetFullOutputPath(), outputPath));
+
+			return outputPath;
+		}
+
 		public void GenerateFile(MetadataFile inputFile, TextWriter outputWriter) {
 			TransformationEngineFactory.CreateEngine(_engine).ClearCache();
 			if (inputFile == null) {
