@@ -23,6 +23,7 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 using Ch3Etah.Core.CodeGen;
@@ -531,16 +532,20 @@ namespace Ch3Etah.Gui.DocumentHandling {
 
 		#endregion DoBinding
 
+		public void RefreshContent()
+		{
+			this.SelectedObject = this.SelectedObject;
+		}
+		
 		#region SelectedObject
-
-		public object SelectedObject {
+		public object SelectedObject 
+		{
 			get { return _generatorCommand; }
 			set {
 				_generatorCommand = (CodeGeneratorCommand) value;
 				DoBinding();
 			}
 		}
-
 		#endregion SelectedObject
 
 		#region IsDirty
@@ -667,11 +672,27 @@ namespace Ch3Etah.Gui.DocumentHandling {
 			if (cboPackage.Text.Trim() == "")
 				return;
 
-			Package package = Package.GetPackage(
-				_generatorCommand.Project.GetFullTemplatePath(),
-				cboPackage.Text);;
+			Package package = null;
+			try
+			{
+				 package = Package.GetPackage(
+					_generatorCommand.Project.GetFullTemplatePath(),
+					cboPackage.Text);;
+			}
+			catch (Exception ex)
+			{
+				if (ex is FileNotFoundException || ex is DirectoryNotFoundException)
+				{
+					MessageBox.Show(ex.Message);
+					return;
+				}
+				throw;
+			}
+
 			if (package == null)
+			{
 				return;
+			}
 			
 			foreach (Template t in package.Templates)
 			{

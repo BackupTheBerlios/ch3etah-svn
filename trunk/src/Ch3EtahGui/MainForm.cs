@@ -34,6 +34,7 @@ using Ch3Etah.Core.Config;
 using Ch3Etah.Core.CodeGen.PackageLib;
 using Ch3Etah.Core.Metadata;
 using Ch3Etah.Core.ProjectLib;
+using PrjectLib = Ch3Etah.Core.ProjectLib;
 using Ch3Etah.Gui.BugTracker;
 using Ch3Etah.Gui.DocumentHandling;
 using Ch3Etah.Gui.DocumentHandling.MdiStrategy;
@@ -48,6 +49,8 @@ namespace Ch3Etah.Gui {
 		private const string ERROR_MESSAGE_1 = " [ERROR LOADING FILE - CHECK THAT FILE EXISTS AND THAT THE PROJECT'S MetadataBaseDir property is correct.]";
 
 		private Splitter splitter3;
+		private System.Windows.Forms.Timer timerExternallyModifiedFiles;
+		private System.ComponentModel.IContainer components;
 		private StatusBar statusBar;
 
 		#region Windows Forms Designer generated code
@@ -58,53 +61,62 @@ namespace Ch3Etah.Gui {
 		/// not be able to load this method if it was changed manually.
 		/// </summary>
 		private void InitializeComponent() {
-			ResourceManager resources = new ResourceManager(typeof (MainForm));
-			statusBar = new StatusBar();
-			splitter3 = new Splitter();
-			dockPanel1 = new DockPanel();
-			SuspendLayout();
+			this.components = new System.ComponentModel.Container();
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
+			this.statusBar = new System.Windows.Forms.StatusBar();
+			this.splitter3 = new System.Windows.Forms.Splitter();
+			this.dockPanel1 = new WeifenLuo.WinFormsUI.DockPanel();
+			this.timerExternallyModifiedFiles = new System.Windows.Forms.Timer(this.components);
+			this.SuspendLayout();
 			// 
 			// statusBar
 			// 
-			statusBar.Location = new Point(0, 459);
-			statusBar.Name = "statusBar";
-			statusBar.Size = new Size(758, 21);
-			statusBar.TabIndex = 6;
+			this.statusBar.Location = new System.Drawing.Point(0, 459);
+			this.statusBar.Name = "statusBar";
+			this.statusBar.Size = new System.Drawing.Size(758, 21);
+			this.statusBar.TabIndex = 6;
 			// 
 			// splitter3
 			// 
-			splitter3.Dock = DockStyle.Bottom;
-			splitter3.Location = new Point(0, 456);
-			splitter3.Name = "splitter3";
-			splitter3.Size = new Size(758, 3);
-			splitter3.TabIndex = 21;
-			splitter3.TabStop = false;
+			this.splitter3.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.splitter3.Location = new System.Drawing.Point(0, 456);
+			this.splitter3.Name = "splitter3";
+			this.splitter3.Size = new System.Drawing.Size(758, 3);
+			this.splitter3.TabIndex = 21;
+			this.splitter3.TabStop = false;
 			// 
 			// dockPanel1
 			// 
-			dockPanel1.ActiveAutoHideContent = null;
-			dockPanel1.Dock = DockStyle.Fill;
-			dockPanel1.Font = new Font("Tahoma", 11F, FontStyle.Regular, GraphicsUnit.World);
-			dockPanel1.Location = new Point(0, 0);
-			dockPanel1.Name = "dockPanel1";
-			dockPanel1.Size = new Size(758, 456);
-			dockPanel1.TabIndex = 23;
+			this.dockPanel1.ActiveAutoHideContent = null;
+			this.dockPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dockPanel1.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World);
+			this.dockPanel1.Location = new System.Drawing.Point(0, 0);
+			this.dockPanel1.Name = "dockPanel1";
+			this.dockPanel1.Size = new System.Drawing.Size(758, 456);
+			this.dockPanel1.TabIndex = 23;
+			// 
+			// timerExternallyModifiedFiles
+			// 
+			this.timerExternallyModifiedFiles.Interval = 200;
+			this.timerExternallyModifiedFiles.Tick += new System.EventHandler(this.timerExternallyModifiedFiles_Tick);
 			// 
 			// MainForm
 			// 
-			AutoScaleBaseSize = new Size(5, 13);
-			ClientSize = new Size(758, 480);
-			Controls.Add(dockPanel1);
-			Controls.Add(splitter3);
-			Controls.Add(statusBar);
-			Icon = ((Icon) (resources.GetObject("$this.Icon")));
-			IsMdiContainer = true;
-			Name = "MainForm";
-			Text = "CH3ETAH";
-			WindowState = FormWindowState.Maximized;
-			Closing += new CancelEventHandler(Form_Closing);
-			Load += new EventHandler(MainForm_Load);
-			ResumeLayout(false);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(758, 480);
+			this.Controls.Add(this.dockPanel1);
+			this.Controls.Add(this.splitter3);
+			this.Controls.Add(this.statusBar);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.IsMdiContainer = true;
+			this.Name = "MainForm";
+			this.Text = "CH3ETAH";
+			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.Form_Closing);
+			this.Load += new System.EventHandler(this.MainForm_Load);
+			this.Activated += new System.EventHandler(this.MainForm_Activated);
+			this.Deactivate += new System.EventHandler(this.MainForm_Deactivate);
+			this.ResumeLayout(false);
 
 		}
 
@@ -204,6 +216,8 @@ namespace Ch3Etah.Gui {
 
 			// Tree view
 			RefreshUI();
+
+			MetadataFile.FileChangedExternally += new EventHandler(FileChangedExternally);
 		}
 
 		#endregion Constructors and Member variables
@@ -253,15 +267,26 @@ namespace Ch3Etah.Gui {
 				return true;
 			}
 
-			if (document != null) {
-				if (document is ObjectEditorForm) {
-					((ObjectEditorForm) document).ObjectEditor.CommitChanges();
+			MetadataFile.SuspendFileSystemWatching();
+			try
+			{
+				if (document != null) 
+				{
+					if (document is ObjectEditorForm) 
+					{
+						((ObjectEditorForm) document).ObjectEditor.CommitChanges();
+					}
+					else 
+					{
+						Debug.WriteLine(
+							"WARNING: Document could not be saved because it is not of the type 'ObjectEditorForm'. System type of document content is: " + document.GetType().FullName);
+						return false;
+					}
 				}
-				else {
-					Debug.WriteLine(
-						"WARNING: Document could not be saved because it is not of the type 'ObjectEditorForm'. System type of document content is: " + document.GetType().FullName);
-					return false;
-				}
+			}
+			finally
+			{
+				MetadataFile.ResumeFileSystemWatching();
 			}
 			return true;
 		}
@@ -1626,6 +1651,18 @@ fileMenu=null;
 
 		private void propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e) {
 			FillTreeview();
+			PropertyGrid g = (PropertyGrid)s;
+			 if (
+				g.SelectedObject is PrjectLib.InputParameterCollection
+				|| g.SelectedObject is CodeGeneratorCommand
+				|| g.SelectedObject is DataSource)
+			 {
+				IObjectEditor editor = ObjectEditorManager.FindObjectEditor(g.SelectedObject);
+				if (editor != null)
+				{
+					editor.RefreshContent();
+				}
+			 }
 		}
 		private void propertyGrid_Validated(object sender, EventArgs e)
 		{
@@ -1736,8 +1773,24 @@ fileMenu=null;
 			}
 		}
 
+		
+		private bool _isActivated = false;
+		private void MainForm_Activated(object sender, System.EventArgs e)
+		{
+			_isActivated = true;
+			if (_changedFiles.Count > 0)
+			{
+				UpdateExternallyModifiedFiles();
+			}
+		}
 
-		protected override void Dispose(bool disposing) {
+		private void MainForm_Deactivate(object sender, System.EventArgs e)
+		{
+			_isActivated = false;
+		}
+
+		protected override void Dispose(bool disposing) 
+		{
 			base.Dispose(disposing);
 			if (disposing) {
 				_mruList.Dispose();
@@ -1820,6 +1873,75 @@ fileMenu=null;
 		}
 
 		#endregion
+
+		#region Automatic updating of files modified externally
+		private ArrayList _changedFiles = new ArrayList();
+		private void FileChangedExternally(object sender, EventArgs e)
+		{
+			if (!_changedFiles.Contains(sender))
+			{
+				_changedFiles.Add(sender);
+			}
+			
+			if (_isActivated)
+			{
+				timerExternallyModifiedFiles.Enabled = true;
+				timerExternallyModifiedFiles.Start();
+			}
+		}
+		
+		private void timerExternallyModifiedFiles_Tick(object sender, System.EventArgs e)
+		{
+			timerExternallyModifiedFiles.Stop();
+			timerExternallyModifiedFiles.Enabled = false;
+			UpdateExternallyModifiedFiles();
+		}
+
+		private void UpdateExternallyModifiedFiles()
+		{
+			ArrayList files = _changedFiles;
+			_changedFiles = new ArrayList();
+
+			string names = "";
+			foreach (object file in files)
+			{
+				if (!(file is MetadataFile))
+				{
+					throw new InvalidOperationException(
+						string.Format("Automatic reloading of objects of type '{0}' is currently not supported.", file.GetType().ToString()));
+				}
+				names += ((MetadataFile)file).FullPath + "\r\n";
+			}
+			if (names == "") return;
+
+			DialogResult r = MessageBox.Show(this, 
+				string.Format(
+					"The following file(s) appear to have been modified outside of the CH3ETAH UI: \r\n{0} \r\n Would you like to reload them now?"
+					, names)
+				, "File(s) Changed Externally"
+				, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			if (r == System.Windows.Forms.DialogResult.Yes)
+			{
+				try
+				{
+					foreach (object file in files)
+					{
+						((MetadataFile)file).Load();
+						IObjectEditor editor = ObjectEditorManager.FindObjectEditor(file);
+						if (editor != null)
+						{
+							editor.RefreshContent();
+						}
+					}
+				}
+				finally
+				{
+					_changedFiles.Clear();
+				}
+			}
+		}
+		#endregion Automatic updating of files modified externally
+
 
 	}
 

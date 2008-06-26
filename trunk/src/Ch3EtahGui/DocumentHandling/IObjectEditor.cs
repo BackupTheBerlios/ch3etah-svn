@@ -43,5 +43,6 @@ namespace Ch3Etah.Gui.DocumentHandling
 		
 		void QueryUnload(out bool cancel);
 
+		void RefreshContent();
 	}
 }

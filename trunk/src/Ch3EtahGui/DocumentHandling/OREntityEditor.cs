@@ -362,7 +362,14 @@ namespace Ch3Etah.Gui.DocumentHandling
 
 		private void DoBinding()
 		{
-			CreateInitialTreeData();
+			if (CurrentEditMode == MetadataEditMode.Xml)
+			{
+				textFileEditor1.SelectedObject = _MetadataFile.GetFullPath();
+			}
+			else
+			{
+				CreateInitialTreeData();
+			}
 			Enabled = true;
 		}
 
@@ -403,8 +410,12 @@ namespace Ch3Etah.Gui.DocumentHandling
 
 		#endregion DoBinding
 
+		public void RefreshContent()
+		{
+			this.SelectedObject = this.SelectedObject;
+		}
+		
 		#region SelectedObject
-
 		public object SelectedObject
 		{
 			get { return _MetadataFile; }
@@ -414,7 +425,6 @@ namespace Ch3Etah.Gui.DocumentHandling
 				DoBinding();
 			}
 		}
-
 		#endregion SelectedObject
 
 		#region IsDirty
@@ -457,40 +467,48 @@ namespace Ch3Etah.Gui.DocumentHandling
 		#region CommitChanges
 		public bool CommitChanges()
 		{
-			if (CurrentEditMode == MetadataEditMode.Xml)
+			MetadataFile.SuspendFileSystemWatching();
+			try
 			{
-				XmlDocument doc = new XmlDocument();
-				doc.LoadXml(textFileEditor1.GetText());
-				_MetadataFile.LoadXml(doc);
-				bool ok = textFileEditor1.CommitChanges();
-				if (ok) 
+				if (CurrentEditMode == MetadataEditMode.Xml)
 				{
-					_MetadataFile.FileName = _MetadataFile.GetRelativePath(textFileEditor1.FileName);
-				}
-				this.DoBinding();
-				return ok;
-			}
-			else
-			{
-				DialogResult fileExists = MetadataFileExists(FileDialogMode.Save);
-				if (fileExists == DialogResult.Yes)
-				{
-					FileAttributes attr = File.GetAttributes(_MetadataFile.GetFullPath());
-					if ((attr & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+					XmlDocument doc = new XmlDocument();
+					doc.LoadXml(textFileEditor1.GetText());
+					_MetadataFile.LoadXml(doc);
+					bool ok = textFileEditor1.CommitChanges();
+					if (ok) 
 					{
-						string msg = string.Format(
-							"The file '{0}' is read-only and cannot be overwritten."
-							, _MetadataFile.GetFullPath());
-						MessageBox.Show(
-							msg
-							, _MetadataFile.Name
-							, MessageBoxButtons.OK
-							, MessageBoxIcon.Error);
-						return false;
+						_MetadataFile.FileName = _MetadataFile.GetRelativePath(textFileEditor1.FileName);
 					}
-					_MetadataFile.Save();
+					this.DoBinding();
+					return ok;
 				}
-				return fileExists == DialogResult.Yes;
+				else
+				{
+					DialogResult fileExists = MetadataFileExists(FileDialogMode.Save);
+					if (fileExists == DialogResult.Yes)
+					{
+						FileAttributes attr = File.GetAttributes(_MetadataFile.GetFullPath());
+						if ((attr & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+						{
+							string msg = string.Format(
+								"The file '{0}' is read-only and cannot be overwritten."
+								, _MetadataFile.GetFullPath());
+							MessageBox.Show(
+								msg
+								, _MetadataFile.Name
+								, MessageBoxButtons.OK
+								, MessageBoxIcon.Error);
+							return false;
+						}
+						_MetadataFile.Save();
+					}
+					return fileExists == DialogResult.Yes;
+				}
+			}
+			finally
+			{
+				MetadataFile.ResumeFileSystemWatching();
 			}
 		}
 

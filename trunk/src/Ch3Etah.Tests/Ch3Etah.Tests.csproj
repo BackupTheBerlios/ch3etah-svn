@@ -111,6 +111,11 @@
                     HintPath = "..\..\..\..\..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll"
                     AssemblyFolderKey = "hklm\primary interop assemblies"
                 />
+                <Reference
+                    Name = "Ch3Etah.Core"
+                    Project = "{2A171F7D-E0A0-4FFF-B63E-22F1D6E4DDA5}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -131,6 +136,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <Folder RelPath = "IntegrationTests\" />
                 <File
                     RelPath = "UnitTests\BugTracker\TrackerItemFixture.cs"
                     SubType = "Code"
@@ -158,6 +164,11 @@
                 />
                 <File
                     RelPath = "UnitTests\ProjectLib\CodeGeneratorCommandFixture.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "UnitTests\RegionSupport\RegionParserFixture.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

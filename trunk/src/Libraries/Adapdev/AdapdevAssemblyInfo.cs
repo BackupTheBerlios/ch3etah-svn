@@ -11,7 +11,8 @@ using System.Reflection;
 
 #if DEBUG
 [assembly : AssemblyVersion("0.1.0.*")]
+[assembly : AssemblyKeyFile("..\\..\\..\\..\\..\\Ch3Etah.snk")]
 #else
 [assembly : AssemblyVersion("1.0.2005.1013")]
-[assembly : AssemblyKeyFile("..\\..\\..\\..\\..\\Ch3Etah.snk")]
+[assembly : AssemblyKeyFile("..\\..\\..\\Ch3Etah.snk")]
 #endif

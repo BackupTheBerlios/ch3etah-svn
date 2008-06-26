@@ -134,8 +134,14 @@ namespace Ch3Etah.Gui.DocumentHandling
 		}
 		#endregion DoBinding
 		
+		public void RefreshContent()
+		{
+			this.SelectedObject = this.SelectedObject;
+		}
+		
 		#region SelectedObject
-		public object SelectedObject {
+		public object SelectedObject 
+		{
 			get {
 				return _parameters;
 			}

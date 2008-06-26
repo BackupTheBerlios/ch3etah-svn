@@ -35,6 +35,7 @@ namespace Ch3Etah.CodeSmithSupport.Engine
 				
 				template.SetProperty("CurrentMetadataFile", base.Context.CurrentMetadataFile);
 				template.SetProperty("ContextMetadataFiles", base.Context.ProjectMetadataFiles);
+				template.SetProperty("SelectedMetadataFiles", base.Context.SelectedMetadataFiles);
 				foreach (InputParameter param in base.Context.Parameters)
 				{
 					template.SetProperty(param.Name, param.Value);

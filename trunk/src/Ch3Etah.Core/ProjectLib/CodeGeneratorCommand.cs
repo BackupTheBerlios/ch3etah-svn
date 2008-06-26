@@ -569,7 +569,8 @@ namespace Ch3Etah.Core.ProjectLib {
 				RestoreTemplateBaseFolder();
 			}
 			generator.Context.CurrentMetadataFile = inputFile;
-			generator.Context.ProjectMetadataFiles = this.Project.MetadataFiles;
+			generator.Context.ProjectMetadataFiles.AddRange(this.Project.MetadataFiles);
+			generator.Context.SelectedMetadataFiles.AddRange(this.SelectedMetadataFiles);
 			return generator;
 		}
 

@@ -102,12 +102,12 @@ namespace Ch3Etah.Core.ProjectLib {
 		}
 		#endregion DataSourceEnumerator class
 
-		public DataSource Find(String dataSouceName)
+		public DataSource Find(String name)
 		{
 			// Looping
 			foreach (DataSource tmpDataSource in this)
 			{
-				if (tmpDataSource.Name.Equals(dataSouceName))
+				if (tmpDataSource.Name.Equals(name))
 				{
 					return tmpDataSource;
 				}

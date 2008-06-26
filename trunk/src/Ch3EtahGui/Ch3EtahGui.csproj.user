@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP LastOpenVersion = "7.10.3077" >
         <Build>
-            <Settings ReferencePath = "C:\Projetos.NET\Ch3Etah\src\csharp\Libraries\Bin\;C:\Projetos.NET\Ch3Etah\src\lib\;C:\Projetos.NET\Ch3Etah\src\csharp\Ch3EtahGui\bin\Debug\;C:\Projetos.NET\Ch3Etah\src\Libraries\Bin\;C:\Projetos.NET\Ch3Etah\src\Ch3EtahGui\bin\Debug\;C:\Documents and Settings\egglestonjg\My Documents\CH3ETAH\trunk\src\Libraries\Bin\;D:\Projects\CH3ETAH\trunk_build\src\Libraries\Bin\" >
+            <Settings ReferencePath = "C:\Projetos.NET\Ch3Etah\src\csharp\Libraries\Bin\;C:\Projetos.NET\Ch3Etah\src\lib\;C:\Projetos.NET\Ch3Etah\src\csharp\Ch3EtahGui\bin\Debug\;C:\Projetos.NET\Ch3Etah\src\Libraries\Bin\;C:\Projetos.NET\Ch3Etah\src\Ch3EtahGui\bin\Debug\;C:\Documents and Settings\egglestonjg\My Documents\CH3ETAH\trunk\src\Libraries\Bin\;D:\Projects\CH3ETAH\trunk_build\src\Libraries\Bin\;C:\Documents and Settings\egglestonjg\My Documents\CH3ETAH\trunk_20061106\trunk\src\Libraries\Bin\" >
                 <Config
                     Name = "Debug"
                     EnableASPDebugging = "false"

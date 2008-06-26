@@ -207,11 +207,17 @@ namespace Ch3Etah.Gui.DocumentHandling {
 
 		#endregion DoBinding
 
+		public void RefreshContent()
+		{
+			this.SelectedObject = this.SelectedObject;
+		}
+		
 		#region Properties
 
 		#region SelectedObject
 
-		public object SelectedObject {
+		public object SelectedObject 
+		{
 			get { return _generatorCommand; }
 			set {
 				_generatorCommand = (CodeGeneratorCommand) value;

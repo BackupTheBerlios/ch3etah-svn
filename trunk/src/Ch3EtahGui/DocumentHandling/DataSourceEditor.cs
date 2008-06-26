@@ -177,8 +177,12 @@ namespace Ch3Etah.Gui.DocumentHandling
 
 		#endregion DoBinding
 
+		public void RefreshContent()
+		{
+			this.SelectedObject = this.SelectedObject;
+		}
+		
 		#region SelectedObject
-
 		public object SelectedObject 
 		{
 			get { return _dataSource; }
@@ -188,7 +192,6 @@ namespace Ch3Etah.Gui.DocumentHandling
 				DoBinding();
 			}
 		}
-
 		#endregion SelectedObject
 
 		#region IsDirty

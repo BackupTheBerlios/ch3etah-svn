@@ -92,7 +92,7 @@ After your project has loaded, select the root node in the Project Explorer and 
 <li>TemplatePackageBaseDir = Packages</li>
 </ul>
 
-<img src = "img\getting_started_02.jpg" />
+<img src = "img\getting_started_02.JPG" />
 
 <p>
 You should see the Packages node loaded with the templates that are in the "Practice" folder which you downloaded earlier.  If not, make sure you created your project in the right directory.
@@ -102,7 +102,7 @@ You should see the Packages node loaded with the templates that are in the "Prac
 Double-click on the global parameters node in the Project Explorer and then click the "Add" button at the bottom to create a new parameter. Named the parameter "EntityNamespace" and give it a value of "Northwind.Domain".
 </p>
 
-<img src = "img\getting_started_03.jpg" />
+<img src = "img\getting_started_03.JPG" />
 
 <p>
 This Global Parameters editor lets you define parameters that will be supplied to your code generation templates at generation time. Here we are telling our templates to output "Northwind.Domain" as the namespace for our classes. 
@@ -118,7 +118,7 @@ For example: in NVelocity templates parameters are accessed using the syntax <co
 You can access "Applications Settings" through the Edit menu. Currently the only settings available through this dialog are those relating to Object-Relational Mapping.  Here you can define the defaults that will be used when new data sources are added to a project. Once a data source has been created, you can edit its ORM settings by selecting the data source in the Project Explorer and editing the configuration settings in the Properties Window. Go ahead and change AutoEnableMappedIndexes to false and AutoMapLinks to true, and then click Save.
 </p>
 
-<img src = "img\getting_started_04.jpg" />
+<img src = "img\getting_started_04.JPG" />
 
 			</div>
 			
@@ -128,21 +128,21 @@ You can access "Applications Settings" through the Edit menu. Currently the only
 Right-click on the Data Sources node now, select "Add New Data Source", and name your new data source "Northwind".  In the data source editor window, click the Build button to create your connection string.  (Alternately, you can enter your connection string directly into the connection string text box) To connect to the Northwind database in SQL Server, choose "Microsoft OLE DB Provider for SQL Server" under the Provider tab, use the Connection tab to edit your connection settings, and click OK. (Note that your connection settings may differ from those shown here.)
 </p>
 
-<img src = "img\getting_started_05.jpg" />
-<img src = "img\getting_started_06.jpg" />
+<img src = "img\getting_started_05.JPG" />
+<img src = "img\getting_started_06.JPG" />
 
 <p>
 When you close the connection string builder, the Treeview below should be filled with all of the tables and views in your database.  Select "Orders" and "Order Details" from under the Tables node and then click the "Add/Update Selected" button on the right to add these two entities to your project.
 </p>
 
-<img src = "img\getting_started_07.jpg" />
+<img src = "img\getting_started_07.JPG" />
 
 <p>
 When you expand the Metadata Files node in the Project Explorer, you should see that an XML file was created for each one of the tables selected in the previous step. Double-click the Orders XML file to edit the properties for this entity.  The metadata file editor has two views: Design and XML.  Design view allows exploring your metadata tree visually and editing its components through custom GUI widgets as well as the properties window, providing any context-sensitive help that may be available.  Currently design view is only supported for O/R (Object Relational) entities, but pluggable support for other strongly typed metadata is in the works.
 </p>
 
-<img src = "img\getting_started_08.jpg" />
-<img src = "img\getting_started_09.jpg" />
+<img src = "img\getting_started_08.JPG" />
+<img src = "img\getting_started_09.JPG" />
 
 <p>
 In the design view for the Orders entity, you'll notice that it was given the same name as the Orders table. In C# (and .NET in general) it's considered good practice to name your classes in the singular, so let's go ahead and change our Orders entity to Order.  You should also update the CollectionName and PluralName properties as well. If you look at the links that were generated you will see that the link to our OrderDetails entity is spelled incorrectly.  Don't worry about this for now, when we update the OrderDetails entity, this link should be updated automatically for us.  Go ahead and make the same changes to the OrderDetails entity now. When you're done editing the entity XML files, save your changes and close the editor windows.
@@ -168,7 +168,7 @@ Now let's use the XML files we've created to generate some code.  Right-click on
 <li>Output generation = Multiple output files</li>
 </ul>
 
-<img src = "img\getting_started_10.jpg" />
+<img src = "img\getting_started_10.JPG" />
 
 <p>
 Make sure that both of the XML files are selected and that "Auto-select new files" is checked, then save your changes.
@@ -178,7 +178,7 @@ Make sure that both of the XML files are selected and that "Auto-select new file
 If you click the Edit button next to the template name, you can see and edit the template for this generator command.  You can also edit templates from the Packages node under the Project Explorer  Later on we'll cover templates editing in more detail.
 </p>
 
-<img src = "img\getting_started_10a.jpg" />
+<img src = "img\getting_started_10a.JPG" />
 
 <p>
 Add another generator command named "Business Entity" and define the following attribute values in the editor window:
@@ -193,7 +193,7 @@ Add another generator command named "Business Entity" and define the following a
 <li>Overwrite existing files = false</li>
 </ul>
 
-<img src = "img\getting_started_11.jpg" />
+<img src = "img\getting_started_11.JPG" />
 
 <p>
 And again select both XML files and then save your changes.  The reason why we don't want to overwrite existing files for this command is because this class will inherit from our abstract entity and be used for any customizations that we want to make.  We wouldn't want our custom code to be overwritten!  Another way of preserving custom changes would be to use regions and merging.  The ghostly se subjects will be covered in a future tutorial.
@@ -203,31 +203,31 @@ And again select both XML files and then save your changes.  The reason why we d
 Now let's generate some code!  Click the Run Project button on the toolbar (the green arrow).  If you've configured everything correctly, you should see a bunch of messages flying by in the output window with information about the generation process.  After a couple of seconds, code generation should be complete and for files should have been created in the Northwind.Domain and Northwind.Domain\Generated folders in the output directory where your CH3ETAH project is located.
 </p>
 
-<img src = "img\getting_started_12.jpg" />
+<img src = "img\getting_started_12.JPG" />
 
 <p>
 Go to the output directory and open the Ch3Etah.GettingStarted solution in Visual Studio.
 </p>
 
-<img src = "img\getting_started_13.jpg" />
+<img src = "img\getting_started_13.JPG" />
 
 <p>
 In the Solution Explorer, select the four files that were generated, right-click, and select "Include In Project".
 </p>
 
-<img src = "img\getting_started_14.jpg" />
+<img src = "img\getting_started_14.JPG" />
 
 <p>
 Then open the files and take a look at the code that was generated.  There isn't much here right now, but the templates could be modified to support just about any functionality you can think of.
 </p>
 
-<img src = "img\getting_started_15.jpg" />
+<img src = "img\getting_started_15.JPG" />
 
 <p>
 You can open the code editor for the orders form in the Northwind.Gui project and write code to test the entities that we've just generated.  If you've done everything correctly up to now, the solution should compile and run.
 </p>
 
-<img src = "img\getting_started_16.jpg" />
+<img src = "img\getting_started_16.JPG" />
 
 <p>
 Something to note: going to all this effort to generate simple classes for two relational entities isn't very efficient. You could probably get the same result in the same, or maybe even less time by hand coding. But the magic of code generation kicks in when you start generating multiple artifacts for larger numbers of entities. We've used this process for dozens of projects with the number of mapped entities ranging anywhere from 10 to about 100. Some of the artifacts we can generate for each entity include much more functional classes than what we just created, binding-friendly collections, NHibernate mapping files, stored procedures, project stubs, and typed datasets to facilitate using the design time formatting capabilities of .NET controls such as those from Janus and Infragistics. In these types of scenarios, the time savings can be astounding. We'll be doing some of that below.

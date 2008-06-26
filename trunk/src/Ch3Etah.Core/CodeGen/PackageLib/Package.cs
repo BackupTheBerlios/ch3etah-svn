@@ -138,17 +138,17 @@ namespace Ch3Etah.Core.CodeGen.PackageLib
 			if (File.Exists(uri)) {
 				return LoadFile(uri);
 			}
-			else if (Directory.Exists(uri)) {
+			else if (Directory.Exists(uri) && File.Exists(uri + @"\manifest.xml")) {
 				return LoadFile(uri + @"\manifest.xml");
 			}
 			else {
-				if (Path.GetExtension(uri) == "") {
+				if (Path.GetExtension(uri) == "" && !Directory.Exists(uri)) {
 					throw new DirectoryNotFoundException(
-						string.Format("Directory '' could not be found.", uri));
+						string.Format("Error attempting to load package manifest file. Package directory '{0}' could not be found.", uri));
 				}
 				else {
 					throw new FileNotFoundException(
-						string.Format("File '' could not be found.", uri));
+						string.Format("Error attempting to load package manifest file. File '{0}' could not be found.", uri));
 				}
 			}
 		}

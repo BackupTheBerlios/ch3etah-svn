@@ -48,6 +48,11 @@ namespace Ch3Etah.Gui.DocumentHandling
 			}
 		}
 
+		public void RefreshContent()
+		{
+			this.SelectedObject = this.SelectedObject;
+		}
+
 		#region Constructors and member variables
 
 		protected string _fileName;

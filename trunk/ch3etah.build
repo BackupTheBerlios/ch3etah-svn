@@ -157,12 +157,13 @@ bye
 		</zip>
 	</target>
 	<target name="deploy-web-site" depends="prepare-ssh-args, docs-copy-web-local" >
+		<echo message="Preparing to copy website content to '${remote.web.serverpart}'..." />
 		<exec program="${scp.program}" verbose="false" timeout="150000" >
 			<arg line="-q -r ${scp.program.args}" />
 			<arg value="${local.web.path}\*" />
 			<arg line="${remote.web.serverpart}" />
 		</exec>
-		<echo message="Copied website content to ${local.web.path}" />
+		<echo message="Copied website content to '${remote.web.serverpart}'" />
 	</target>
 	
 	<target name="web-get-local" depends="prepare-ssh-args" description="gets a local copy of the website content from sourceforge">
@@ -319,7 +320,7 @@ bye
 				
 			protected override void ExecuteTask() 
 			{
-				Log(Level.Info, "Updating assembly version to '{1}' in file '{0}'.", Version, FileName);
+				Log(Level.Info, "Updating assembly version to '{0}' in file '{1}'.", Version, FileName);
 				string input = "";
 				using (FileStream stream = new FileStream(FileName, FileMode.Open, FileAccess.Read, FileShare.Read)) 
 				{

@@ -20,10 +20,12 @@ namespace Ch3Etah.CodeSmithSupport.BaseTemplates
 		#region Private fields
 		private MetadataFile _currentMetadataFile;
 		private MetadataFileCollection _contextMetadataFiles;
+		private MetadataFileCollection _selectedMetadataFiles;
 		private StringHelper _stringHelper;
 		private TypeHelper _typeHelper;
 		private string _codeGenSystemLogin;
 		private string _codeGenOutputPath;
+
 		#endregion Private fields
 
 		[CodeTemplateProperty(CodeTemplatePropertyOption.Required)]
@@ -38,6 +40,13 @@ namespace Ch3Etah.CodeSmithSupport.BaseTemplates
 		{
 			get { return _contextMetadataFiles; }
 			set { _contextMetadataFiles = value; }
+		}
+
+		[CodeTemplateProperty(CodeTemplatePropertyOption.Required)]
+		public MetadataFileCollection SelectedMetadataFiles
+		{
+			get { return _selectedMetadataFiles; }
+			set { _selectedMetadataFiles = value; }
 		}
 
 		[CodeTemplateProperty(CodeTemplatePropertyOption.Required)]

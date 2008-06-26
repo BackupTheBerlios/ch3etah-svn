@@ -1,3 +1,6 @@
+---------------------------------------------------------------------------
+- Version 0.5.3.149
+---------------------------------------------------------------------------
 ADD: Added a "getting started" tutorial. (still incomplete)
 FIX: Updated App.config so that CH3ETAH will run correctly on machines with .NET framework 2.0 installed.
 ADD: Renaming an entity or its changing its plural name will update any links that point to it when the link name is equal to, begins with, or ends with that entity's name/plural name.

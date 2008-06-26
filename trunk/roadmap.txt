@@ -8,21 +8,33 @@ Releases: (every 3-6 weeks)
  - Documentation should be consistent
 
 Some major features to be implemented:
-* Package Editing (v0.6) !!! very urgent !!!
+http://msdn.microsoft.com/vstudio/teamsystem/Workshop/gat/default.aspx
+http://msdn.microsoft.com/vstudio/teamsystem/Workshop/gat/intro.aspx
+* Ability to check http://ch3etah.sf.net/version.xml for latest version
 * Region support with hash code generation and checking (v0.6)
-* Multiple generation using XPath to extract metadata (v0.7)
+* Package Editing (v0.6)
+* Bring back template editor w/ adhoc metadata entry and auto-preview (v0.6)
+* Assembly analyzer for reverse engeneering (v0.6)
+* Support for adhoc and runtime metadata (v0.7)
+* Multiple file generation from one input XML using XPath to extract metadata (v0.7)
 * Dynamic, configurable design support for strongly-typed metadata (v0.7)
-* Assembly analyzer for reverse engeneering (v0.7)
+* Metadata inheritance (a la XSD, for example w/ Entity/OREntity) (v0.7)
 * SimpleEngine (v0.8)
 * Better binding and change notification (v0.8)
 * AppDomain isolation of template engines (at least NVelocity) (v0.8)
-* Graphical DSL support similar to MS DSL Workbench (http://www.ddj.com/dept/architect/184429825) (v1+)
+* Graphical DSL support similar to MS DSL Workbench and ObjectMapper (http://www.ddj.com/dept/architect/184429825) (v1+)
 * Nant/MSBuild project files (v1+)
+* Better support for adhoc template creation and use (without creating project) (v1+)
 
 References
 * http://www.ddj.com/dept/architect/184429825
 * http://www.developerdotstar.com/mag/articles/o-r_mapping_persistence.html
 * http://www.hanselminutes.com/default.aspx?showID=20
+* http://www.devx.com/vstudioextensibility
+* http://www.devx.com/vstudioextensibility/Article/31688 (Diff between Add-ins and Packages, which are more powerfull)
+* http://msdn.microsoft.com/library/?url=/library/en-us/Extensibility_Guided_Tour/Redistribution.asp?frame=true (Redistributing VS integration packages)
+* http://plas.fit.qut.edu.au/gppg/ (YACC Language Parser Generator)
+* http://www.doitwith.net/CommentView.aspx?guid=39a0e537-5d0e-4f9b-ac5c-51e8b3d1d4ec (DXCore - free framework for developing VS extensibility projects)
 
 *** NEED TO CREATE BACKUP SCRIPT FOR WEBSITE CONTENT AND WIKI THAT RUNS DAILY
 BUG: If you right-click on a metadata file that could not be loaded, you get an exception so you can't remove the file except by editing the project XML file.
@@ -32,6 +44,9 @@ BUG: There is way too much coupling between the OREntityEditor and it's children
 BUG: It seems if you close the property grid, it doesn't show again through the menu
 BUG: If a message box is displayed (eg. invalid project file name) while the splash screen is visible, the message box is hidden behind the splash.
 
+* FEAT: Add drag and drop. Drag to titlebar opens text file/project. Drag to treeview can do different things depending on the target node and type of file.
+* FEAT: Needs an addin for VS or integrated source control (because, for example people forget to add metadata files to source control). Perhaps a custom tool for CH3 files that checks if all of the project's referenced files are included in source control and throws a compile warning/error.
+* FEAT: Add diffing (configurable) of files/regions when there is a mismatch
 * FEAT: Add parameter to ORM settings to specify when database entity names are plural
 * FEAT: When give user option to apply app-level ORM settings to all data sources in project
 * FEAT: Add ability to check ch3etah.sf.net/version.xml for updates. Also store changelog and version info in xml files.
@@ -65,7 +80,7 @@ http://nsis.sourceforge.net/Detect_if_a_window_is_open_and_close_it.
 http://www.codeproject.com/cs/miscctrl/LinkLabelDatagridColumn.asp?df=100&forumid=226832&select=1447710#xx1447710xx
 http://www.codeproject.com/vb/net/Datagrid_ColumnStyles.asp#xx1396971xx
 * FEAT: Need support for different sources of metadata other than files, eg. "select Name, MessageTypeID from MessageType" that would be translated to XML at gentime and passed to the templates with other metadata. A source of metadata could even be an extraction, XPath and XSLT transform that takes metadata from a DB and transforms it to a particular format that then has strong-typed entities built on top of it.
-
+* FEAT: Add pre and post-processors to codegen commands that can be written as C# or VB scripts (like NAnt custom tasks)
 
 * WISH: Visual UML-style modeler. Should use Model-View-Presenter pattern and code to interfaces so that other types of metadata entities (e.g. XMI) can be plugged into the modeler.
 * WISH: Manage multiple files in project structure (i.e. select several metadata files and remove them)

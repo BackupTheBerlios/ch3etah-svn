@@ -52,11 +52,19 @@ namespace Ch3Etah.Gui.DocumentHandling.MdiStrategy
 			get {
 				ArrayList editors = new ArrayList();
 				if (_mdiParent != null) {
-					foreach (Form form in _mdiParent.MdiChildren) {
-						if (form.GetType() == typeof(ObjectEditorForm)) {
+					foreach(Object form in ((IMdiContainer) _mdiParent).DockPanel.Contents) 
+					{
+						if (form is ObjectEditorForm)
+						{
 							editors.Add(((ObjectEditorForm)form).ObjectEditor);
 						}
 					}
+//					foreach (Form form in _mdiParent.MdiChildren) 
+//					{
+//						if (form.GetType() == typeof(ObjectEditorForm)) {
+//							editors.Add(((ObjectEditorForm)form).ObjectEditor);
+//						}
+//					}
 				}
 				return (IObjectEditor[])editors.ToArray(typeof(IObjectEditor));
 			}
@@ -69,7 +77,7 @@ namespace Ch3Etah.Gui.DocumentHandling.MdiStrategy
 		}
 
 		public void ShowEditor(IObjectEditor editor) {
-			ObjectEditorForm f = FindObjectEditor(editor);
+			ObjectEditorForm f = FindObjectEditorForm(editor);
  			if (f == null) {
 				f = new ObjectEditorForm((IObjectEditor)editor);
 				try {
@@ -85,7 +93,8 @@ namespace Ch3Etah.Gui.DocumentHandling.MdiStrategy
  			}
 		}
 		
- 		private ObjectEditorForm FindObjectEditor(IObjectEditor editor) {
+		private ObjectEditorForm FindObjectEditorForm(IObjectEditor editor) 
+		{
 			if (_mdiParent == null) {
 				return null;
 			}
@@ -100,5 +109,17 @@ namespace Ch3Etah.Gui.DocumentHandling.MdiStrategy
  			return null;
  		}
 		
+		public IObjectEditor FindObjectEditor(object editorContext)
+		{
+			foreach (IObjectEditor e in this.Editors)
+			{
+				if (e.SelectedObject == editorContext)
+				{
+					return e;
+				}
+			}
+			return null;
+		}
+
 	}
 }

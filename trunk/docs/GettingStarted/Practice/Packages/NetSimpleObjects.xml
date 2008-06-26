@@ -11,6 +11,11 @@
 				<Brand Name="OREntity" />
 			</IndividualMetadataBrands>
 		</Template>
+		<Template Name="CS_CodeSmithEntity" Address="Templates\CS_CodeSmithEntity.cst">
+			<IndividualMetadataBrands>
+				<Brand Name="OREntity" />
+			</IndividualMetadataBrands>
+		</Template>
     </Templates>
     <Libraries>
     </Libraries>

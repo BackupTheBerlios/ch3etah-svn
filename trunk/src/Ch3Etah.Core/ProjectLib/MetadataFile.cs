@@ -245,9 +245,18 @@ namespace Ch3Etah.Core.ProjectLib
 			XmlDocument document = new XmlDocument();
 			string xml = SaveXml();
 			document.LoadXml(xml);
-			using (TextWriter wr = new StreamWriter(GetFullPath(fileName), false, System.Text.Encoding.UTF8))
+			//MetadataFile.SuspendFileSystemWatching();
+			try
 			{
-				document.Save(wr);
+				using (TextWriter wr = new StreamWriter(GetFullPath(fileName), false, System.Text.Encoding.UTF8))
+				{
+					document.Save(wr);
+					SetupFileWatcher(fileName);
+				}
+			}
+			finally
+			{
+				MetadataFile.ResumeFileSystemWatching();
 			}
 			FileName = fileName;
 			_loadedState = xml;
@@ -294,6 +303,7 @@ namespace Ch3Etah.Core.ProjectLib
 		private string GetFullPath(string fileName) {
 			if (Path.IsPathRooted(fileName))
 			{
+				SetupFileWatcher(fileName);
 				return fileName;
 			}
 			else
@@ -301,6 +311,7 @@ namespace Ch3Etah.Core.ProjectLib
 				string fullMetadataPath = Project.GetFullMetadataPath();
 				string path = Path.Combine(fullMetadataPath, fileName);
 				string fullPath = Path.GetFullPath(path);
+				SetupFileWatcher(fullPath);
 				return fullPath;
 			}
 			
@@ -343,11 +354,54 @@ namespace Ch3Etah.Core.ProjectLib
 		}
 		#endregion GetFullPath / GetRelativePath
 		
+		#region File Watcher
+		public static event EventHandler FileChangedExternally;
+		public static void SuspendFileSystemWatching()
+		{
+			_suspendWatching = true;
+		}
+		public static void ResumeFileSystemWatching()
+		{
+			_suspendWatching = false;
+		}
+		private static bool _suspendWatching = false;
+		private FileSystemWatcher _watcher;
+		private string _watchingPath;
+		private void SetupFileWatcher(string fileName)
+		{
+			RemoveFileWatcher();
+			_watchingPath = fileName;
+			_watcher = new FileSystemWatcher(Path.GetDirectoryName(_watchingPath));
+			_watcher.Changed += new FileSystemEventHandler(FileChanged);
+			_watcher.Filter = Path.GetFileName(_watchingPath);
+			_watcher.NotifyFilter = NotifyFilters.LastWrite;
+			_watcher.EnableRaisingEvents = true;
+		}
+		private void RemoveFileWatcher()
+		{
+			if (_watcher != null)
+			{
+				_watcher.EnableRaisingEvents = false;
+				_watcher.Dispose();
+				_watcher = null;
+				_watchingPath = "";
+			}
+		}
+		private void FileChanged(object sender, FileSystemEventArgs e)
+		{
+			if (!_suspendWatching && FileChangedExternally != null)
+			{
+				FileChangedExternally(this, new EventArgs());
+			}
+		}
+		#endregion File Watcher
+
 		#region ToString
-		public override string ToString() {
+		public override string ToString() 
+		{
 			return this.Name;
 		}
 		#endregion ToString
-		
+
 	}
 }

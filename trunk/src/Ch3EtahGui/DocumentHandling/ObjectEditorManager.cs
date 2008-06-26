@@ -54,5 +54,11 @@ namespace Ch3Etah.Gui.DocumentHandling
 			return _handlingStrategy.ShowEditorDialog(editor);
 		}
 		
+		public static IObjectEditor FindObjectEditor(object editorContext)
+		{
+			return _handlingStrategy.FindObjectEditor(editorContext);
+		}
+
+		
 	}
 }

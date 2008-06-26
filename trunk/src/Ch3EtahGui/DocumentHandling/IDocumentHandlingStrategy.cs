@@ -33,5 +33,6 @@ namespace Ch3Etah.Gui.DocumentHandling
 		
 		void ShowEditor(IObjectEditor editor);
 		DialogResult ShowEditorDialog(IObjectEditor editor);
+		IObjectEditor FindObjectEditor(object editorContext);
 	}
 }
